@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Review · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* wf-stepper (round-3 fix, unique classes) */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+</style>
+<!-- page-local style (existing tokens only) -->
+<style>
+.banner{display:flex;align-items:center;gap:16px;background:var(--info-s);border:1px solid var(--info-s);border-left:4px solid var(--info);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px}
+.banner .b-ic{width:40px;height:40px;border-radius:10px;background:#fff;color:var(--info);display:grid;place-items:center;flex:none}
+.banner .b-ic svg{width:22px;height:22px}
+.banner p{font-size:13px;color:var(--text)}
+.banner .b-sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+.parsed-cell{display:flex;flex-wrap:wrap;gap:5px;align-items:center;cursor:pointer;max-width:260px}
+.parsed-cell .chip{padding:3px 8px;font-size:11.5px}
+.parsed-cell .more{color:var(--primary);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:3px}
+.parsed-cell .more svg{width:13px;height:13px;transition:transform .15s}
+tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
+.drawer-row td{background:var(--surface-2)!important;padding:0}
+.drawer-inner{padding:18px 20px}
+.drawer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.drawer-grid h4{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.drawer-grid ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.drawer-grid li{font-size:13px;display:flex;gap:8px}
+.drawer-grid li b{font-weight:600}
+.dl{font-size:13px;display:flex;gap:6px;margin-bottom:4px}
+.dl span:first-child{color:var(--muted);min-width:78px}
+.flag{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--danger);background:var(--danger-s);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.flag svg{width:15px;height:15px;flex:none;margin-top:1px}
+.cv-drawer{position:fixed;top:0;right:0;width:420px;max-width:92vw;height:100vh;background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-lg);z-index:60;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease}
+.cv-drawer.open{transform:translateX(0)}
+.cv-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.cv-head h3{font-size:15px;font-weight:700}
+.cv-body{padding:20px;overflow:auto;flex:1}
+.cv-page{background:#fff;border:1px solid var(--border);border-radius:8px;padding:22px;box-shadow:var(--shadow);font-size:12.5px;color:var(--text)}
+.cv-page h5{font-size:16px;font-weight:700;margin-bottom:2px}
+.cv-page .cv-sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.cv-page .cv-sec{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--primary);border-bottom:1px solid var(--border);padding-bottom:3px;margin:14px 0 7px}
+.cv-page p{margin-bottom:5px;line-height:1.55}
+.cv-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:55;opacity:0;visibility:hidden;transition:opacity .2s}
+.cv-overlay.open{opacity:1;visibility:visible}
+.modal-wide{max-width:640px}
+.modal-body{padding:20px;max-height:72vh;overflow:auto}
+.sum-box{background:var(--surface-2);border-radius:10px;padding:14px 16px;margin-bottom:8px;font-size:13px}
+.histo{display:flex;align-items:flex-end;gap:8px;height:96px;margin-top:14px;padding:0 4px}
+.histo .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;height:100%}
+.histo .col .stk{width:100%;border-radius:6px 6px 0 0}
+.histo .col small{font-size:10.5px;color:var(--muted);text-align:center;line-height:1.2}
+.histo .col b{font-size:11px;font-variant-numeric:tabular-nums}
+.opt-card{border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt-card:hover{border-color:var(--accent)}
+.opt-card.sel{border-color:var(--primary);background:var(--primary-soft)}
+.opt-top{display:flex;align-items:flex-start;gap:10px}
+.opt-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex:none;margin-top:1px;display:grid;place-items:center}
+.opt-card.sel .opt-radio{border-color:var(--primary)}
+.opt-card.sel .opt-radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--primary)}
+.opt-title{font-weight:600;font-size:13.5px}
+.opt-desc{color:var(--muted);font-size:12.5px;margin-top:1px}
+.opt-controls{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.opt-controls[hidden]{display:none}
+.opt-controls input[type=range]{width:100%;accent-color:var(--primary)}
+.opt-preview{margin-top:8px;font-size:12.5px;font-weight:600;color:var(--primary)}
+.modal-foot{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.modal-foot .gov{font-size:11.5px;color:var(--muted);max-width:300px}
+@media(max-width:1024px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .drawer-grid{grid-template-columns:1fr}
+  .parsed-cell{max-width:200px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item active" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b>Job Positions</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <a class="wf-step done" href="template-builder.page.html" data-testid="step-1"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Template</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="import-cvs.page.html" data-testid="step-2"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Import</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="processing.page.html" data-testid="step-3"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Process</a>
+    <span class="wf-sep done"></span>
+    <span class="wf-step current" data-testid="step-4"><span class="wf-dot">4</span>Review</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-7"><span class="wf-dot">7</span>Interview</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Hire</span>
+  </nav>
+      <div class="page-head">
+        <div>
+          <h1>Review parsed CVs — Sr. Brand Manager</h1>
+          <p>512 candidates ready for review</p>
+        </div>
+        <a class="btn btn-ghost" href="results.page.html" data-testid="review-view-results">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening results
+        </a>
+      </div>
+
+      <!-- AI suggestion banner -->
+      <div class="banner" data-testid="review-banner">
+        <div class="b-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div style="flex:1">
+          <p><b>500 candidates ready.</b> 25% scored above 80%. Would you like AI to suggest a shortlist?</p>
+          <div class="b-sub">Final rejection always requires human review — AI only assists.</div>
+        </div>
+        <button class="btn btn-primary" data-testid="review-get-suggestions" onclick="openModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Get shortlist suggestions
+        </button>
+      </div>
+
+      <!-- CV review table -->
+      <div class="card">
+        <div class="card-head">
+          <h2>Parsed candidates</h2>
+          <span style="font-size:12.5px;color:var(--muted)"><span data-testid="review-selected-count">0</span> selected</span>
+        </div>
+        <div style="overflow:auto">
+        <table data-testid="review-table">
+          <thead>
+            <tr>
+              <th style="width:42px"><input type="checkbox" data-testid="review-select-all" onclick="toggleAll(this)" aria-label="Select all candidates"></th>
+              <th>Candidate</th>
+              <th>CV file</th>
+              <th>Parsed profile</th>
+              <th>Confidence</th>
+              <th>AI match score</th>
+              <th>Status</th>
+              <th style="text-align:right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cvBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== In-page CV side drawer (original CV preview) ===== -->
+<div class="cv-overlay" id="cvOverlay" data-testid="cv-drawer-overlay" onclick="closeCvDrawer()"></div>
+<aside class="cv-drawer" id="cvDrawer" data-testid="cv-drawer" aria-hidden="true">
+  <div class="cv-head">
+    <h3 id="cvDrawerTitle">Original CV</h3>
+    <button class="icon-btn" data-testid="cv-drawer-close" onclick="closeCvDrawer()" aria-label="Close CV preview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cv-body" id="cvDrawerBody"></div>
+</aside>
+
+<!-- ===== AI Shortlist Suggestion Modal ===== -->
+<div class="modal-mask" id="shortlistModal" data-testid="shortlist-modal" style="display:none">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="shortlistTitle">
+    <div class="card-head">
+      <h3 id="shortlistTitle">Shortlist suggestions for Sr. Brand Manager</h3>
+      <button class="icon-btn" data-testid="shortlist-close" onclick="closeModal()" aria-label="Close suggestions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Summary -->
+      <div class="sum-box">
+        <b>500 candidates parsed.</b><br>
+        125 (25%) scored ≥80%. &nbsp;230 (46%) scored 60–79%. &nbsp;145 (29%) scored below 60%.
+        <div class="histo" data-testid="shortlist-histogram">
+          <div class="col"><b>145</b><div class="stk" style="height:42%;background:var(--danger)"></div><small>&lt;60%<br>29%</small></div>
+          <div class="col"><b>230</b><div class="stk" style="height:66%;background:var(--warn)"></div><small>60–79%<br>46%</small></div>
+          <div class="col"><b>95</b><div class="stk" style="height:55%;background:var(--info)"></div><small>80–89%<br>19%</small></div>
+          <div class="col"><b>30</b><div class="stk" style="height:30%;background:var(--success)"></div><small>≥90%<br>6%</small></div>
+        </div>
+      </div>
+
+      <!-- Strategy radio-cards -->
+      <div data-testid="shortlist-options">
+        <!-- 1: Top N by score -->
+        <div class="opt-card sel" data-opt="topn" data-testid="shortlist-opt-topn" onclick="selectOpt('topn')">
+          <div class="opt-top">
+            <span class="opt-radio"></span>
+            <div><div class="opt-title">Top N by score</div><div class="opt-desc">Pick the highest-scoring candidates overall.</div></div>
+          </div>
+          <div class="opt-controls" id="ctl-topn">
+            <label style="font-size:12.5px;font-weight:600">Number of candidates: <span id="topnVal">30</span></label>
+            <input type="range" min="5" max="100" value="30" step="1" data-testid="shortlist-topn-slider" oninput="onTopN(this.value)">
+            <div class="opt-preview" id="topnPreview" data-testid="shortlist-topn-preview">Top 30 candidates, all with score ≥78%.</div>
+          </div>
+        </div>
+
+        <!-- 2: Above score threshold -->
+        <div class="opt-card" data-opt="threshold" data-testid="shortlist-opt-threshold" onclick="selectOpt('threshold')">
+          <div class="opt-top">
+            <span class="opt-radio"></span>
+            <div><div class="opt-title">Above score threshold</div><div class="opt-desc">Shortlist everyone at or above a chosen match %.</div></div>
+          </div>
+          <div class="opt-controls" id="ctl-threshold" hidden>
+            <label style="font-size:12.5px;font-weight:600">Minimum score: <span id="thrVal">85</span>%</label>
+            <input type="range" min="50" max="95" value="85" step="1" data-testid="shortlist-threshold-slider" oninput="onThreshold(this.value)">
+            <div class="opt-preview" id="thrPreview" data-testid="shortlist-threshold-preview">42 candidates above 85%.</div>
+          </div>
+        </div>
+
+        <!-- 3: Balanced by skill coverage -->
+        <div class="opt-card" data-opt="balanced" data-testid="shortlist-opt-balanced" onclick="selectOpt('balanced')">
+          <div class="opt-top">
+            <span class="opt-radio"></span>
+            <div><div class="opt-title">Balanced by skill coverage</div><div class="opt-desc">Maximise coverage of every required skill.</div></div>
+          </div>
+          <div class="opt-controls" id="ctl-balanced" hidden>
+            <div class="opt-preview" data-testid="shortlist-balanced-preview">25 candidates covering 100% of required skills.</div>
+          </div>
+        </div>
+
+        <!-- 4: Top N per location -->
+        <div class="opt-card" data-opt="location" data-testid="shortlist-opt-location" onclick="selectOpt('location')">
+          <div class="opt-top">
+            <span class="opt-radio"></span>
+            <div><div class="opt-title">Top N per location</div><div class="opt-desc">Even geographic spread across districts.</div></div>
+          </div>
+          <div class="opt-controls" id="ctl-location" hidden>
+            <label style="font-size:12.5px;font-weight:600">Candidates per district</label>
+            <input type="number" min="1" max="20" value="3" data-testid="shortlist-location-input" style="width:90px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font:inherit" oninput="onLocation(this.value)">
+            <div class="opt-preview" id="locPreview" data-testid="shortlist-location-preview">3 per district × 8 districts = 24 candidates.</div>
+          </div>
+        </div>
+
+        <!-- 5: Manual -->
+        <div class="opt-card" data-opt="manual" data-testid="shortlist-opt-manual" onclick="selectOpt('manual')">
+          <div class="opt-top">
+            <span class="opt-radio"></span>
+            <div><div class="opt-title">Manual</div><div class="opt-desc">Close this and decide row-by-row in the table.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <div class="gov">Final rejection still requires human review (AI governance).</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" data-testid="shortlist-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" data-testid="shortlist-apply" onclick="applySuggestion()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Apply suggestion
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Download a mock CV file (prototype) ---------- */
+function downloadCv(id){
+  var c = CANDS.filter(function(x){return x.id===id;})[0];
+  if(!c) return;
+  var lines = [
+    'CURRICULUM VITAE',
+    '================',
+    '',
+    'Name:      ' + c.name,
+    'Email:     ' + c.email,
+    'District:  ' + (c.district || ''),
+    'Experience:' + (c.exp || ''),
+    'Education: ' + (c.edu || ''),
+    'Skills:    ' + (c.skills ? c.skills.join(', ') : ''),
+    '',
+    'AI match score: ' + (c.score!=null ? c.score + '%' : '—'),
+    'Parsing confidence: ' + (c.conf!=null ? c.conf + '%' : '—'),
+    '',
+    '— STL ATS prototype · mock CV export —'
+  ].join('\n');
+  var blob = new Blob([lines], {type:'text/plain'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = c.file || ('CV_' + c.name.replace(/\s+/g,'_') + '.txt');
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+/* ---------- Mock data (FMCG / Bangladesh) ---------- */
+var CANDS = [
+  {id:1, name:'Tanvir Hasan', email:'tanvir.hasan@gmail.com', file:'Tanvir_Hasan_CV.pdf', conf:96, score:92, district:'Dhaka',
+    skills:['Brand Strategy','Trade Marketing','P&L'], edu:'MBA, Marketing — IBA, DU', exp:'11 yrs',
+    edus:['MBA, Marketing — IBA, University of Dhaka (2013)','BBA — North South University (2010)'],
+    work:['Brand Manager — Unilever Bangladesh (2018–Present)','Asst. Brand Manager — Pran-RFL (2014–2018)'],
+    skillsFull:['Brand Strategy','Trade Marketing','P&L Management','ATL/BTL','Consumer Insights','Distributor Management'],
+    certs:['Nielsen Retail Audit Certification','Google Digital Marketing'], phone:'+880 1711-204050', flags:[]},
+  {id:2, name:'Nusrat Jahan', email:'nusrat.jahan@yahoo.com', file:'Nusrat_Jahan_Resume.docx', conf:91, score:88, district:'Dhaka',
+    skills:['ATL/BTL','Consumer Insights','NPD'], edu:'MBA — North South University', exp:'9 yrs',
+    edus:['MBA, Marketing — North South University (2015)','BSc Economics — BRAC University (2011)'],
+    work:['Sr. Brand Executive — ACI Consumer (2017–Present)','Brand Executive — Square Toiletries (2013–2017)'],
+    skillsFull:['ATL/BTL','Consumer Insights','New Product Development','Media Planning','Budgeting'],
+    certs:['Kantar Brand Health Tracking'], phone:'+880 1819-556677', flags:[]},
+  {id:3, name:'Rakibul Islam', email:'rakib.islam@outlook.com', file:'Rakibul_Islam_CV.pdf', conf:88, score:84, district:'Chattogram',
+    skills:['Trade Marketing','Distribution','Sales'], edu:'BBA — University of Chittagong', exp:'8 yrs',
+    edus:['BBA, Marketing — University of Chittagong (2014)'],
+    work:['Trade Marketing Manager — Akij Group (2019–Present)','Territory Officer — Marico Bangladesh (2015–2019)'],
+    skillsFull:['Trade Marketing','Distribution','Field Sales','Route-to-Market','SKU Planning'],
+    certs:[], phone:'+880 1521-998877', flags:[]},
+  {id:4, name:'Sadia Afrin', email:'sadia.afrin@gmail.com', file:'Sadia_Afrin.pdf', conf:74, score:79, district:'Dhaka',
+    skills:['Digital Marketing','Social Media','Content'], edu:'BBA — BRAC University', exp:'6 yrs',
+    edus:['BBA, Marketing — BRAC University (2017)'],
+    work:['Digital Marketing Lead — Bata Bangladesh (2020–Present)','Content Executive — Daraz (2018–2020)'],
+    skillsFull:['Digital Marketing','Social Media','Content Strategy','SEO','Performance Ads'],
+    certs:['Meta Blueprint','HubSpot Inbound'], phone:'+880 1717-334455',
+    flags:[{t:'Career break',d:'14-month gap between 2018 and 2020 (unexplained).'}]},
+  {id:5, name:'Mahin Chowdhury', email:'mahin.ch@gmail.com', file:'Mahin_Chowdhury_CV.pdf', conf:82, score:73, district:'Sylhet',
+    skills:['Sales','Distribution','Negotiation'], edu:'BBA — Metropolitan University', exp:'7 yrs',
+    edus:['BBA — Metropolitan University, Sylhet (2016)'],
+    work:['Area Sales Manager — Pran-RFL (2018–Present)','Sales Officer — Nestlé Bangladesh (2016–2018)'],
+    skillsFull:['Sales','Distribution','Negotiation','Team Leadership','Forecasting'],
+    certs:[], phone:'+880 1611-223344', flags:[]},
+  {id:6, name:'Farhana Rahman', email:'farhana.r@gmail.com', file:'Farhana_Rahman_Resume.pdf', conf:69, score:68, district:'Khulna',
+    skills:['Marketing','Events','PR'], edu:'BA, English — Khulna University', exp:'5 yrs',
+    edus:['BA, English — Khulna University (2018)'],
+    work:['Marketing Officer — Abul Khair Group (2019–Present)','Intern — bKash (2018)'],
+    skillsFull:['Event Management','PR','Brand Activation','Vendor Management'],
+    certs:[], phone:'+880 1300-112233',
+    flags:[{t:'Skill gap',d:'No P&L or brand strategy experience for a managerial brand role.'}]},
+  {id:7, name:'Imran Kabir', email:'imran.kabir@gmail.com', file:'Imran_Kabir_scan.pdf', conf:61, score:61, district:'Rajshahi',
+    skills:['Sales','Retail','Merchandising'], edu:'HSC — Rajshahi College', exp:'9 yrs',
+    edus:['HSC, Business Studies — Rajshahi College (2012)'],
+    work:['Sr. Sales Executive — Square Consumer (2016–Present)','Sales Rep — Igloo Foods (2013–2016)'],
+    skillsFull:['Field Sales','Retail Execution','Merchandising','Order Booking'],
+    certs:[], phone:'+880 1733-445566',
+    flags:[{t:'Under-qualified',d:'HSC only; role requires a Bachelor degree minimum.'},{t:'Low OCR confidence',d:'Scanned CV — parsing confidence below 70%.'}]},
+  {id:8, name:'Sumaiya Akter', email:'sumaiya.akter@gmail.com', file:'Sumaiya_Akter_CV.docx', conf:78, score:55, district:'Dhaka',
+    skills:['HR','Recruitment','Admin'], edu:'MBA, HRM — East West University', exp:'6 yrs',
+    edus:['MBA, HRM — East West University (2016)','BBA — East West University (2014)'],
+    work:['HR Executive — Square Pharmaceuticals (2018–Present)','HR Intern — Grameenphone (2016)'],
+    skillsFull:['Recruitment','HR Operations','Payroll','Employee Relations'],
+    certs:['SHRM-CP'], phone:'+880 1911-667788',
+    flags:[{t:'Domain mismatch',d:'HR background — limited marketing/brand exposure.'}]},
+  {id:9, name:'Arif Mahmud', email:'arif.mahmud@gmail.com', file:'Arif_Mahmud_Resume.pdf', conf:84, score:49, district:'Chattogram',
+    skills:['Supply Chain','Logistics','Procurement'], edu:'BSc IPE — BUET', exp:'10 yrs',
+    edus:['BSc, Industrial & Production Engineering — BUET (2013)'],
+    work:['Supply Chain Manager — Akij Food & Beverage (2017–Present)','Planner — Coca-Cola Bangladesh (2013–2017)'],
+    skillsFull:['Supply Chain','Logistics','Procurement','Demand Planning','SAP'],
+    certs:['CSCP'], phone:'+880 1555-889900',
+    flags:[{t:'Frequent job changes',d:'4 employers in 6 years before 2017.'}]},
+  {id:10, name:'Jannatul Ferdous', email:'jannat.f@gmail.com', file:'Jannatul_Ferdous_CV.pdf', conf:55, score:41, district:'Barishal',
+    skills:['Customer Service','Telesales'], edu:'BA — National University', exp:'3 yrs',
+    edus:['BA, Sociology — National University (2020)'],
+    work:['Customer Care Agent — Robi Axiata (2021–Present)'],
+    skillsFull:['Customer Service','Telesales','CRM Tools'],
+    certs:[], phone:'+880 1400-998877',
+    flags:[{t:'Missing info',d:'No email verified in CV; phone parsed with low confidence.'},{t:'Insufficient experience',d:'3 yrs vs 7+ required for the role.'}]}
+];
+
+function initials(n){return n.split(' ').map(function(w){return w[0]}).slice(0,2).join('').toUpperCase();}
+function scoreColor(s){return s>=80?'var(--success)':s>=60?'var(--warn)':'var(--danger)';}
+function confColor(c){return c>=90?'var(--success)':c>=70?'var(--warn)':'var(--danger)';}
+function esc(s){return String(s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+
+/* ---------- Build table rows ---------- */
+function buildRows(){
+  var tb=document.getElementById('cvBody'); var html='';
+  CANDS.forEach(function(c){
+    var chips=c.skills.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('');
+    html+=''+
+    '<tr id="row-'+c.id+'" data-testid="review-row-'+c.id+'">'+
+      '<td><input type="checkbox" class="rowcb" data-testid="review-row-'+c.id+'-check" onchange="updateCount()" aria-label="Select '+esc(c.name)+'"></td>'+
+      '<td><div class="cand"><span class="ava">'+initials(c.name)+'</span><div><div style="font-weight:600">'+esc(c.name)+'</div><small>'+esc(c.email)+'</small></div></div></td>'+
+      '<td><div style="display:flex;align-items:center;gap:8px">'+
+        '<a href="#" download data-testid="review-row-'+c.id+'-download" onclick="downloadCv('+c.id+');return false;" title="Download CV" style="font-size:12.5px;color:var(--primary);font-weight:600;display:inline-flex;align-items:center;gap:6px">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+esc(c.file)+'</a>'+
+        '<button class="icon-btn" style="width:30px;height:30px" data-testid="review-row-'+c.id+'-viewcv" onclick="openCvDrawer('+c.id+')" title="View original CV" aria-label="View original CV">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'+
+        '</button></div></td>'+
+      '<td><div class="parsed-cell" data-testid="review-row-'+c.id+'-parsed" onclick="toggleProfile('+c.id+')" title="Expand parsed profile">'+
+          chips+
+          '<span class="chip" style="background:var(--info-s);color:var(--info)">'+esc(c.exp)+'</span>'+
+          '<span class="more">details<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>'+
+        '</div></td>'+
+      '<td><div class="score"><div class="bar"><i style="width:'+c.conf+'%;background:'+confColor(c.conf)+'"></i></div><b style="color:'+confColor(c.conf)+'">'+c.conf+'%</b></div></td>'+
+      '<td><div class="score"><div class="bar"><i style="width:'+c.score+'%;background:'+scoreColor(c.score)+'"></i></div><b>'+c.score+'%</b></div></td>'+
+      '<td><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
+      '<td style="text-align:right;white-space:nowrap">'+
+        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')">Shortlist</button> '+
+        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-reject" onclick="setStatus('+c.id+',\'dan\')">Reject</button> '+
+        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-pending" onclick="setStatus('+c.id+',\'warn\')">Mark pending</button>'+
+      '</td>'+
+    '</tr>'+
+    '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="8"><div class="drawer-inner" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
+  });
+  tb.innerHTML=html;
+}
+
+function profileHTML(c){
+  var flags = c.flags.length
+    ? c.flags.map(function(f){return '<div class="flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>'+esc(f.t)+'</b> — '+esc(f.d)+'</div></div>';}).join('')
+    : '<div class="badge b-suc" style="margin-top:2px">No red flags detected</div>';
+  return ''+
+  '<div class="drawer-grid">'+
+    '<div>'+
+      '<h4>Education history</h4><ul>'+c.edus.map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul>'+
+      '<h4 style="margin-top:14px">Work history</h4><ul>'+c.work.map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+'</ul>'+
+      '<h4 style="margin-top:14px">Skills</h4><div style="display:flex;flex-wrap:wrap;gap:6px">'+c.skillsFull.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('')+'</div>'+
+    '</div>'+
+    '<div>'+
+      '<h4>Certifications</h4>'+(c.certs.length?'<ul>'+c.certs.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul>':'<div style="font-size:13px;color:var(--muted)">None listed</div>')+
+      '<h4 style="margin-top:14px">Contact</h4>'+
+        '<div class="dl"><span>Email</span><span>'+esc(c.email)+'</span></div>'+
+        '<div class="dl"><span>Phone</span><span>'+esc(c.phone)+'</span></div>'+
+        '<div class="dl"><span>District</span><span>'+esc(c.district)+'</span></div>'+
+        '<div class="dl"><span>Experience</span><span>'+esc(c.exp)+'</span></div>'+
+      '<h4 style="margin-top:14px">Red flags</h4>'+flags+
+    '</div>'+
+  '</div>';
+}
+
+/* ---------- Row expand (parsed profile) ---------- */
+function toggleProfile(id){
+  var dr=document.getElementById('drawer-'+id);
+  var row=document.getElementById('row-'+id);
+  var open = dr.style.display==='none';
+  dr.style.display = open ? 'table-row' : 'none';
+  row.classList.toggle('expanded', open);
+}
+
+/* ---------- CV side drawer ---------- */
+function openCvDrawer(id){
+  var c=CANDS.find(function(x){return x.id===id;});
+  document.getElementById('cvDrawerTitle').textContent='Original CV — '+c.name;
+  var body=''+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;color:var(--muted);font-size:12.5px">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+esc(c.file)+'</div>'+
+    '<div class="cv-page">'+
+      '<h5>'+esc(c.name)+'</h5>'+
+      '<div class="cv-sub">'+esc(c.email)+' · '+esc(c.phone)+' · '+esc(c.district)+', Bangladesh</div>'+
+      '<div class="cv-sec">Profile</div>'+
+      '<p>'+esc(c.exp)+' of FMCG experience. Core strengths: '+esc(c.skills.join(', '))+'. Seeking the Sr. Brand Manager role at Square Toiletries Limited.</p>'+
+      '<div class="cv-sec">Experience</div>'+c.work.map(function(w){return '<p>• '+esc(w)+'</p>';}).join('')+
+      '<div class="cv-sec">Education</div>'+c.edus.map(function(e){return '<p>• '+esc(e)+'</p>';}).join('')+
+      '<div class="cv-sec">Skills</div><p>'+esc(c.skillsFull.join(' · '))+'</p>'+
+      (c.certs.length?'<div class="cv-sec">Certifications</div>'+c.certs.map(function(s){return '<p>• '+esc(s)+'</p>';}).join(''):'')+
+    '</div>';
+  document.getElementById('cvDrawerBody').innerHTML=body;
+  document.getElementById('cvDrawer').classList.add('open');
+  document.getElementById('cvDrawer').setAttribute('aria-hidden','false');
+  document.getElementById('cvOverlay').classList.add('open');
+}
+function closeCvDrawer(){
+  document.getElementById('cvDrawer').classList.remove('open');
+  document.getElementById('cvDrawer').setAttribute('aria-hidden','true');
+  document.getElementById('cvOverlay').classList.remove('open');
+}
+
+/* ---------- Status / actions ---------- */
+var STMAP={suc:['b-suc','Shortlisted'], dan:['b-dan','Rejected — pending HR review'], warn:['b-warn','Pending review'], inf:['b-inf','Screened']};
+function setStatus(id,kind){
+  var el=document.getElementById('status-'+id); if(!el)return;
+  var m=STMAP[kind];
+  el.className='badge '+m[0]; el.textContent=m[1];
+}
+
+/* ---------- Bulk select ---------- */
+function toggleAll(cb){
+  document.querySelectorAll('.rowcb').forEach(function(x){x.checked=cb.checked;});
+  updateCount();
+}
+function updateCount(){
+  var n=document.querySelectorAll('.rowcb:checked').length;
+  document.querySelector('[data-testid="review-selected-count"]').textContent=n;
+}
+
+/* ---------- Modal ---------- */
+function openModal(){document.getElementById('shortlistModal').style.display='grid';}
+function closeModal(){document.getElementById('shortlistModal').style.display='none';}
+
+var currentOpt='topn';
+function selectOpt(opt){
+  currentOpt=opt;
+  document.querySelectorAll('.opt-card').forEach(function(c){
+    var on=c.getAttribute('data-opt')===opt;
+    c.classList.toggle('sel',on);
+    var ctl=c.querySelector('.opt-controls');
+    if(ctl) ctl.hidden=!on;
+  });
+  if(opt==='manual'){closeModal();}
+}
+
+/* live previews */
+function onTopN(v){
+  document.getElementById('topnVal').textContent=v;
+  var minScore = Math.max(40, 93 - Math.round(v*0.5)); // bigger N -> lower floor
+  document.getElementById('topnPreview').textContent='Top '+v+' candidates, all with score ≥'+minScore+'%.';
+}
+function onThreshold(v){
+  document.getElementById('thrVal').textContent=v;
+  // count mock candidates at/above threshold from the visible sample, scaled to the 500 pool
+  var pct = v>=90?6 : v>=85?8 : v>=80?25 : v>=70?54 : v>=60?71 : 86;
+  var cnt = Math.round(500*pct/100);
+  document.getElementById('thrPreview').textContent=cnt+' candidates above '+v+'%.';
+}
+function onLocation(v){
+  v=Math.max(1, parseInt(v||1,10));
+  document.getElementById('locPreview').textContent=v+' per district × 8 districts = '+(v*8)+' candidates.';
+}
+
+/* ---------- Apply suggestion: bulk update + navigate ---------- */
+function applySuggestion(){
+  if(currentOpt==='manual'){closeModal();return;}
+  var shortlistIds=[];
+  if(currentOpt==='topn'){
+    var n=parseInt(document.querySelector('[data-testid="shortlist-topn-slider"]').value,10);
+    var ranked=CANDS.slice().sort(function(a,b){return b.score-a.score;});
+    shortlistIds=ranked.slice(0,Math.min(n,ranked.length)).map(function(c){return c.id;});
+  }else if(currentOpt==='threshold'){
+    var t=parseInt(document.querySelector('[data-testid="shortlist-threshold-slider"]').value,10);
+    shortlistIds=CANDS.filter(function(c){return c.score>=t;}).map(function(c){return c.id;});
+  }else if(currentOpt==='balanced'){
+    // pick highest scorer per distinct top-skill for coverage
+    var seen={}; CANDS.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(c){
+      var k=c.skills[0]; if(!seen[k]){seen[k]=1; shortlistIds.push(c.id);} });
+  }else if(currentOpt==='location'){
+    var per=Math.max(1,parseInt(document.querySelector('[data-testid="shortlist-location-input"]').value||1,10));
+    var byDist={};
+    CANDS.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(c){
+      byDist[c.district]=byDist[c.district]||0;
+      if(byDist[c.district]<per){byDist[c.district]++; shortlistIds.push(c.id);} });
+  }
+  CANDS.forEach(function(c){ setStatus(c.id, shortlistIds.indexOf(c.id)>-1 ? 'suc' : 'dan'); });
+  closeModal();
+  window.location.href='results.page.html';
+}
+
+/* init */
+buildRows();
+onTopN(30);
+</script>
+</body>
+</html>

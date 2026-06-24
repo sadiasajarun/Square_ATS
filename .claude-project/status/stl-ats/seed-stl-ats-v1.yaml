@@ -1,0 +1,123 @@
+# Seed Specification
+# Generated: 2026-06-23
+# Ambiguity Score: 0.10
+# Project: stl-ats (STL AI-Powered ATS)
+
+goal: "Build a web-based AI-powered Applicant Tracking System for Square Toiletries Limited that lets HR create job positions with weighted screening templates, bulk-upload CVs (5,000+/batch), and receive AI-assisted explainable shortlist recommendations — with mandatory human-in-the-loop control before any rejection."
+
+constraints:
+  # Hard constraints (non-negotiable)
+  - "Human-in-the-loop: zero automated rejections; human review mandatory before any candidate rejection"
+  - "Explainable scoring: every match score must expose per-criterion contributions + matched/missed CV evidence + red flags"
+  - "Bilingual: Bangla + English CVs treated as first-class (Unicode normalization, language-aware parsing, bilingual dictionaries)"
+  - "RBAC: four roles — Admin, HR (primary), Hiring Manager, Viewer — with module-level permissions"
+  - "Backend stack is NestJS (TypeScript), overriding the project doc's Laravel/FastAPI"
+  - "Stack: React + TypeScript frontend, NestJS REST API, PostgreSQL, Redis queue, S3-compatible storage"
+  - "Auth via JWT in httpOnly cookies (never localStorage); token rotation on refresh"
+  - "Full audit trail: uploads, parsing, scoring runs, overrides, shortlist movements, exports, admin actions"
+  - "AI governance aligned with NIST AI RMF, ISO/IEC 42001, OWASP LLM Top 10; version-controlled templates/prompts"
+  # Build decisions (v1)
+  - "v1 scope: ALL 7 modules (User/Security, CV Upload/Parsing, AI Screening, Candidate DB/History, Export/Reporting, Integration/Workflow, AI Governance)"
+  - "AI scoring is HYBRID: deterministic weighted engine as the scoring core + optional LLM (Anthropic) for extraction & red-flag narrative; falls back to rules when no API key"
+  - "OCR via pluggable IOcrService adapter with a stub/local impl in v1; digital PDF/Word parsed directly; cloud provider (Azure/Google) wired later"
+  - "Notifications: real SMTP email (templated); SMS as a pluggable adapter with stub/log impl until a gateway is chosen"
+  - "Out of scope: candidate-facing self-service portal; full employment/fraud verification (only inconsistency indicators); automated rejection"
+
+acceptance_criteria:
+  - "Admin can create/activate/deactivate users and assign one of 4 roles with module-level permissions"
+  - "HR can create a job position (title, department, designation, description) and build a screening template with selectable criteria (age, gender, education, experience, skills, location, certifications), per-criterion weights, include keywords, exclude keywords, and an auto-shortlist threshold"
+  - "HR can bulk-upload 5,000+ CVs per batch (PDF/Word/JPG/PNG) processed asynchronously via Redis queue with per-file status (pending→processing→parsed→screened→shortlisted/rejected-pending-review/duplicate/failed)"
+  - "Duplicate detection works within a batch (file hash) and against the existing candidate DB (email, phone, name, profile similarity)"
+  - "AI screening produces a percentage match score with an explanation panel: per-criterion contribution breakdown, matched/missed CV evidence, and red flags (career break, frequent job changes, missing info, over/under-qualification, skill gap)"
+  - "Candidates scoring >= threshold are auto-moved to a shortlist; candidates below threshold are marked rejected-pending-review and CANNOT be rejected without an HR action"
+  - "HR can override any AI decision with a mandatory logged reason; overrides are recorded in the audit trail and feedback store"
+  - "Re-screening on criteria change works without requiring CV re-upload"
+  - "Centralized candidate master profile shows application history, last application date, previous positions, previous shortlist status; supports tagging, bookmarking, and full-text + structured search (talent pool)"
+  - "HR can export: bulk original CV bundle (filtered/shortlisted), customizable-field Excel, STL predefined Excel format, screening reports, interview panel summaries — all export actions are audit-logged"
+  - "HR can schedule interviews (slots, panels, candidate invites) and send templated email (real) + SMS (stub) notifications with delivery/schedule status tracking"
+  - "Hiring Manager can view assigned positions, review shortlisted candidates, add interview feedback/comments, and accept/reject for next round or return to HR (cannot upload or override screening scores)"
+  - "Viewer has read-only access to assigned positions, candidate profiles, and reports"
+  - "All screening templates and AI prompts are version-controlled with full traceability"
+  - "All sensitive data encrypted in transit (TLS) and at rest; file uploads validated with malware-scan integration readiness"
+
+ontology_schema:
+  name: "ATSDomainModel"
+  description: "Core domain entities for the STL applicant tracking and AI screening system"
+  fields:
+    - name: "User"
+      type: "object"
+      description: "System user with role (Admin|HR|HiringManager|Viewer), status, module permissions, credentials"
+    - name: "JobPosition"
+      type: "object"
+      description: "Open role: title, department, designation, description, status; owns one or more ScreeningTemplate versions"
+    - name: "ScreeningTemplate"
+      type: "object"
+      description: "Version-controlled config: weighted Criteria, include/exclude keywords, auto-shortlist threshold, AI prompt version"
+    - name: "Criterion"
+      type: "object"
+      description: "Single weighted screening dimension (age, gender, education, experience, past positions, skills, location, certifications) with weight"
+    - name: "CandidateBatch"
+      type: "object"
+      description: "An upload batch tied to a JobPosition; tracks aggregate processing progress and counts"
+    - name: "CvFile"
+      type: "object"
+      description: "An uploaded file with format, storage key, file hash, per-file processing status, extraction confidence, missing-field flags"
+    - name: "Candidate"
+      type: "object"
+      description: "Master candidate profile from parsed data: name, contact, email, phone, district, education, experience, skills, tags, bookmark"
+    - name: "Application"
+      type: "object"
+      description: "Links a Candidate to a JobPosition via a CvFile; holds match score, status, shortlist state, application history"
+    - name: "ScreeningResult"
+      type: "object"
+      description: "AI output for an Application: percentage score, per-criterion contributions, matched/missed evidence, red flags, prompt/template version"
+    - name: "Override"
+      type: "object"
+      description: "HR manual decision change with mandatory reason, actor, timestamp; feeds audit + AI feedback"
+    - name: "Interview"
+      type: "object"
+      description: "Scheduled interview: slot, panel members, candidate invite, status, hiring-manager feedback/comments"
+    - name: "Notification"
+      type: "object"
+      description: "Outbound email/SMS message with template, channel, delivery status"
+    - name: "AuditLog"
+      type: "object"
+      description: "Immutable record of upload, parse, scoring run, override, shortlist movement, export, admin action"
+    - name: "ExportJob"
+      type: "object"
+      description: "Requested export (CV bundle, Excel, report) with field selection, status, audit linkage"
+
+evaluation_principles:
+  - name: "human_in_the_loop_integrity"
+    description: "No path produces an automated rejection; overrides always available and logged with reason"
+    weight: 0.25
+  - name: "explainability"
+    description: "Every score traces to per-criterion contributions and concrete CV evidence"
+    weight: 0.20
+  - name: "functional_completeness"
+    description: "All 7 modules and their acceptance criteria implemented and working end-to-end"
+    weight: 0.20
+  - name: "bulk_processing_robustness"
+    description: "Async queue handles 5,000+ CV batches with accurate per-file status and duplicate detection"
+    weight: 0.15
+  - name: "security_and_audit"
+    description: "RBAC enforced, JWT httpOnly cookies, encryption, complete audit trail"
+    weight: 0.10
+  - name: "bilingual_support"
+    description: "Bangla + English CVs parsed and screened as first-class"
+    weight: 0.10
+
+exit_conditions:
+  - name: "success"
+    description: "All acceptance criteria verified across the 7 modules"
+    criteria: "evaluation_score >= 0.8"
+  - name: "max_iterations"
+    description: "Safety valve"
+    criteria: "iterations > 10"
+
+metadata:
+  version: "1.0"
+  ambiguity_score: 0.10
+  project: "stl-ats"
+  source_doc: ".claude-project/context/PRD_FULL_CONTENT.md"
+  created_at: "2026-06-23"

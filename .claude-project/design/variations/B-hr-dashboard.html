@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variation B — Square Corporate · HR Dashboard · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F5;--surface:#FFFFFF;--surface-2:#ECF1EF;--border:#D7DEDB;
+  --text:#10221C;--muted:#5C6E68;--primary:#0B6E4F;--primary-hover:#08583E;--primary-soft:#E3F2EC;
+  --primary-dark:#0A3D2C;--primary-darker:#08311F;--accent:#C8A33C;--accent-soft:#F6EDD2;
+  --success:#0B6E4F;--success-s:#E3F2EC;--info:#1E6FB8;--info-s:#DCEBF7;
+  --warn:#B5781A;--warn-s:#FBEFD6;--danger:#C2402F;--danger-s:#F8DED9;--caution:#6D4AAE;--caution-s:#E9E2F5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+.mono{font-family:'IBM Plex Mono',monospace}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{background:var(--primary-darker);color:#fff;display:flex;flex-direction:column;padding:14px 10px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 8px 16px;font-weight:700;font-size:16px;color:#fff}
+.brand .logo{width:30px;height:30px;border-radius:6px;background:var(--accent);color:var(--primary-darker);display:grid;place-items:center;font-weight:700}
+.nav-label{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:14px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;color:rgba(255,255,255,.72);font-weight:500;margin-bottom:1px}
+.nav-item svg{width:18px;height:18px}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:var(--primary-dark);color:#fff;position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:3px;background:var(--accent)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid rgba(255,255,255,.1)}
+.avatar{width:32px;height:32px;border-radius:6px;background:var(--accent);color:var(--primary-darker);display:grid;place-items:center;font-weight:700}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:58px;background:var(--primary-dark);display:flex;align-items:center;gap:16px;padding:0 26px;color:#fff}
+.crumb{font-size:13px;color:rgba(255,255,255,.7)}.crumb b{color:#fff;font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:7px 12px;color:rgba(255,255,255,.8);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:#fff;width:100%}
+.search input::placeholder{color:rgba(255,255,255,.6)}
+.lang{display:flex;border:1px solid rgba(255,255,255,.25);border-radius:6px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:rgba(255,255,255,.7)}.lang span.on{background:var(--accent);color:var(--primary-darker)}
+.icon-btn{width:36px;height:36px;border:1px solid rgba(255,255,255,.22);border-radius:6px;display:grid;place-items:center;color:#fff;background:transparent}
+.content{padding:22px 26px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.page-head h1{font-size:21px;font-weight:600}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:6px;font-weight:600;font-size:13px;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.kpi{padding:16px 18px;border-left:3px solid var(--primary)}
+.kpi.acc{border-left-color:var(--accent)}.kpi.warn{border-left-color:var(--warn)}.kpi.inf{border-left-color:var(--info)}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:27px;font-weight:600;margin-top:8px}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:14px;font-weight:600}
+.card-head a{font-size:12.5px;color:var(--primary);font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:9px 18px}
+td{padding:10px 18px;border-top:1px solid var(--border);font-size:13px}
+tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:6px;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:700;font-size:12px}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;position:relative}
+.bar i{display:block;height:100%}
+.bar .thr{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--accent);left:75%}
+.score b{width:32px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:4px;font-size:11.5px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:2px;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}.b-dan{background:var(--danger-s);color:var(--danger)}.b-cau{background:var(--caution-s);color:var(--caution)}
+.batch{padding:13px 18px;border-top:1px solid var(--border)}.batch:first-of-type{border-top:0}
+.batch .r{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.batch .nm{font-weight:600;font-size:13px}.batch .pct{font-size:12px;color:var(--muted)}
+.pbar{height:7px;border-radius:3px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary)}
+.batch .meta{display:flex;gap:14px;margin-top:7px;font-size:11.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="logo">S</span> STL ATS</a>
+    <div class="nav-label">Workspace</div>
+    <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Dashboard</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Job Positions</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> CV Uploads</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Screening Results</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Candidates</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Interviews</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exports</a>
+    <div class="side-foot"><span class="avatar">FA</span><div style="font-size:13px;color:#fff"><b>Farzana Akter</b><div style="color:rgba(255,255,255,.6);font-size:12px">HR Manager</div></div></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Workspace / <b>Dashboard</b></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Search candidates, positions…"></label>
+      <div class="lang"><span class="on">EN</span><span>বাংলা</span></div>
+      <button class="icon-btn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    </header>
+    <main class="content">
+      <div class="page-head">
+        <div><h1>Hiring Pipeline Overview</h1><p>Square Toiletries Limited · Talent Acquisition</p></div>
+        <div style="display:flex;gap:10px"><button class="btn btn-ghost">Upload CVs</button><button class="btn btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> New Position</button></div>
+      </div>
+      <section class="kpis">
+        <div class="card kpi"><div class="k-top">Open Positions</div><div class="v">12</div><div class="d up">+2 this week</div></div>
+        <div class="card kpi warn"><div class="k-top">Pending Screening</div><div class="v">3</div><div class="d" style="color:var(--muted)">2 batches processing</div></div>
+        <div class="card kpi inf"><div class="k-top">New Applications</div><div class="v">4,820</div><div class="d up">+1,240 today</div></div>
+        <div class="card kpi acc"><div class="k-top">Shortlisted</div><div class="v">186</div><div class="d up">41 awaiting review</div></div>
+      </section>
+      <section class="grid2">
+        <div class="card">
+          <div class="card-head"><h2>Top candidates · Sr. Brand Manager</h2><a href="#">View all results →</a></div>
+          <table>
+            <thead><tr><th>Candidate</th><th>Match score</th><th>Exp.</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div class="cand"><span class="ava">MR</span><div>Mahmudur Rahman<small>Dhaka · MBA, IBA</small></div></div></td><td><div class="score"><div class="bar"><i style="width:92%;background:var(--success)"></i><span class="thr"></span></div><b class="mono">92</b></div></td><td>9 yrs</td><td><span class="badge b-suc">Shortlisted</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">SK</span><div>Sadia Karim<small>Chattogram · BBA, DU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:88%;background:var(--success)"></i><span class="thr"></span></div><b class="mono">88</b></div></td><td>7 yrs</td><td><span class="badge b-suc">Shortlisted</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">TI</span><div>Tanvir Islam<small>Dhaka · BSc, BUET</small></div></div></td><td><div class="score"><div class="bar"><i style="width:74%;background:var(--warn)"></i><span class="thr"></span></div><b class="mono">74</b></div></td><td>6 yrs</td><td><span class="badge b-inf">Screened</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">NF</span><div>Nusrat Fariha<small>Sylhet · MBA, NSU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:61%;background:var(--warn)"></i><span class="thr"></span></div><b class="mono">61</b></div></td><td>5 yrs</td><td><span class="badge b-dan">Pending review</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">AH</span><div>Arif Hossain<small>Dhaka · BBA, BRACU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:47%;background:var(--danger)"></i><span class="thr"></span></div><b class="mono">47</b></div></td><td>3 yrs</td><td><span class="badge b-cau">Duplicate</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Active batches</h2><a href="#">All batches →</a></div>
+          <div class="batch"><div class="r"><span class="nm">Sr. Brand Manager · #214</span><span class="pct mono">78%</span></div><div class="pbar"><i style="width:78%"></i></div><div class="meta"><span>3,910 parsed</span><span>820 screening</span><span style="color:var(--danger)">12 failed</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Territory Officer · #213</span><span class="pct mono">100%</span></div><div class="pbar"><i style="width:100%"></i></div><div class="meta"><span>5,120 parsed</span><span>241 shortlisted</span><span style="color:var(--caution)">34 dup.</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Lab Chemist · #212</span><span class="pct mono">35%</span></div><div class="pbar"><i style="width:35%"></i></div><div class="meta"><span>610 parsed</span><span>queued</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Sales Executive · #210</span><span class="pct mono">100%</span></div><div class="pbar"><i style="width:100%"></i></div><div class="meta"><span>2,300 parsed</span><span>88 shortlisted</span></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

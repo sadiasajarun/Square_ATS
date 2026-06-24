@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variation A — Clarity · HR Dashboard · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;--primary:#4F46E5;--primary-hover:#4338CA;--primary-soft:#EEF2FF;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#2563EB;--info-s:#DBEAFE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;--caution:#7C3AED;--caution-s:#EDE9FE;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600}
+/* Main */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}
+.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.batch{padding:14px 20px;border-top:1px solid var(--border)}
+.batch:first-of-type{border-top:0}
+.batch .r{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.batch .nm{font-weight:600;font-size:13.5px}
+.batch .pct{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.batch .meta{display:flex;gap:14px;margin-top:8px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="logo">S</span> STL ATS</a>
+    <div class="nav-label">Workspace</div>
+    <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Dashboard</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Job Positions</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> CV Uploads</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Screening Results</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Candidates</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Interviews</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exports</a>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div style="font-size:13px"><b>Farzana Akter</b><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+    </div>
+  </aside>
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Workspace / <b>Dashboard</b></div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Search candidates, positions…"></label>
+      <div class="lang"><span class="on">EN</span><span>বাংলা</span></div>
+      <button class="icon-btn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    </header>
+    <main class="content">
+      <div class="page-head">
+        <div><h1>Good morning, Farzana</h1><p>Here's what's happening across your hiring pipeline today.</p></div>
+        <div style="display:flex;gap:10px"><button class="btn btn-ghost">Upload CVs</button><button class="btn btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> New Position</button></div>
+      </div>
+      <!-- KPIs -->
+      <section class="kpis">
+        <div class="card kpi"><div class="k-top">Open Positions <span class="k-ic" style="background:var(--primary-soft);color:var(--primary)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span></div><div class="v">12</div><div class="d up">▲ 2 added this week</div></div>
+        <div class="card kpi"><div class="k-top">Pending Screening <span class="k-ic" style="background:var(--warn-s);color:var(--warn)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span></div><div class="v">3</div><div class="d" style="color:var(--muted)">2 batches processing</div></div>
+        <div class="card kpi"><div class="k-top">New Applications <span class="k-ic" style="background:var(--info-s);color:var(--info)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span></div><div class="v">4,820</div><div class="d up">▲ 1,240 today</div></div>
+        <div class="card kpi"><div class="k-top">Shortlisted <span class="k-ic" style="background:var(--success-s);color:var(--success)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span></div><div class="v">186</div><div class="d up">▲ 41 awaiting review</div></div>
+      </section>
+      <!-- GRID -->
+      <section class="grid2">
+        <div class="card">
+          <div class="card-head"><h2>Top candidates · Sr. Brand Manager</h2><a href="#">View all results →</a></div>
+          <table>
+            <thead><tr><th>Candidate</th><th>Match score</th><th>Experience</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div class="cand"><span class="ava">MR</span><div>Mahmudur Rahman<small>Dhaka · MBA, IBA</small></div></div></td><td><div class="score"><div class="bar"><i style="width:92%;background:var(--success)"></i></div><b>92</b></div></td><td>9 yrs</td><td><span class="badge b-suc">Shortlisted</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">SK</span><div>Sadia Karim<small>Chattogram · BBA, DU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:88%;background:var(--success)"></i></div><b>88</b></div></td><td>7 yrs</td><td><span class="badge b-suc">Shortlisted</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">TI</span><div>Tanvir Islam<small>Dhaka · BSc, BUET</small></div></div></td><td><div class="score"><div class="bar"><i style="width:74%;background:var(--warn)"></i></div><b>74</b></div></td><td>6 yrs</td><td><span class="badge b-inf">Screened</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">NF</span><div>Nusrat Fariha<small>Sylhet · MBA, NSU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:61%;background:var(--warn)"></i></div><b>61</b></div></td><td>5 yrs</td><td><span class="badge b-dan">Pending review</span></td></tr>
+              <tr><td><div class="cand"><span class="ava">AH</span><div>Arif Hossain<small>Dhaka · BBA, BRACU</small></div></div></td><td><div class="score"><div class="bar"><i style="width:47%;background:var(--danger)"></i></div><b>47</b></div></td><td>3 yrs</td><td><span class="badge b-cau">Duplicate</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Active batches</h2><a href="#">All batches →</a></div>
+          <div class="batch"><div class="r"><span class="nm">Sr. Brand Manager · Batch #214</span><span class="pct">78%</span></div><div class="pbar"><i style="width:78%"></i></div><div class="meta"><span>3,910 parsed</span><span>820 screening</span><span style="color:var(--danger)">12 failed</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Territory Officer · Batch #213</span><span class="pct">100%</span></div><div class="pbar"><i style="width:100%;background:var(--success)"></i></div><div class="meta"><span>5,120 parsed</span><span>241 shortlisted</span><span class="b-cau" style="background:none;color:var(--caution)">34 duplicates</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Lab Chemist · Batch #212</span><span class="pct">35%</span></div><div class="pbar"><i style="width:35%"></i></div><div class="meta"><span>610 parsed</span><span>queued</span></div></div>
+          <div class="batch"><div class="r"><span class="nm">Sales Executive · Batch #210</span><span class="pct">100%</span></div><div class="pbar"><i style="width:100%;background:var(--success)"></i></div><div class="meta"><span>2,300 parsed</span><span>88 shortlisted</span></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

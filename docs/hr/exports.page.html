@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exports &amp; Reports · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+.hide{display:none!important}
+/* export builder */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.type-card{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .12s,background .12s}
+.type-card:hover{background:var(--surface-2)}
+.type-card input{margin-top:3px;flex:none}
+.type-card.sel{border-color:var(--primary);background:var(--primary-soft)}
+.type-card .tc-ic{width:34px;height:34px;border-radius:8px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center;flex:none}
+.type-card.sel .tc-ic{background:#fff}
+.type-card .tc-ic svg{width:18px;height:18px}
+.type-card .tc-txt b{font-size:13.5px;font-weight:600;display:block}
+.type-card .tc-txt small{color:var(--muted);font-size:12px;display:block;margin-top:2px}
+.scope-row{display:flex;flex-wrap:wrap;gap:8px}
+.scope-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;font-size:12.5px;font-weight:500;cursor:pointer}
+.scope-pill:hover{background:var(--surface-2)}
+.opt-pane{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--surface)}
+.note-box{font-size:12.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.fields-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.fields-tools{display:flex;align-items:center;gap:8px}
+.link-btn{background:none;border:0;color:var(--primary);font-weight:600;font-size:12.5px;padding:0}
+.link-btn:hover{text-decoration:underline}
+.fields-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.fchk{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500;padding:4px 0}
+.switch{width:18px;height:18px}
+.validation-msg{background:var(--danger-s);color:var(--danger);border:1px solid var(--danger);border-radius:8px;padding:9px 12px;font-size:12.5px;font-weight:500;margin-bottom:12px}
+.dl-link{color:var(--primary);font-weight:600;font-size:13px}
+.dl-link:hover{text-decoration:underline}
+.toast{position:fixed;right:24px;bottom:24px;background:var(--text);color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:80;max-width:380px}
+.toast svg{width:18px;height:18px;color:var(--success-s);flex:none}
+.toast.show{animation:toastIn .25s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item active" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+    
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b>Exports &amp; Reports</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Exports &amp; Reports</h1>
+          <p>Choose what to export, mark the fields you need, then generate. Every export is audit-logged.</p>
+        </div>
+      </div>
+
+      <!-- New export builder -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-head"><h2>New export</h2></div>
+        <div class="card-body">
+          <form id="export-form" onsubmit="return false">
+
+            <!-- Step 1: Export type -->
+            <div class="field">
+              <label>1 &middot; Export type</label>
+              <div class="type-grid">
+                <label class="type-card" data-type-card="cv-bundle">
+                  <input type="radio" name="export-type" value="cv-bundle" data-testid="type-cv-bundle" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Bulk CV download</b><small>Original CV files as a ZIP</small></span>
+                </label>
+                <label class="type-card" data-type-card="excel">
+                  <input type="radio" name="export-type" value="excel" data-testid="type-excel" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Excel export</b><small>Customizable fields</small></span>
+                </label>
+                <label class="type-card" data-type-card="stl-summary">
+                  <input type="radio" name="export-type" value="stl-summary" data-testid="type-stl-summary" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Final candidate summary</b><small>Predefined STL Excel format</small></span>
+                </label>
+                <label class="type-card" data-type-card="screening-report">
+                  <input type="radio" name="export-type" value="screening-report" data-testid="type-screening-report" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Screening report</b><small>PDF with scores + explanations</small></span>
+                </label>
+                <label class="type-card" data-type-card="panel-summary">
+                  <input type="radio" name="export-type" value="panel-summary" data-testid="type-panel-summary" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Interview panel summary</b><small>Panel, slots &amp; feedback rollup</small></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 2: Scope -->
+            <div class="field">
+              <label>2 &middot; Scope</label>
+              <div class="scope-row">
+                <label class="scope-pill"><input type="radio" name="export-scope" value="All candidates" data-testid="scope-all" checked onchange="onScopeChange()"> All candidates</label>
+                <label class="scope-pill"><input type="radio" name="export-scope" value="Shortlisted only" data-testid="scope-shortlisted" onchange="onScopeChange()"> Shortlisted only</label>
+                <label class="scope-pill"><input type="radio" name="export-scope" value="Selected candidate" data-testid="scope-selected" onchange="onScopeChange()"> Selected candidate</label>
+                <label class="scope-pill"><input type="radio" name="export-scope" value="By position" data-testid="scope-position" onchange="onScopeChange()"> By position</label>
+              </div>
+              <div id="scope-position-wrap" class="hide" style="margin-top:10px">
+                <select id="scope-position-select" data-testid="scope-position-select">
+                  <option value="Sr. Brand Manager">Sr. Brand Manager — Marketing</option>
+                  <option value="QA Chemist">QA Chemist — Quality Assurance</option>
+                  <option value="Territory Sales Officer">Territory Sales Officer — Sales (Sylhet)</option>
+                  <option value="Production Officer">Production Officer — Manufacturing (Gazipur)</option>
+                  <option value="Digital Marketing Executive">Digital Marketing Executive — Marketing</option>
+                </select>
+              </div>
+              <div id="scope-selected-wrap" class="hide" style="margin-top:10px">
+                <select id="scope-selected-select" data-testid="scope-selected-select">
+                  <option value="Tahmina Rahman">Tahmina Rahman — Sr. Brand Manager</option>
+                  <option value="Rifat Hossain">Rifat Hossain — QA Chemist</option>
+                  <option value="Nusrat Jahan">Nusrat Jahan — Digital Marketing Executive</option>
+                  <option value="Abdullah Al Mamun">Abdullah Al Mamun — Territory Sales Officer</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Step 3: Conditional options -->
+            <div class="field" id="options-block">
+              <label>3 &middot; Options</label>
+
+              <!-- placeholder when no type chosen -->
+              <div id="opt-none" class="opt-pane note-box" data-testid="opt-none">
+                Select an export type above to see its options.
+              </div>
+
+              <!-- Excel options -->
+              <div id="opt-excel" class="opt-pane hide" data-testid="opt-excel">
+                <div class="fields-head">
+                  <span style="font-weight:600;font-size:12.5px">Fields to include</span>
+                  <span class="fields-tools">
+                    <button type="button" class="link-btn" data-testid="fields-select-all" onclick="setAllFields(true)">Select all</button>
+                    <span style="color:var(--border)">|</span>
+                    <button type="button" class="link-btn" data-testid="fields-clear" onclick="setAllFields(false)">Clear</button>
+                  </span>
+                </div>
+                <div class="fields-grid">
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Name" data-testid="field-name" checked> Name</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Contact number" data-testid="field-contact" checked> Contact number</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Email" data-testid="field-email" checked> Email</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Home district" data-testid="field-district" checked> Home district</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Education" data-testid="field-education"> Education</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Experience" data-testid="field-experience"> Experience</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Skills" data-testid="field-skills"> Skills</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Match score" data-testid="field-match-score" checked> Match score</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Interview rating" data-testid="field-interview-rating"> Interview rating</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Tags" data-testid="field-tags"> Tags</label>
+                </div>
+              </div>
+
+              <!-- Final candidate summary options -->
+              <div id="opt-stl-summary" class="opt-pane hide" data-testid="opt-stl-summary">
+                <div class="note-box">Uses STL standard summary template.</div>
+                <div style="margin-top:10px">
+                  <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Position</label>
+                  <select id="stl-position-select" data-testid="stl-position-select">
+                    <option value="Sr. Brand Manager">Sr. Brand Manager — Marketing</option>
+                    <option value="QA Chemist">QA Chemist — Quality Assurance</option>
+                    <option value="Territory Sales Officer">Territory Sales Officer — Sales (Sylhet)</option>
+                    <option value="Production Officer">Production Officer — Manufacturing (Gazipur)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Screening report options -->
+              <div id="opt-screening-report" class="opt-pane hide" data-testid="opt-screening-report">
+                <label class="toggle-row">
+                  <span>Include score explanations</span>
+                  <input type="checkbox" id="incl-explanations" data-testid="toggle-explanations" checked class="switch">
+                </label>
+                <div class="hint">Adds a per-criterion breakdown of why each candidate scored as they did.</div>
+              </div>
+
+              <!-- Interview panel summary options -->
+              <div id="opt-panel-summary" class="opt-pane hide" data-testid="opt-panel-summary">
+                <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Panel / position</label>
+                <select id="panel-position-select" data-testid="panel-position-select">
+                  <option value="Sr. Brand Manager — Panel A">Sr. Brand Manager — Panel A (Marketing)</option>
+                  <option value="QA Chemist — Panel B">QA Chemist — Panel B (QA)</option>
+                  <option value="Territory Sales Officer — Panel C">Territory Sales Officer — Panel C (Sales)</option>
+                </select>
+              </div>
+
+              <!-- CV bundle options -->
+              <div id="opt-cv-bundle" class="opt-pane hide" data-testid="opt-cv-bundle">
+                <div class="note-box">Exports original CV files as a .zip.</div>
+              </div>
+            </div>
+
+            <!-- Validation + generate -->
+            <div id="export-validation" class="validation-msg hide" data-testid="export-validation"></div>
+
+            <button type="submit" class="btn btn-primary" data-testid="export-generate" onclick="generateExport()" style="width:100%;justify-content:center;margin-top:4px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span id="generate-label">Generate export</span>
+            </button>
+            <div class="hint" data-testid="audit-note">All exports are recorded in the audit trail.</div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Export history -->
+      <div class="card">
+        <div class="card-head">
+          <h2>Export history</h2>
+          <a href="../admin/audit.page.html" data-testid="view-audit-log">Audit log</a>
+        </div>
+        <div style="overflow:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Export name</th><th>Type</th><th>Scope</th><th>Fields / Options</th>
+              <th>Created by</th><th>Date</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="export-history-body">
+            <tr data-testid="export-row-h1">
+              <td><div style="font-weight:600">Excel export — Shortlisted — 2026-06-23</div></td>
+              <td><span class="badge b-inf">Excel export</span></td>
+              <td>Shortlisted only</td>
+              <td>Name, Contact number, Email, Match score</td>
+              <td>Farzana Akter</td>
+              <td>2026-06-23</td>
+              <td><span class="badge b-suc">Ready</span></td>
+              <td><a class="dl-link" href="#" data-testid="export-h1-download" onclick="downloadExport(event,'Excel export — Shortlisted — 2026-06-23')">Download</a></td>
+            </tr>
+            <tr data-testid="export-row-h2">
+              <td><div style="font-weight:600">Bulk CV download — By position (QA Chemist) — 2026-06-22</div></td>
+              <td><span class="badge b-cau">Bulk CV download</span></td>
+              <td>By position (QA Chemist)</td>
+              <td>Original CV files (.zip)</td>
+              <td>Farzana Akter</td>
+              <td>2026-06-22</td>
+              <td><span class="badge b-suc">Ready</span></td>
+              <td><a class="dl-link" href="#" data-testid="export-h2-download" onclick="downloadExport(event,'Bulk CV download — By position (QA Chemist) — 2026-06-22')">Download</a></td>
+            </tr>
+            <tr data-testid="export-row-h3">
+              <td><div style="font-weight:600">Final candidate summary — Shortlisted — 2026-06-21</div></td>
+              <td><span class="badge b-inf">Final candidate summary</span></td>
+              <td>Shortlisted only</td>
+              <td>STL standard summary template</td>
+              <td>Farzana Akter</td>
+              <td>2026-06-21</td>
+              <td><span class="badge b-suc">Ready</span></td>
+              <td><a class="dl-link" href="#" data-testid="export-h3-download" onclick="downloadExport(event,'Final candidate summary — Shortlisted — 2026-06-21')">Download</a></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hide" data-testid="export-toast"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var TYPE_LABEL = {
+    'cv-bundle': 'Bulk CV download',
+    'excel': 'Excel export',
+    'stl-summary': 'Final candidate summary',
+    'screening-report': 'Screening report',
+    'panel-summary': 'Interview panel summary'
+  };
+  var TYPE_BADGE = {
+    'cv-bundle': 'b-cau',
+    'excel': 'b-inf',
+    'stl-summary': 'b-inf',
+    'screening-report': 'b-mut',
+    'panel-summary': 'b-warn'
+  };
+  var historySeq = 4; // seeded h1..h3
+
+  function selectedType(){
+    var r = document.querySelector('input[name="export-type"]:checked');
+    return r ? r.value : null;
+  }
+  function selectedScopeRadio(){
+    return document.querySelector('input[name="export-scope"]:checked');
+  }
+
+  // ---- Type switching ----
+  window.onTypeChange = function(){
+    var type = selectedType();
+    // highlight chosen card
+    document.querySelectorAll('.type-card').forEach(function(c){
+      var input = c.querySelector('input[name="export-type"]');
+      c.classList.toggle('sel', input && input.checked);
+    });
+    // show only matching options pane
+    var panes = ['none','cv-bundle','excel','stl-summary','screening-report','panel-summary'];
+    panes.forEach(function(p){
+      var el = document.getElementById('opt-' + p);
+      if(el) el.classList.add('hide');
+    });
+    var target = type ? document.getElementById('opt-' + type) : document.getElementById('opt-none');
+    if(!target) target = document.getElementById('opt-none');
+    target.classList.remove('hide');
+    clearValidation();
+  };
+
+  // ---- Scope switching ----
+  window.onScopeChange = function(){
+    var val = selectedScopeRadio() ? selectedScopeRadio().value : '';
+    document.getElementById('scope-position-wrap').classList.toggle('hide', val !== 'By position');
+    document.getElementById('scope-selected-wrap').classList.toggle('hide', val !== 'Selected candidate');
+    clearValidation();
+  };
+
+  // ---- Excel field controls ----
+  window.setAllFields = function(state){
+    document.querySelectorAll('.excel-field').forEach(function(cb){ cb.checked = state; });
+    clearValidation();
+  };
+
+  function checkedFields(){
+    return Array.prototype.slice.call(document.querySelectorAll('.excel-field:checked'))
+      .map(function(cb){ return cb.value; });
+  }
+
+  // ---- Scope summary text ----
+  function scopeText(){
+    var val = selectedScopeRadio() ? selectedScopeRadio().value : 'All candidates';
+    if(val === 'By position'){
+      return 'By position (' + document.getElementById('scope-position-select').value + ')';
+    }
+    if(val === 'Selected candidate'){
+      return 'Selected candidate (' + document.getElementById('scope-selected-select').value + ')';
+    }
+    return val;
+  }
+
+  // ---- Options summary text per type ----
+  function optionsText(type){
+    if(type === 'excel') return checkedFields().join(', ');
+    if(type === 'cv-bundle') return 'Original CV files (.zip)';
+    if(type === 'stl-summary') return 'STL standard summary template (' + document.getElementById('stl-position-select').value + ')';
+    if(type === 'screening-report') return 'Scores' + (document.getElementById('incl-explanations').checked ? ' + explanations' : '');
+    if(type === 'panel-summary') return 'Panel: ' + document.getElementById('panel-position-select').value;
+    return '';
+  }
+
+  // ---- Validation ----
+  function showValidation(msg){
+    var v = document.getElementById('export-validation');
+    v.textContent = msg;
+    v.classList.remove('hide');
+  }
+  function clearValidation(){
+    document.getElementById('export-validation').classList.add('hide');
+  }
+
+  // ---- Toast ----
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>' + msg + '</span>';
+    t.classList.remove('hide');
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.classList.add('hide'); t.classList.remove('show'); }, 3500);
+  }
+
+  function todayISO(){
+    var d = new Date();
+    function p(n){ return (n<10?'0':'') + n; }
+    return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+  }
+
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ---- Generate ----
+  window.generateExport = function(){
+    var type = selectedType();
+    if(!type){
+      showValidation('Please choose an export type before generating.');
+      return;
+    }
+    if(type === 'excel' && checkedFields().length === 0){
+      showValidation('Select at least one field to include in the Excel export.');
+      return;
+    }
+    clearValidation();
+
+    var btn = document.querySelector('[data-testid="export-generate"]');
+    var label = document.getElementById('generate-label');
+    var prev = label.textContent;
+    btn.disabled = true;
+    btn.style.opacity = '.7';
+    btn.style.cursor = 'wait';
+    label.textContent = 'Generating…';
+
+    var typeLabel = TYPE_LABEL[type];
+    var scope = scopeText();
+    var opts = optionsText(type);
+    var date = todayISO();
+    var name = typeLabel + ' — ' + scope + ' — ' + date;
+    var badge = TYPE_BADGE[type];
+    var idx = historySeq++;
+
+    setTimeout(function(){
+      var tbody = document.getElementById('export-history-body');
+      var tr = document.createElement('tr');
+      tr.setAttribute('data-testid', 'export-row-h' + idx);
+      tr.innerHTML =
+        '<td><div style="font-weight:600">' + esc(name) + '</div></td>' +
+        '<td><span class="badge ' + badge + '">' + esc(typeLabel) + '</span></td>' +
+        '<td>' + esc(scope) + '</td>' +
+        '<td>' + esc(opts) + '</td>' +
+        '<td>Farzana Akter</td>' +
+        '<td>' + date + '</td>' +
+        '<td><span class="badge b-suc">Ready</span></td>' +
+        '<td><a class="dl-link" href="#" data-testid="export-h' + idx + '-download" onclick="downloadExport(event,\'' + esc(name).replace(/'/g,'&#39;') + '\')">Download</a></td>';
+      tbody.insertBefore(tr, tbody.firstChild);
+
+      btn.disabled = false;
+      btn.style.opacity = '';
+      btn.style.cursor = '';
+      label.textContent = prev;
+      showToast('Export ready: ' + name);
+    }, 1200);
+  };
+
+  // ---- Download (history rows) ----
+  window.downloadExport = function(ev, name){
+    if(ev) ev.preventDefault();
+    showToast('Downloading: ' + name);
+  };
+
+  // init default state
+  onScopeChange();
+  onTypeChange();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Processing batch — Position: Sr. Brand Manager · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* wf-stepper (round-3 fix, unique classes) */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+</style>
+<!-- page-local style (existing tokens only) -->
+<style>
+.stage-chips{display:flex;gap:8px;flex-wrap:wrap}
+.triage-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-top:1px solid var(--border)}
+.triage-row .grow{flex:1;min-width:0}
+.triage-row.resolved{opacity:.55}
+.triage-row .actions{display:flex;gap:8px;flex-wrap:wrap;flex:none}
+.bulk-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:var(--surface-2);border-top:1px solid var(--border);flex-wrap:wrap}
+.bulk-bar .lbl{font-size:12.5px;font-weight:600;color:var(--muted)}
+.footer-bar{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:20px;flex-wrap:wrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.resolved-tag{font-size:12px;font-weight:600;color:var(--success)}
+.modal-body{padding:22px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item active" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b>Processing batch</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <a class="wf-step done" href="template-builder.page.html" data-testid="step-1"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Template</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="import-cvs.page.html" data-testid="step-2"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Import</a>
+    <span class="wf-sep done"></span>
+    <span class="wf-step current" data-testid="step-3"><span class="wf-dot">3</span>Process</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-4"><span class="wf-dot">4</span>Review</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-7"><span class="wf-dot">7</span>Interview</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Hire</span>
+  </nav>
+      <div class="page-head">
+        <div>
+          <h1>Processing batch</h1>
+          <p>Position: <b>Sr. Brand Manager</b> · Marketing (Grade 6) — parsing, OCR and de-duplication in progress.</p>
+        </div>
+        <a class="btn btn-ghost" href="import-cvs.page.html" data-testid="proc-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to import
+        </a>
+      </div>
+
+      <!-- 4.1 Aggregate progress -->
+      <section class="card" data-testid="agg-progress">
+        <div class="card-head">
+          <h2>Overall progress</h2>
+          <span style="font-size:13px;color:var(--muted)">Parsed <b style="color:var(--text)" data-testid="agg-parsed">348</b> / Total <b style="color:var(--text)" data-testid="agg-total">512</b></span>
+        </div>
+        <div class="card-body">
+          <div class="pbar" data-testid="agg-pbar" style="margin-bottom:16px"><i style="width:68%"></i></div>
+          <div class="stage-chips" data-testid="stage-chips">
+            <span class="chip" data-testid="stage-queued"><span class="badge b-mut" style="padding:1px 7px">Queued</span> 42</span>
+            <span class="chip" data-testid="stage-ocr"><span class="badge b-cau" style="padding:1px 7px">OCR</span> 26</span>
+            <span class="chip" data-testid="stage-parsing"><span class="badge b-inf" style="padding:1px 7px">Parsing</span> 96</span>
+            <span class="chip" data-testid="stage-scoring"><span class="badge b-suc" style="padding:1px 7px">Scoring</span> 348</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.2 Duplicate CVs detected -->
+      <section class="card" style="margin-top:16px" data-testid="dupes-card">
+        <div class="card-head">
+          <h2>Duplicate CVs detected</h2>
+          <span class="badge b-warn" data-testid="dupes-count">4 flagged</span>
+        </div>
+
+        <div class="triage-row" data-kind="dupe" data-testid="dupe-row-1">
+          <div class="cand grow">
+            <span class="ava">TR</span>
+            <div><div style="font-weight:600">Tahmid Rahman</div><small>Matches existing candidate in database</small></div>
+          </div>
+          <span class="badge b-dan" style="flex:none">96% match</span>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-1-compare" onclick="openCompare('Tahmid Rahman')">Compare</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="dupe-1-reject" onclick="resolveRow(this,'Rejected duplicate')">Reject duplicate</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-1-keep" onclick="resolveRow(this,'Kept')">Keep anyway</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="dupe" data-testid="dupe-row-2">
+          <div class="cand grow">
+            <span class="ava">NJ</span>
+            <div><div style="font-weight:600">Nusrat Jahan</div><small>Duplicate within this batch</small></div>
+          </div>
+          <span class="badge b-dan" style="flex:none">91% match</span>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-2-compare" onclick="openCompare('Nusrat Jahan')">Compare</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="dupe-2-reject" onclick="resolveRow(this,'Rejected duplicate')">Reject duplicate</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-2-keep" onclick="resolveRow(this,'Kept')">Keep anyway</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="dupe" data-testid="dupe-row-3">
+          <div class="cand grow">
+            <span class="ava">SA</span>
+            <div><div style="font-weight:600">Sadia Afrin</div><small>Matches existing candidate in database</small></div>
+          </div>
+          <span class="badge b-warn" style="flex:none">84% match</span>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-3-compare" onclick="openCompare('Sadia Afrin')">Compare</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="dupe-3-reject" onclick="resolveRow(this,'Rejected duplicate')">Reject duplicate</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-3-keep" onclick="resolveRow(this,'Kept')">Keep anyway</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="dupe" data-testid="dupe-row-4">
+          <div class="cand grow">
+            <span class="ava">MI</span>
+            <div><div style="font-weight:600">Mahmudul Islam</div><small>Duplicate within this batch</small></div>
+          </div>
+          <span class="badge b-warn" style="flex:none">79% match</span>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-4-compare" onclick="openCompare('Mahmudul Islam')">Compare</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="dupe-4-reject" onclick="resolveRow(this,'Rejected duplicate')">Reject duplicate</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupe-4-keep" onclick="resolveRow(this,'Kept')">Keep anyway</button>
+          </div>
+        </div>
+
+        <div class="bulk-bar">
+          <span class="lbl">Bulk actions for all duplicates</span>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-danger btn-sm" data-testid="dupes-reject-all" onclick="bulkResolve('dupe','Rejected duplicate')">Reject all duplicates</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="dupes-keep-all" onclick="bulkResolve('dupe','Kept')">Keep all</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.3 Files needing attention -->
+      <section class="card" style="margin-top:16px" data-testid="attention-card">
+        <div class="card-head">
+          <h2>Files needing attention</h2>
+          <span class="badge b-dan" data-testid="attention-count">4 failed</span>
+        </div>
+
+        <div class="triage-row" data-kind="fail" data-testid="fail-row-1">
+          <div class="grow" style="min-width:0">
+            <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Imran_Kabir_CV.heic</div>
+            <span class="badge b-dan" style="margin-top:4px">Unsupported format</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="fail-1-replace" onclick="resolveRow(this,'Replaced')">Replace file</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="fail-1-remove" onclick="resolveRow(this,'Removed')">Remove from batch</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="fail" data-testid="fail-row-2">
+          <div class="grow" style="min-width:0">
+            <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Farhana_Akhter_scan.pdf</div>
+            <span class="badge b-warn" style="margin-top:4px">OCR failed</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="fail-2-retry" onclick="resolveRow(this,'Retried with OCR')">Retry with OCR</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="fail-2-remove" onclick="resolveRow(this,'Removed')">Remove from batch</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="fail" data-testid="fail-row-3">
+          <div class="grow" style="min-width:0">
+            <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Rakib_Hasan_resume.docx</div>
+            <span class="badge b-dan" style="margin-top:4px">Corrupt file</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="fail-3-replace" onclick="resolveRow(this,'Replaced')">Replace file</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="fail-3-remove" onclick="resolveRow(this,'Removed')">Remove from batch</button>
+          </div>
+        </div>
+
+        <div class="triage-row" data-kind="fail" data-testid="fail-row-4">
+          <div class="grow" style="min-width:0">
+            <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Shahriar_Alam_portfolio.pdf</div>
+            <span class="badge b-warn" style="margin-top:4px">File too large</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-ghost btn-sm" data-testid="fail-4-retry" onclick="resolveRow(this,'Retried with OCR')">Retry with OCR</button>
+            <button type="button" class="btn btn-danger btn-sm" data-testid="fail-4-remove" onclick="resolveRow(this,'Removed')">Remove from batch</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.4 Footer actions -->
+      <div class="footer-bar">
+        <a href="#" class="card-head-link" data-testid="proc-skip" style="font-size:13px;font-weight:600;color:var(--primary)" onclick="openSkip();return false;">Skip remaining</a>
+        <span class="badge b-warn" data-testid="proc-remaining">8 decisions remaining</span>
+        <button type="button" class="btn btn-primary" id="continueBtn" data-testid="proc-continue" disabled onclick="goReview()">
+          Continue to review
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Compare modal (mock side-by-side) -->
+<div class="modal-mask" id="compareModal" style="display:none" data-testid="compare-modal">
+  <div class="modal">
+    <div class="card-head"><h3 id="compareTitle">Compare candidates</h3>
+      <button type="button" class="icon-btn" data-testid="compare-close" aria-label="Close" onclick="closeCompare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid2" style="grid-template-columns:1fr 1fr">
+        <div class="card" style="box-shadow:none">
+          <div class="card-body">
+            <div class="badge b-inf" style="margin-bottom:8px">Incoming CV</div>
+            <div style="font-weight:600" id="compareNameNew">—</div>
+            <div class="hint">Email: tahmid.rahman@gmail.com</div>
+            <div class="hint">Phone: +8801711-204471</div>
+            <div class="hint">Source: Bulk upload · 2026-06-23</div>
+          </div>
+        </div>
+        <div class="card" style="box-shadow:none">
+          <div class="card-body">
+            <div class="badge b-mut" style="margin-bottom:8px">Existing record</div>
+            <div style="font-weight:600" id="compareNameOld">—</div>
+            <div class="hint">Email: tahmid.rahman@gmail.com</div>
+            <div class="hint">Phone: +8801711-204471</div>
+            <div class="hint">Source: LinkedIn · 2026-04-02</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button type="button" class="btn btn-ghost btn-sm" data-testid="compare-dismiss" onclick="closeCompare()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Skip-remaining confirmation modal -->
+<div class="modal-mask" id="skipModal" style="display:none" data-testid="skip-modal">
+  <div class="modal">
+    <div class="card-head"><h3>Skip remaining decisions?</h3>
+      <button type="button" class="icon-btn" data-testid="skip-close" aria-label="Close" onclick="closeSkip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--muted)">There are <b id="skipCount" style="color:var(--text)">8</b> unresolved items. Skipping will keep all flagged duplicates and exclude failed files from the batch. You can revisit them later from CV Uploads.</p>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+        <button type="button" class="btn btn-ghost" data-testid="skip-cancel" onclick="closeSkip()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-testid="skip-confirm" onclick="confirmSkip()">Skip and continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function totalRows(){ return document.querySelectorAll('.triage-row').length; }
+function resolvedRows(){ return document.querySelectorAll('.triage-row.resolved').length; }
+
+function updateCounter(){
+  var remaining = totalRows() - resolvedRows();
+  var rem = document.querySelector('[data-testid="proc-remaining"]');
+  var btn = document.getElementById('continueBtn');
+  if(remaining <= 0){
+    rem.className = 'badge b-suc';
+    rem.textContent = 'All decisions resolved';
+    btn.disabled = false;
+  } else {
+    rem.className = 'badge b-warn';
+    rem.textContent = remaining + ' decision' + (remaining===1?'':'s') + ' remaining';
+    btn.disabled = true;
+  }
+}
+
+function resolveRow(btn, label){
+  var row = btn.closest('.triage-row');
+  if(!row || row.classList.contains('resolved')) return;
+  row.classList.add('resolved');
+  // disable all action buttons in this row + show outcome tag
+  row.querySelectorAll('.actions button').forEach(function(b){ b.disabled = true; });
+  var tag = document.createElement('span');
+  tag.className = 'resolved-tag';
+  tag.setAttribute('data-testid','row-outcome');
+  tag.textContent = label;
+  row.querySelector('.actions').appendChild(tag);
+  updateCounter();
+}
+
+function bulkResolve(kind, label){
+  document.querySelectorAll('.triage-row[data-kind="'+kind+'"]').forEach(function(row){
+    if(!row.classList.contains('resolved')){
+      var b = row.querySelector('.actions button');
+      if(b) resolveRow(b, label);
+    }
+  });
+}
+
+// Compare modal
+function openCompare(name){
+  document.getElementById('compareTitle').textContent = 'Compare — ' + name;
+  document.getElementById('compareNameNew').textContent = name;
+  document.getElementById('compareNameOld').textContent = name;
+  document.getElementById('compareModal').style.display = 'grid';
+}
+function closeCompare(){ document.getElementById('compareModal').style.display = 'none'; }
+
+// Skip modal
+function openSkip(){
+  var remaining = totalRows() - resolvedRows();
+  document.getElementById('skipCount').textContent = remaining;
+  document.getElementById('skipModal').style.display = 'grid';
+}
+function closeSkip(){ document.getElementById('skipModal').style.display = 'none'; }
+function confirmSkip(){ closeSkip(); window.location.href = 'cv-review.page.html'; }
+
+function goReview(){
+  if(document.getElementById('continueBtn').disabled) return;
+  window.location.href = 'cv-review.page.html';
+}
+
+updateCounter();
+</script>
+</body>
+</html>

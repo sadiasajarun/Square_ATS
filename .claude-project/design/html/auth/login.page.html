@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+/* Main + topbar */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+/* Page header */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+/* Table */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+/* Score bar */
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+/* Badges (status) */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+/* Forms */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+/* Progress */
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+/* Chips / pills */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+/* Empty / loading */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+/* Two-col layouts */
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+/* Modal (static demo) */
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+</style>
+
+<!-- Auth-page-only layout helpers (do not alter shared tokens above) -->
+<style>
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:24px;position:relative}
+.auth-logo{max-height:64px;width:auto;object-fit:contain;display:block}
+.auth-lang{position:fixed;top:20px;right:20px}
+.auth-card{width:100%;max-width:420px}
+.auth-card .card-body{padding:28px}
+.auth-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;margin-bottom:22px}
+.auth-brand .logo{width:34px;height:34px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:700}
+.auth-head h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.auth-head p{color:var(--muted);font-size:13px;margin-bottom:22px}
+.auth-foot{text-align:center;font-size:13px;color:var(--muted);margin-top:18px}
+.auth-foot a{color:var(--primary);font-weight:600}
+.btn-block{width:100%;justify-content:center;padding:11px 14px;font-size:14px}
+.row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.checkbox{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text)}
+.checkbox input{width:16px;height:16px;accent-color:var(--primary)}
+.forgot{font-size:13px;color:var(--primary);font-weight:600}
+.field .pass-wrap{position:relative}
+.field .pass-wrap input{padding-right:42px}
+.pass-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;border:0;background:transparent;color:var(--muted)}
+.pass-toggle:hover{color:var(--text)}
+.pass-toggle svg{width:18px;height:18px}
+.inline-alert{display:none;align-items:flex-start;gap:8px;background:var(--danger-s);color:var(--danger);border:1px solid var(--danger);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:500;margin-bottom:18px}
+.inline-alert svg{width:18px;height:18px;flex:none;margin-top:1px}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+/* Role chooser (prototype navigation) */
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0 16px;color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.divider::before,.divider::after{content:"";height:1px;background:var(--border);flex:1}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.role-link{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);text-align:left}
+.role-link:hover{background:var(--primary-soft);border-color:var(--primary)}
+.role-link .r-ic{width:32px;height:32px;border-radius:8px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+.role-link .r-ic svg{width:18px;height:18px}
+.role-link b{display:block;font-size:13px;font-weight:600;color:var(--text)}
+.role-link small{font-size:11.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+  <!-- Language toggle (top-right of viewport) -->
+  <div class="lang auth-lang" data-testid="login-lang-toggle" role="group" aria-label="Language">
+    <span class="on" data-testid="login-lang-en">EN</span>
+    <span data-testid="login-lang-bn">বাংলা</span>
+  </div>
+
+  <div class="auth-wrap">
+    <img class="auth-logo" src="../assets/img/logo-square.webp" alt="Square Toiletries Limited" data-testid="login-logo">
+    <div class="card auth-card">
+      <div class="card-body">
+
+        <!-- Brand mark -->
+        <a class="auth-brand" href="login.page.html" data-testid="login-brand-link">
+          <span class="logo">S</span>
+          <span>STL ATS</span>
+        </a>
+
+        <div class="auth-head">
+          <h1>Sign in to STL ATS</h1>
+          <p>Square Toiletries Limited · AI-Powered Applicant Tracking</p>
+        </div>
+
+        <!-- Error alert (hidden by default) -->
+        <div class="inline-alert" id="loginAlert" data-testid="login-error-alert" role="alert" aria-live="polite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>Invalid email or password. Please try again.</span>
+        </div>
+
+        <form data-testid="login-form" onsubmit="window.location.href='../hr/dashboard.page.html';return false">
+          <div class="field">
+            <label for="login-email">Work email</label>
+            <input type="email" id="login-email" name="email" placeholder="you@squaretoiletries.com.bd" autocomplete="username" required data-testid="login-email">
+          </div>
+
+          <div class="field">
+            <label for="login-password">Password</label>
+            <div class="pass-wrap">
+              <input type="password" id="login-password" name="password" placeholder="Enter your password" autocomplete="current-password" required data-testid="login-password">
+              <button type="button" class="pass-toggle" aria-label="Show password" data-testid="login-password-toggle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-between">
+            <label class="checkbox" for="login-remember">
+              <input type="checkbox" id="login-remember" name="remember" data-testid="login-remember">
+              <span>Remember me</span>
+            </label>
+            <a class="forgot" href="forgot-password.page.html" data-testid="login-forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" data-testid="login-submit">Sign in</button>
+        </form>
+
+        <div class="divider">Explore as</div>
+        <div class="role-pick" role="group" aria-label="Explore a role">
+          <a class="role-link" href="../hr/dashboard.page.html" data-testid="login-role-hr">
+            <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
+            <span><b>HR</b><small>Primary workspace</small></span>
+          </a>
+          <a class="role-link" href="../hiring-manager/dashboard.page.html" data-testid="login-role-hm">
+            <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+            <span><b>Hiring Manager</b><small>Review &amp; feedback</small></span>
+          </a>
+          <a class="role-link" href="../viewer/dashboard.page.html" data-testid="login-role-viewer">
+            <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span><b>Viewer</b><small>Read-only</small></span>
+          </a>
+          <a class="role-link" href="../admin/dashboard.page.html" data-testid="login-role-admin">
+            <span class="r-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+            <span><b>Admin</b><small>System &amp; users</small></span>
+          </a>
+        </div>
+
+        <p class="note">Authorized STL personnel only.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Import CVs — Sr. Brand Manager · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* wf-stepper (round-3 fix, unique classes) */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+</style>
+<!-- page-local style (existing tokens only) -->
+<style>
+.intake-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+@media(max-width:1024px){.intake-grid{grid-template-columns:1fr}}
+.source-card{display:flex;flex-direction:column}
+.source-icon{width:40px;height:40px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+.source-icon svg{width:20px;height:20px}
+.dropzone{border:2px dashed var(--border);border-radius:var(--radius);background:var(--surface-2);padding:28px 18px;text-align:center;color:var(--muted);transition:border-color .15s,background .15s}
+.dropzone.over{border-color:var(--accent);background:var(--primary-soft)}
+.dropzone svg{width:34px;height:34px;opacity:.6;margin-bottom:8px}
+.mini-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.mini-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+.mini-row .fn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.portal-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.portal-pill{padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--muted)}
+.portal-pill.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.toggle{position:relative;width:40px;height:22px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);flex:none;transition:background .15s}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:var(--shadow);transition:left .15s}
+.toggle.on{background:var(--primary)}.toggle.on::after{left:20px}
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.toggle-row span{font-size:13px;font-weight:500}
+.status-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.batch-stat{display:flex;gap:24px;flex-wrap:wrap}
+.batch-stat .s .n{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.batch-stat .s .l{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item active" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b>Import CVs</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <a class="wf-step done" href="template-builder.page.html" data-testid="step-1"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Template</a>
+    <span class="wf-sep done"></span>
+    <span class="wf-step current" data-testid="step-2"><span class="wf-dot">2</span>Import</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-3"><span class="wf-dot">3</span>Process</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-4"><span class="wf-dot">4</span>Review</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-7"><span class="wf-dot">7</span>Interview</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Hire</span>
+  </nav>
+      <div class="page-head">
+        <div>
+          <h1>Import CVs</h1>
+          <p>Position: <b>Sr. Brand Manager</b> · Marketing (Grade 6) — pull candidate CVs from multiple sources into one batch.</p>
+        </div>
+        <a class="btn btn-ghost" href="positions.page.html" data-testid="import-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to positions
+        </a>
+      </div>
+
+      <!-- THREE INTAKE SOURCE CARDS -->
+      <div class="intake-grid">
+
+        <!-- 3.1 Bulk file upload -->
+        <section class="card source-card" data-testid="source-upload">
+          <div class="card-head" style="gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+              <h2>Bulk file upload</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="dropzone" id="dropzone" data-testid="upload-dropzone" onclick="document.getElementById('fileInput').click()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div style="font-weight:600;color:var(--text)">Drag &amp; drop CV files here</div>
+              <div class="hint" style="margin-top:4px">PDF, Word, JPG or PNG · Up to 5,000 files per batch</div>
+              <button class="btn btn-ghost btn-sm" style="margin-top:12px" type="button" data-testid="upload-browse" onclick="event.stopPropagation();document.getElementById('fileInput').click()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Browse files
+              </button>
+              <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none" data-testid="upload-input" onchange="addPickedFiles(this)">
+            </div>
+            <div class="mini-list" data-testid="upload-filelist">
+              <div class="mini-row" data-testid="upload-file-1">
+                <span class="badge b-suc">Added</span>
+                <span class="fn">Tahmid_Rahman_BrandMgr.pdf</span>
+                <span style="color:var(--muted);font-size:12px">412 KB</span>
+              </div>
+              <div class="mini-row" data-testid="upload-file-2">
+                <span class="badge b-suc">Added</span>
+                <span class="fn">Nusrat_Jahan_CV.docx</span>
+                <span style="color:var(--muted);font-size:12px">288 KB</span>
+              </div>
+              <div class="mini-row" data-testid="upload-file-3">
+                <span class="badge b-inf">Scanning</span>
+                <span class="fn">Arif_Hossain_resume_scan.jpg</span>
+                <span style="color:var(--muted);font-size:12px">1.2 MB</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3.2 Import from job portals -->
+        <section class="card source-card" data-testid="source-portals">
+          <div class="card-head" style="gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+              <h2>Import from job portals</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="portal-pills" data-testid="portal-pills">
+              <button type="button" class="portal-pill on" data-portal="LinkedIn" data-testid="portal-linkedin" onclick="selectPortal(this)">LinkedIn</button>
+              <button type="button" class="portal-pill" data-portal="BDJobs" data-testid="portal-bdjobs" onclick="selectPortal(this)">BDJobs</button>
+              <button type="button" class="portal-pill" data-portal="Bdjobs Premium" data-testid="portal-bdjobs-premium" onclick="selectPortal(this)">Bdjobs Premium</button>
+              <button type="button" class="portal-pill" data-portal="Other" data-testid="portal-other" onclick="selectPortal(this)">Other</button>
+            </div>
+
+            <div class="status-row">
+              <span id="portalStatus" class="badge b-mut" data-testid="portal-status">Not connected</span>
+              <span class="hint" style="margin-top:0">Source: <b id="portalName">LinkedIn</b></span>
+            </div>
+
+            <div class="field">
+              <label for="portalUrl">Job posting URL</label>
+              <input id="portalUrl" type="url" placeholder="https://www.linkedin.com/jobs/view/3819…" value="https://www.linkedin.com/jobs/view/3819204471" data-testid="portal-url">
+            </div>
+
+            <!-- auto-sync toggle: shown only once a portal is connected -->
+            <div class="toggle-row" id="portalSyncRow" data-testid="portal-sync-row" style="display:none">
+              <button type="button" class="toggle on" id="portalSync" data-testid="portal-sync-toggle" role="switch" aria-checked="true" aria-label="Sync new applicants automatically" onclick="togglePortalSync(this)"></button>
+              <span>Sync new applicants automatically</span>
+            </div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-ghost btn-sm" id="portalConnectBtn" data-testid="portal-connect" onclick="connectPortal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Connect account
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" id="portalFetchBtn" data-testid="portal-fetch" style="display:none" onclick="fetchPortalCVs()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="portalFetchLabel">Fetch CVs</span>
+              </button>
+            </div>
+            <p class="hint" id="portalFetchMsg" data-testid="portal-fetch-msg" style="display:none"></p>
+            <p class="hint">New applicants from connected postings are pulled into this batch every 15 minutes.</p>
+          </div>
+        </section>
+
+        <!-- 3.3 Import from email inbox -->
+        <section class="card source-card" data-testid="source-email">
+          <div class="card-head" style="gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></span>
+              <h2>Import from email inbox</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="status-row">
+              <span id="emailStatus" class="badge b-mut" data-testid="email-status">Not connected</span>
+            </div>
+            <div class="field">
+              <label for="emailInbox">Monitored inbox</label>
+              <input id="emailInbox" type="email" value="careers@stl.com" data-testid="email-inbox">
+            </div>
+            <div class="field">
+              <label for="emailSubject">Subject keyword filter</label>
+              <input id="emailSubject" type="text" value="Application for" placeholder="e.g. Application for" data-testid="email-subject">
+            </div>
+            <div class="field">
+              <label for="emailAttach">Attachment filter</label>
+              <select id="emailAttach" data-testid="email-attach">
+                <option>PDF and DOC/DOCX</option>
+                <option>PDF only</option>
+                <option>DOC/DOCX only</option>
+                <option>PDF, DOC and images</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+              <button type="button" class="btn btn-ghost btn-sm" data-testid="email-connect-gmail" onclick="connectEmail('Gmail')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>Connect Gmail
+              </button>
+              <button type="button" class="btn btn-ghost btn-sm" data-testid="email-connect-outlook" onclick="connectEmail('Outlook')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>Connect Outlook
+              </button>
+            </div>
+            <div class="toggle-row" style="margin-bottom:0">
+              <button type="button" class="toggle" id="emailAuto" data-testid="email-auto-toggle" role="switch" aria-checked="false" aria-label="Auto-import new CVs as they arrive" onclick="toggleSwitch(this)"></button>
+              <span>Auto-import new CVs as they arrive</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- CURRENT BATCH -->
+      <section class="card" style="margin-top:16px" data-testid="current-batch">
+        <div class="card-head">
+          <h2>Current batch</h2>
+          <span class="badge b-inf" data-testid="batch-state">Collecting</span>
+        </div>
+        <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+          <div class="batch-stat">
+            <div class="s"><div class="n" data-testid="batch-queued">512</div><div class="l">Files queued</div></div>
+            <div class="s"><div class="n" data-testid="batch-upload">480</div><div class="l">From upload</div></div>
+            <div class="s"><div class="n" data-testid="batch-portals">24</div><div class="l">From portals</div></div>
+            <div class="s"><div class="n" data-testid="batch-email">8</div><div class="l">From email</div></div>
+          </div>
+          <a class="btn btn-primary" href="processing.page.html" data-testid="import-start">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start processing
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+// --- Bulk upload: drag/drop visual + add picked files to mini-list ---
+(function(){
+  var dz = document.getElementById('dropzone');
+  ['dragenter','dragover'].forEach(function(e){
+    dz.addEventListener(e, function(ev){ev.preventDefault();dz.classList.add('over');});
+  });
+  ['dragleave','drop'].forEach(function(e){
+    dz.addEventListener(e, function(ev){ev.preventDefault();dz.classList.remove('over');});
+  });
+  dz.addEventListener('drop', function(ev){
+    var files = ev.dataTransfer && ev.dataTransfer.files;
+    if(files && files.length){ appendFiles(files); }
+  });
+})();
+function addPickedFiles(input){ if(input.files && input.files.length){ appendFiles(input.files); } }
+function appendFiles(files){
+  var list = document.querySelector('[data-testid="upload-filelist"]');
+  var n = list.children.length;
+  for(var i=0;i<files.length;i++){
+    n++;
+    var row = document.createElement('div');
+    row.className = 'mini-row';
+    row.setAttribute('data-testid','upload-file-'+n);
+    row.innerHTML = '<span class="badge b-suc">Added</span>'
+      + '<span class="fn">'+files[i].name.replace(/</g,'&lt;')+'</span>'
+      + '<span style="color:var(--muted);font-size:12px">'+Math.max(1,Math.round((files[i].size||0)/1024))+' KB</span>';
+    list.appendChild(row);
+  }
+}
+
+// --- Job portal: per-portal connect / fetch flow ---
+// Each portal keeps its own state so switching tabs restores the right view.
+var portalState = {
+  'LinkedIn':        {url:'https://www.linkedin.com/jobs/view/3819204471', count:36, connected:false, fetched:false, fetching:false, autoSync:true},
+  'BDJobs':          {url:'https://www.bdjobs.com/jobs/sr-brand-manager-stl', count:52, connected:false, fetched:false, fetching:false, autoSync:true},
+  'Bdjobs Premium':  {url:'', count:28, connected:false, fetched:false, fetching:false, autoSync:true},
+  'Other':           {url:'', count:14, connected:false, fetched:false, fetching:false, autoSync:true}
+};
+var activePortal = 'LinkedIn';
+
+function selectPortal(btn){
+  document.querySelectorAll('.portal-pill').forEach(function(p){p.classList.remove('on');});
+  btn.classList.add('on');
+  activePortal = btn.getAttribute('data-portal');
+  renderPortal();
+}
+
+// Render the portal card to match the active portal's stored state.
+function renderPortal(){
+  var st = portalState[activePortal];
+  document.getElementById('portalName').textContent = activePortal;
+  document.getElementById('portalUrl').value = st.url;
+
+  var status   = document.getElementById('portalStatus');
+  var connectB = document.getElementById('portalConnectBtn');
+  var fetchB   = document.getElementById('portalFetchBtn');
+  var fetchLbl = document.getElementById('portalFetchLabel');
+  var syncRow  = document.getElementById('portalSyncRow');
+  var syncTog  = document.getElementById('portalSync');
+  var msg      = document.getElementById('portalFetchMsg');
+
+  if(st.connected){
+    status.className = 'badge b-suc';
+    status.textContent = 'Connected';
+    connectB.style.display = 'none';
+    fetchB.style.display = 'inline-flex';
+    syncRow.style.display = 'flex';
+  } else {
+    status.className = 'badge b-mut';
+    status.textContent = 'Not connected';
+    connectB.style.display = 'inline-flex';
+    fetchB.style.display = 'none';
+    syncRow.style.display = 'none';
+  }
+
+  // restore auto-sync toggle state for this portal
+  if(st.autoSync){ syncTog.classList.add('on'); syncTog.setAttribute('aria-checked','true'); }
+  else { syncTog.classList.remove('on'); syncTog.setAttribute('aria-checked','false'); }
+
+  // fetch button + confirmation message
+  if(st.fetching){
+    fetchB.disabled = true;
+    fetchLbl.textContent = 'Fetching…';
+    msg.style.display = 'none';
+  } else {
+    fetchB.disabled = false;
+    fetchLbl.textContent = st.fetched ? 'Re-fetch CVs' : 'Fetch CVs';
+    if(st.fetched){
+      msg.style.display = 'block';
+      msg.className = 'hint';
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'Imported ' + st.count + ' CVs from ' + activePortal;
+    } else {
+      msg.style.display = 'none';
+    }
+  }
+}
+
+function connectPortal(){
+  portalState[activePortal].connected = true;
+  renderPortal();
+}
+
+function fetchPortalCVs(){
+  var st = portalState[activePortal];
+  if(!st.connected || st.fetching || st.fetched) return;
+  var portal = activePortal; // capture in case the user switches tabs mid-fetch
+  st.fetching = true;
+  renderPortal();
+  setTimeout(function(){
+    var p = portalState[portal];
+    p.fetching = false;
+    p.fetched = true;
+    addPortalCVsToBatch(p.count);
+    if(activePortal === portal){ renderPortal(); }
+  }, 1100);
+}
+
+// Increment the "Current batch" totals when portal CVs are imported.
+function addPortalCVsToBatch(amount){
+  var queuedEl  = document.querySelector('[data-testid="batch-queued"]');
+  var portalsEl = document.querySelector('[data-testid="batch-portals"]');
+  queuedEl.textContent  = (parseInt(queuedEl.textContent, 10)  || 0) + amount;
+  portalsEl.textContent = (parseInt(portalsEl.textContent, 10) || 0) + amount;
+}
+
+// auto-sync toggle persists per portal
+function togglePortalSync(el){
+  var on = el.classList.toggle('on');
+  el.setAttribute('aria-checked', on ? 'true' : 'false');
+  portalState[activePortal].autoSync = on;
+}
+
+// initialise the portal card on load
+renderPortal();
+
+// --- Email connect ---
+function connectEmail(provider){
+  var s = document.getElementById('emailStatus');
+  s.className='badge b-suc';
+  s.textContent='Connected · '+provider;
+}
+
+// --- Generic toggle switch ---
+function toggleSwitch(el){
+  var on = el.classList.toggle('on');
+  el.setAttribute('aria-checked', on ? 'true':'false');
+}
+</script>
+</body>
+</html>

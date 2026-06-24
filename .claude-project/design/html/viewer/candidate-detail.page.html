@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Profile · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+/* Main + topbar */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+/* Page header */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+/* Table */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+/* Score bar */
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+/* Badges (status) */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+/* Forms */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+/* Progress */
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+/* Chips / pills */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+/* Empty / loading */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+/* Two-col layouts */
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+/* Modal (static demo) */
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+    <div class="nav-label">Viewer</div>
+    <nav>
+      <a class="nav-item active" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Assigned Positions
+      </a>
+      <a class="nav-item" href="reports.page.html" data-testid="nav-reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Reports
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">RC</span>
+      <div><div style="font-weight:600;font-size:13px">Rifat Chowdhury</div><div style="color:var(--muted);font-size:12px">Viewer · Dept. Head</div></div>
+    
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="viewer-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><a href="dashboard.page.html">Assigned Positions</a> / <a href="position-detail.page.html">Senior Brand Manager</a> / <b>Tahmid Rahman</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <h1>Tahmid Rahman</h1>
+            <span class="badge b-suc">Shortlisted</span>
+            <span class="badge b-inf" data-testid="readonly-indicator">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              Read-only
+            </span>
+          </div>
+          <p>tahmid.rahman@gmail.com · +880 1712-345678 · Dhaka · Applied for Senior Brand Manager</p>
+        </div>
+      </div>
+
+      <!-- Static tags (no mutation) -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px" data-testid="candidate-tags">
+        <span class="chip">FMCG</span>
+        <span class="chip">Brand Strategy</span>
+        <span class="chip">High Potential</span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-row" data-testid="candidate-tabs">
+        <span class="tab on" data-testid="tab-profile">Profile</span>
+        <a class="tab" href="#application-history" data-testid="tab-application-history">Application History</a>
+      </div>
+
+      <div class="grid-detail">
+        <!-- LEFT column -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Education -->
+          <section class="card" data-testid="section-education">
+            <div class="card-head"><h2>Education</h2></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+              <div>
+                <div style="font-weight:600">MBA, Marketing</div>
+                <div style="color:var(--muted);font-size:13px">Institute of Business Administration (IBA), University of Dhaka · 2013 · CGPA 3.78/4.00</div>
+              </div>
+              <div>
+                <div style="font-weight:600">BBA, Marketing</div>
+                <div style="color:var(--muted);font-size:13px">University of Dhaka · 2010 · CGPA 3.65/4.00</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Experience timeline -->
+          <section class="card" data-testid="section-experience">
+            <div class="card-head"><h2>Experience Timeline</h2></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:0">
+                <div style="display:flex;gap:14px;padding-bottom:18px;border-left:2px solid var(--border);margin-left:5px;padding-left:18px;position:relative">
+                  <span style="position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--primary)"></span>
+                  <div>
+                    <div style="font-weight:600">Brand Manager · Unilever Bangladesh</div>
+                    <div style="color:var(--muted);font-size:13px">Jan 2019 – Present · 7 yrs 5 mo · Dhaka</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:14px;padding-bottom:18px;border-left:2px solid var(--border);margin-left:5px;padding-left:18px;position:relative">
+                  <span style="position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--surface-2);border:2px solid var(--border)"></span>
+                  <div>
+                    <div style="font-weight:600">Assistant Brand Manager · ACI Limited</div>
+                    <div style="color:var(--muted);font-size:13px">Mar 2015 – Dec 2018 · 3 yrs 9 mo · Dhaka</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:14px;border-left:2px solid transparent;margin-left:5px;padding-left:18px;position:relative">
+                  <span style="position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--surface-2);border:2px solid var(--border)"></span>
+                  <div>
+                    <div style="font-weight:600">Management Trainee · Square Toiletries Ltd.</div>
+                    <div style="color:var(--muted);font-size:13px">Jul 2013 – Feb 2015 · 1 yr 8 mo · Dhaka</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Skills -->
+          <section class="card" data-testid="section-skills">
+            <div class="card-head"><h2>Skills</h2></div>
+            <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="chip">Brand Management</span>
+              <span class="chip">Go-to-Market Strategy</span>
+              <span class="chip">Consumer Insights</span>
+              <span class="chip">Trade Marketing</span>
+              <span class="chip">Budget Planning</span>
+              <span class="chip">Team Leadership</span>
+              <span class="chip">Digital Campaigns</span>
+            </div>
+          </section>
+
+          <!-- Certifications -->
+          <section class="card" data-testid="section-certifications">
+            <div class="card-head"><h2>Certifications</h2></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <div><div style="font-weight:600">Digital Marketing Certification — Google</div><div style="color:var(--muted);font-size:13px">2021</div></div>
+              <div><div style="font-weight:600">Brand Management Professional — Kellogg Executive Ed.</div><div style="color:var(--muted);font-size:13px">2019</div></div>
+            </div>
+          </section>
+
+          <!-- Application history -->
+          <section class="card" id="application-history" data-testid="section-application-history">
+            <div class="card-head"><h2>Application History</h2></div>
+            <table>
+              <thead>
+                <tr><th>Position</th><th>Applied Date</th><th>Match Score</th><th>Outcome</th></tr>
+              </thead>
+              <tbody>
+                <tr data-testid="history-row-1">
+                  <td>Senior Brand Manager</td>
+                  <td>14 May 2026</td>
+                  <td><div class="score"><div class="bar"><i style="width:92%;background:var(--success)"></i></div><b>92</b></div></td>
+                  <td><span class="badge b-suc">Shortlisted</span></td>
+                </tr>
+                <tr data-testid="history-row-2">
+                  <td>Marketing Manager</td>
+                  <td>08 Nov 2024</td>
+                  <td><div class="score"><div class="bar"><i style="width:81%;background:var(--success)"></i></div><b>81</b></div></td>
+                  <td><span class="badge b-inf">Screened</span></td>
+                </tr>
+                <tr data-testid="history-row-3">
+                  <td>Assistant Brand Manager</td>
+                  <td>22 Feb 2023</td>
+                  <td><div class="score"><div class="bar"><i style="width:74%;background:var(--warn)"></i></div><b>74</b></div></td>
+                  <td><span class="badge b-mut">Not Selected</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <!-- RIGHT column: score explanation (read-only) -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <section class="card" data-testid="section-score-explanation">
+            <div class="card-head">
+              <h2>Score Explanation</h2>
+              <span class="badge b-suc">92%</span>
+            </div>
+            <div class="card-body">
+              <p style="color:var(--muted);font-size:12.5px;margin-bottom:16px">Per-criterion contribution against template <b style="color:var(--text)">Senior Brand Manager v3</b>.</p>
+
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div data-testid="criterion-experience">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Experience <span style="color:var(--muted)">· weight 30%</span></span><b>28/30</b></div>
+                  <div class="pbar"><i style="width:93%;background:var(--success)"></i></div>
+                </div>
+                <div data-testid="criterion-skills">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Skills <span style="color:var(--muted)">· weight 25%</span></span><b>24/25</b></div>
+                  <div class="pbar"><i style="width:96%;background:var(--success)"></i></div>
+                </div>
+                <div data-testid="criterion-education">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Education <span style="color:var(--muted)">· weight 20%</span></span><b>20/20</b></div>
+                  <div class="pbar"><i style="width:100%;background:var(--success)"></i></div>
+                </div>
+                <div data-testid="criterion-certifications">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Certifications <span style="color:var(--muted)">· weight 15%</span></span><b>11/15</b></div>
+                  <div class="pbar"><i style="width:73%;background:var(--warn)"></i></div>
+                </div>
+                <div data-testid="criterion-location">
+                  <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Location <span style="color:var(--muted)">· weight 10%</span></span><b>9/10</b></div>
+                  <div class="pbar"><i style="width:90%;background:var(--success)"></i></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Matched evidence -->
+          <section class="card" data-testid="section-matched-evidence">
+            <div class="card-head"><h2>Matched Evidence</h2></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span class="badge b-suc" style="flex:none">Match</span>
+                <span style="font-size:13px">11 years brand management at Unilever &amp; ACI — exceeds 8-year requirement.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span class="badge b-suc" style="flex:none">Match</span>
+                <span style="font-size:13px">MBA from IBA, University of Dhaka satisfies "Masters in Marketing/Business" must-have.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span class="badge b-suc" style="flex:none">Match</span>
+                <span style="font-size:13px">Keyword hits: "Go-to-Market", "Consumer Insights", "Trade Marketing".</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Red flags -->
+          <section class="card" data-testid="section-red-flags">
+            <div class="card-head"><h2>Red Flags</h2></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span class="badge b-warn" style="flex:none">Minor</span>
+                <span style="font-size:13px">No professional certification renewal recorded after 2021 — possible lapsed credential.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span class="badge b-mut" style="flex:none">Info</span>
+                <span style="font-size:13px">No other risk indicators detected (no career break, no frequent job changes).</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

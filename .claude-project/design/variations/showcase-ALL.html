@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STL ATS — Design Variations Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0F172A;color:#E2E8F0}
+header{padding:28px 32px;border-bottom:1px solid #1E293B}
+header h1{font-size:22px;font-weight:800;color:#fff}
+header p{color:#94A3B8;margin-top:6px;font-size:14px;max-width:760px}
+.tabs{display:flex;gap:8px;padding:16px 32px;position:sticky;top:0;background:#0F172A;border-bottom:1px solid #1E293B;z-index:5}
+.tab{padding:9px 16px;border-radius:8px;border:1px solid #334155;color:#CBD5E1;font-weight:600;font-size:13.5px;cursor:pointer;background:transparent}
+.tab.on{background:#4F46E5;border-color:#4F46E5;color:#fff}
+.legend{margin-left:auto;display:flex;gap:18px;align-items:center;font-size:12.5px;color:#94A3B8}
+.legend b{color:#E2E8F0}
+.stage{padding:24px 32px 60px}
+.panel{display:none}
+.panel.on{display:block}
+.meta{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px}
+.chip{display:flex;align-items:center;gap:8px;font-size:13px;color:#CBD5E1}
+.sw{width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,.2)}
+.frame-wrap{border:1px solid #1E293B;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 20px 60px -20px rgba(0,0,0,.6)}
+iframe{width:100%;height:760px;border:0;display:block}
+.note{font-size:12.5px;color:#64748B;margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <h1>STL AI-Powered ATS — Design Variations</h1>
+  <p>Three style directions applied to the same HR Dashboard. Same information architecture and status color semantics; different personality (color, typography, density, shape). Pick one to drive full HTML generation across all role screens.</p>
+</header>
+<nav class="tabs">
+  <button class="tab on" data-t="A">A · Clarity</button>
+  <button class="tab" data-t="B">B · Square Corporate</button>
+  <button class="tab" data-t="C">C · Focus</button>
+  <div class="legend"><span>Status colors:</span> <span class="chip"><i class="sw" style="background:#16A34A"></i>Shortlisted</span><span class="chip"><i class="sw" style="background:#2563EB"></i>Screened</span><span class="chip"><i class="sw" style="background:#D97706"></i>Pending</span><span class="chip"><i class="sw" style="background:#DC2626"></i>Review</span><span class="chip"><i class="sw" style="background:#7C3AED"></i>Duplicate</span></div>
+</nav>
+<div class="stage">
+  <section class="panel on" id="A">
+    <div class="meta"><span class="chip"><i class="sw" style="background:#4F46E5"></i><b>Indigo</b> primary</span><span class="chip">Font: <b>Inter</b></span><span class="chip">Shape: <b>12px radius, soft shadows</b></span><span class="chip">Feel: <b>Clean modern SaaS (Stripe/Linear)</b></span></div>
+    <div class="frame-wrap"><iframe src="A-hr-dashboard.html" title="Variation A"></iframe></div>
+    <p class="note">Quiet, precise, low-fatigue. Familiar SaaS feel that gets out of the way.</p>
+  </section>
+  <section class="panel" id="B">
+    <div class="meta"><span class="chip"><i class="sw" style="background:#0B6E4F"></i><b>Deep green</b> + <i class="sw" style="background:#C8A33C"></i>gold</span><span class="chip">Font: <b>IBM Plex Sans</b></span><span class="chip">Shape: <b>8px radius, dense, dark shell</b></span><span class="chip">Feel: <b>Branded enterprise HRIS</b></span></div>
+    <div class="frame-wrap"><iframe src="B-hr-dashboard.html" title="Variation B"></iframe></div>
+    <p class="note">Authoritative, corporate, system-of-record. Dark green shell + gold accents, denser tables for power users.</p>
+  </section>
+  <section class="panel" id="C">
+    <div class="meta"><span class="chip"><i class="sw" style="background:#0F766E"></i><b>Teal</b> + <i class="sw" style="background:#EA8A0B"></i>amber</span><span class="chip">Font: <b>Manrope</b></span><span class="chip">Shape: <b>16px radius, roomy, warm</b></span><span class="chip">Feel: <b>Warm, calm, human</b></span></div>
+    <div class="frame-wrap"><iframe src="C-hr-dashboard.html" title="Variation C"></iframe></div>
+    <p class="note">Warm and approachable, roomy rows and rounded cards. Low-fatigue for long review sessions.</p>
+  </section>
+</div>
+<script>
+const tabs=document.querySelectorAll('.tab'),panels=document.querySelectorAll('.panel');
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  panels.forEach(p=>p.classList.toggle('on',p.id===t.dataset.t));
+}));
+</script>
+</body>
+</html>

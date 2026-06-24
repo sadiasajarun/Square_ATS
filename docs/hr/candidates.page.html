@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Database · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item active" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+    
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><b>Candidate Database</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Candidate Database</h1>
+          <p>Searchable talent pool · <b style="color:var(--text)">12,480</b> candidates across all positions</p>
+        </div>
+        <a class="btn btn-ghost" href="exports.page.html" data-testid="action-export-pool">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export results
+        </a>
+      </div>
+
+      <!-- Search + structured filters -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-body">
+          <div class="search" style="margin-left:0;width:100%;margin-bottom:14px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Full-text search across skills, parsed CV content, education, experience…" data-testid="candidates-search" value="">
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;align-items:end">
+            <div class="field" style="margin:0">
+              <label for="f-skills">Skills</label>
+              <select id="f-skills" data-testid="filter-skills"><option>All skills</option><option>Brand Management</option><option>Trade Marketing</option><option>QC / Chemistry</option><option>SAP / ERP</option><option>Digital Marketing</option><option>Supply Chain</option></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-district">District</label>
+              <select id="f-district" data-testid="filter-district"><option>All districts</option><option>Dhaka</option><option>Chattogram</option><option>Khulna</option><option>Rajshahi</option><option>Sylhet</option><option>Gazipur</option><option>Cumilla</option></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-education">Education</label>
+              <select id="f-education" data-testid="filter-education"><option>All education</option><option>SSC / HSC</option><option>Bachelor's</option><option>Master's / MBA</option><option>PhD</option></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-tags">Tags</label>
+              <select id="f-tags" data-testid="filter-tags"><option>All tags</option><option>High potential</option><option>Re-applicant</option><option>Referral</option><option>Internal</option><option>Strong communicator</option></select>
+            </div>
+            <button class="btn btn-ghost" data-testid="filter-bookmarked" onclick="this.classList.toggle('active')" style="height:38px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Bookmarked
+            </button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:12px;color:var(--muted);font-weight:600">Active filters:</span>
+            <span class="chip" data-testid="active-filter-district">District: Dhaka <span class="x" data-testid="remove-filter-district">×</span></span>
+            <span class="chip" data-testid="active-filter-skill">Skill: Brand Management <span class="x" data-testid="remove-filter-skill">×</span></span>
+            <button class="btn btn-ghost btn-sm" data-testid="clear-filters" onclick="void 0">Clear all</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidate table -->
+      <div class="card">
+        <div class="card-head">
+          <h2>Candidates <span style="color:var(--muted);font-weight:500">· 8 of 12,480 shown</span></h2>
+          <a href="#" data-testid="view-card-grid">Card view</a>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Candidate</th><th>Current / Last Position</th><th>District</th><th>Top Skills</th><th>Tags</th><th>Last Applied</th><th>Save</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr data-testid="candidate-row-1" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">TH</span><div><div style="font-weight:600">Tanvir Hasan</div><small>tanvir.hasan@gmail.com</small></div></div></td>
+              <td>Asst. Brand Manager<small style="color:var(--muted);display:block">Unilever Bangladesh</small></td>
+              <td>Dhaka</td>
+              <td><span class="chip">Brand Mgmt</span><span class="chip">Trade Mktg</span></td>
+              <td><span class="badge b-suc">High potential</span></td>
+              <td>14 Jun 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-1" title="Bookmarked" onclick="void 0" style="color:var(--primary);border-color:var(--primary-soft)"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-1-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-2" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">SA</span><div><div style="font-weight:600">Sharmin Akter</div><small>sharmin.akter@yahoo.com</small></div></div></td>
+              <td>Trade Marketing Officer<small style="color:var(--muted);display:block">ACI Limited</small></td>
+              <td>Chattogram</td>
+              <td><span class="chip">Trade Mktg</span><span class="chip">Distribution</span></td>
+              <td><span class="badge b-inf">Re-applicant</span></td>
+              <td>09 Jun 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-2" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-2-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-3" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">MR</span><div><div style="font-weight:600">Md. Rakibul Islam</div><small>rakibul.islam@gmail.com</small></div></div></td>
+              <td>QA Chemist<small style="color:var(--muted);display:block">Square Pharmaceuticals</small></td>
+              <td>Gazipur</td>
+              <td><span class="chip">QC / Chemistry</span><span class="chip">GMP</span></td>
+              <td><span class="badge b-cau">Referral</span></td>
+              <td>02 Jun 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-3" title="Bookmarked" onclick="void 0" style="color:var(--primary);border-color:var(--primary-soft)"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-3-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-4" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">NJ</span><div><div style="font-weight:600">Nusrat Jahan</div><small>nusrat.jahan@gmail.com</small></div></div></td>
+              <td>Digital Marketing Executive<small style="color:var(--muted);display:block">Robi Axiata</small></td>
+              <td>Dhaka</td>
+              <td><span class="chip">Digital Mktg</span><span class="chip">SEO</span></td>
+              <td><span class="badge b-suc">Strong communicator</span></td>
+              <td>28 May 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-4" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-4-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-5" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">FK</span><div><div style="font-weight:600">Farhana Karim</div><small>farhana.k@outlook.com</small></div></div></td>
+              <td>Supply Chain Executive<small style="color:var(--muted);display:block">Pran-RFL Group</small></td>
+              <td>Cumilla</td>
+              <td><span class="chip">Supply Chain</span><span class="chip">SAP / ERP</span></td>
+              <td><span class="badge b-inf">Re-applicant</span></td>
+              <td>21 May 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-5" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-5-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-6" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">AS</span><div><div style="font-weight:600">Abdullah Al Shafi</div><small>a.shafi@gmail.com</small></div></div></td>
+              <td>Maintenance Engineer<small style="color:var(--muted);display:block">BSRM Steels</small></td>
+              <td>Chattogram</td>
+              <td><span class="chip">Mechanical</span><span class="chip">Maintenance</span></td>
+              <td><span class="badge b-mut">Internal</span></td>
+              <td>15 May 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-6" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-6-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-7" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">SR</span><div><div style="font-weight:600">Sadia Rahman</div><small>sadia.rahman@gmail.com</small></div></div></td>
+              <td>Brand Executive<small style="color:var(--muted);display:block">Marico Bangladesh</small></td>
+              <td>Dhaka</td>
+              <td><span class="chip">Brand Mgmt</span><span class="chip">Market Research</span></td>
+              <td><span class="badge b-suc">High potential</span></td>
+              <td>30 Apr 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-7" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-7-view">View</a></td>
+            </tr>
+            <tr data-testid="candidate-row-8" onclick="location.href='candidate-detail.page.html'" style="cursor:pointer">
+              <td><div class="cand"><span class="ava">MH</span><div><div style="font-weight:600">Mahmudul Hasan</div><small>mahmudul.h@gmail.com</small></div></div></td>
+              <td>Territory Officer<small style="color:var(--muted);display:block">British American Tobacco</small></td>
+              <td>Khulna</td>
+              <td><span class="chip">Sales</span><span class="chip">Distribution</span></td>
+              <td><span class="badge b-cau">Referral</span></td>
+              <td>18 Apr 2026</td>
+              <td onclick="event.stopPropagation()"><button class="icon-btn" data-testid="bookmark-8" title="Bookmark" onclick="void 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button></td>
+              <td onclick="event.stopPropagation()"><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cand-8-view">View</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state (example — shown when no matches) -->
+      <div class="card" style="margin-top:20px;display:none" data-testid="candidates-empty">
+        <div class="empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div style="font-weight:600;color:var(--text);font-size:15px">No matching candidates</div>
+          <p style="margin-top:6px">No candidates match your current search and filters. Try removing a filter or broadening your keywords.</p>
+          <button class="btn btn-ghost btn-sm" data-testid="empty-clear-filters" onclick="void 0" style="margin-top:14px">Clear all filters</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

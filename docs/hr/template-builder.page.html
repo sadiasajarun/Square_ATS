@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening Template Builder · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* wf-stepper (round-3 fix, unique classes) */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+</style>
+
+<!-- ===== Page-local styles (existing tokens only) ===== -->
+<style>
+.crit-row{display:grid;grid-template-columns:150px 1fr 220px;gap:16px;align-items:start;padding:16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin-bottom:14px}
+.crit-row.off{opacity:.5;background:var(--surface-2)}
+.crit-left{display:flex;flex-direction:column;gap:8px}
+.crit-name{font-weight:600;font-size:13.5px}
+.crit-sub{font-size:11.5px;color:var(--muted)}
+.crit-center{min-width:0}
+.crit-right{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.toggle{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.toggle input{position:absolute;opacity:0;width:0;height:0}
+.toggle .track{width:38px;height:22px;border-radius:999px;background:var(--border);transition:background .15s;flex:none;position:relative}
+.toggle .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--shadow);transition:transform .15s}
+.toggle input:checked + .track{background:var(--primary)}
+.toggle input:checked + .track::after{transform:translateX(16px)}
+.chipbox{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);min-height:42px}
+.chipbox input{border:0;outline:0;font:inherit;flex:1;min-width:120px;background:transparent;color:var(--text)}
+.chip.removable .x{font-weight:700;line-height:1}
+.suggest-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px}
+.suggest-label{font-size:11.5px;font-weight:600;color:var(--primary);display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.suggest-label svg{width:14px;height:14px}
+.chip.sug{background:var(--primary-soft);color:var(--primary);cursor:pointer;border:1px dashed var(--primary)}
+.chip.sug:hover{background:#d4e6fa}
+.chip-add{flex:none;width:30px;height:30px;border-radius:8px;border:1px solid var(--primary);background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
+.chip-add svg{width:15px;height:15px}
+.chip-add:hover{background:var(--primary);color:#fff}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.seg button{padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);border:0;border-right:1px solid var(--border)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--primary-soft);color:var(--primary)}
+.seg.sm button{padding:4px 9px;font-size:11px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.stepper button{width:34px;height:34px;background:var(--surface);border:0;color:var(--text);font-size:16px;display:grid;place-items:center}
+.stepper button:hover{background:var(--surface-2)}
+.stepper .val{width:54px;text-align:center;font-weight:600;border-left:1px solid var(--border);border-right:1px solid var(--border);height:34px;line-height:34px;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--primary);cursor:pointer}
+.range-wrap{display:flex;align-items:center;gap:10px}
+.range-wrap .num{width:64px}
+.weight-read{font-size:13px;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums;text-align:right}
+.crit-remove{align-self:flex-end;width:28px;height:28px;border:1px solid var(--border);border-radius:8px;background:var(--surface);display:grid;place-items:center;color:var(--muted)}
+.crit-remove:hover{background:var(--danger-s);color:var(--danger);border-color:var(--danger-s)}
+.total-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border-radius:var(--radius);background:var(--surface-2);border:1px solid var(--border);margin-top:6px}
+.total-pill{font-size:15px;font-weight:700;padding:4px 14px;border-radius:999px;font-variant-numeric:tabular-nums}
+.total-ok{background:var(--success-s);color:var(--success)}
+.total-bad{background:var(--danger-s);color:var(--danger)}
+.total-warn{background:var(--warn-s);color:var(--warn)}
+.pop-wrap{position:relative;display:inline-block}
+.popover{position:absolute;top:calc(100% + 6px);left:0;z-index:40;min-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:6px;display:none}
+.popover.open{display:block}
+.pop-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:500;width:100%;text-align:left;background:transparent;border:0;color:var(--text)}
+.pop-item:hover{background:var(--primary-soft);color:var(--primary)}
+.pop-item svg{width:16px;height:16px;flex:none;color:var(--muted)}
+.pop-item:hover svg{color:var(--primary)}
+.pop-empty{padding:12px;font-size:12.5px;color:var(--muted);text-align:center}
+.btn-outline{background:var(--surface);color:var(--primary);border:1px solid var(--primary)}
+.btn-outline:hover{background:var(--primary-soft)}
+.dual{position:relative;height:34px;flex:1}
+.dual input[type=range]{position:absolute;top:14px;left:0;width:100%;margin:0;pointer-events:none;background:transparent}
+.dual input[type=range]::-webkit-slider-thumb{pointer-events:all}
+.dual input[type=range]::-moz-range-thumb{pointer-events:all}
+.cert-list{display:flex;flex-direction:column;gap:8px}
+.cert-item{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.action-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:8px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;bottom:0}
+.ver-note{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.ver-note svg{width:14px;height:14px}
+.autocomplete{position:relative}
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:30;max-height:180px;overflow:auto;display:none}
+.ac-list.open{display:block}
+.ac-item{padding:8px 12px;font-size:13px;cursor:pointer}
+.ac-item:hover{background:var(--primary-soft);color:var(--primary)}
+@media (max-width:1100px){
+  .crit-row{grid-template-columns:1fr;gap:14px}
+  .crit-right{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .weight-read{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item active" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><a href="positions.page.html" data-testid="crumb-positions">Positions</a> / <a href="position-detail.page.html" data-testid="crumb-position">Sr. Brand Manager</a> / <b>Template</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <span class="wf-step current" data-testid="step-1"><span class="wf-dot">1</span>Template</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-2"><span class="wf-dot">2</span>Import</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-3"><span class="wf-dot">3</span>Process</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-4"><span class="wf-dot">4</span>Review</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-7"><span class="wf-dot">7</span>Interview</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Hire</span>
+  </nav>
+      <div class="page-head">
+        <div>
+          <h1>Screening Template Builder</h1>
+          <p>Sr. Brand Manager · Marketing · Configure weighted criteria, keyword filters and the auto-shortlist threshold.</p>
+        </div>
+        <span class="badge b-inf" data-testid="tpl-version-badge">Editing v4 (draft)</span>
+      </div>
+
+      <!-- (2.1) Screening guidance prompt -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h2>Screening guidance prompt (optional)</h2></div>
+        <div class="card-body">
+          <div class="field" style="margin-bottom:0">
+            <textarea data-testid="tpl-prompt" rows="3" placeholder="Looking for a marketing executive with FMCG background, comfortable working across Bangla and English, willing to travel for trade visits."></textarea>
+            <p class="hint">Describe the ideal candidate in natural language. The AI will use this alongside the criteria below.</p>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+              <button class="btn btn-primary" data-testid="tpl-prompt-apply" onclick="applyPrompt()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>
+                Apply prompt
+              </button>
+              <span class="hint" style="margin:0">AI reads your prompt and adjusts the criteria &amp; skills below.</span>
+            </div>
+            <div id="promptNote" class="badge b-suc" data-testid="tpl-prompt-note" style="display:none;margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- (2.2-2.4) Criteria & weights -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head">
+          <h2>Criteria &amp; weights</h2>
+          <span class="hint" style="margin:0">Enabled criteria should total 100%.</span>
+        </div>
+        <div class="card-body">
+          <div id="critList" data-testid="tpl-criteria-list"></div>
+
+          <div class="pop-wrap" style="margin-top:4px">
+            <button class="btn btn-outline" data-testid="tpl-add-criterion" onclick="toggleAddPopover(event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add new criterion
+            </button>
+            <div class="popover" id="addPopover" data-testid="tpl-add-popover"></div>
+          </div>
+
+          <div class="total-bar" data-testid="tpl-total-bar">
+            <div>
+              <div style="font-weight:600">Total weight of enabled criteria</div>
+              <div class="hint" style="margin-top:2px">Disabled criteria are excluded from scoring and the total.</div>
+            </div>
+            <span class="total-pill total-bad" id="totalPill" data-testid="tpl-total">Total: 0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- (2.5) Global keyword filters -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h2>Global keyword filters</h2></div>
+        <div class="card-body">
+          <div class="grid2" style="grid-template-columns:1fr 1fr">
+            <div class="field" style="margin-bottom:0">
+              <label>Include keywords (must-have)</label>
+              <div class="chipbox" data-testid="tpl-include-box">
+                <span id="includeChips" style="display:contents"></span>
+                <input type="text" data-testid="tpl-include-input" placeholder="Add a must-have keyword…" onkeydown="addKw(event,'include')">
+              </div>
+              <p class="hint">Boosts candidates who match. Press Enter to add.</p>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label>Exclude keywords (disqualifiers)</label>
+              <div class="chipbox" data-testid="tpl-exclude-box">
+                <span id="excludeChips" style="display:contents"></span>
+                <input type="text" data-testid="tpl-exclude-input" placeholder="Add a disqualifier…" onkeydown="addKw(event,'exclude')">
+              </div>
+              <p class="hint">CVs matching these are flagged for review. Press Enter to add.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- (2.6) Auto-shortlist threshold -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h2>Auto-shortlist threshold</h2></div>
+        <div class="card-body">
+          <div class="range-wrap">
+            <input type="range" min="0" max="100" value="75" data-testid="tpl-threshold" oninput="onThreshold(this.value)">
+            <span class="total-pill total-ok" id="thReadout" data-testid="tpl-threshold-readout" style="min-width:64px;text-align:center">75%</span>
+          </div>
+          <p class="hint">Candidates scoring at or above this match percentage are auto-moved to the shortlist. Below threshold → <b>Rejected (pending review)</b>; candidates are never auto-rejected.</p>
+        </div>
+      </div>
+
+      <!-- (2.7) Action bar -->
+      <div class="action-bar" data-testid="tpl-action-bar">
+        <div class="ver-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+          Templates are version-controlled (current: v3 → v4 on save).
+        </div>
+        <div style="display:flex;gap:10px">
+          <a class="btn btn-ghost" href="positions.page.html" data-testid="tpl-cancel">Cancel</a>
+          <button class="btn btn-primary" data-testid="tpl-save" onclick="saveTemplate()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save template &amp; continue
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Screening Template Builder — vanilla interactivity
+============================================================ */
+
+var CATALOG = {
+  age:        { name:'Age',                    sub:'Acceptable age range' },
+  gender:     { name:'Gender',                 sub:'Preferred / required gender' },
+  education:  { name:'Education',              sub:'Minimum level & fields' },
+  experience: { name:'Years of Experience',   sub:'Minimum years required' },
+  pastpos:    { name:'Specific Past Position', sub:'Required prior job titles' },
+  skills:     { name:'Skills',                sub:'Matched against parsed CV' },
+  location:   { name:'Location',              sub:'Preferred districts' },
+  certs:      { name:'Certifications',        sub:'Professional certifications' },
+  custom:     { name:'Custom field',          sub:'Define your own match rule' }
+};
+
+var SKILL_SUGGESTIONS = ['Brand Management','Trade Marketing','FMCG','Market Analysis','Distribution','Bangla & English','MS Excel','Negotiation','Field Sales','Consumer Insights'];
+var DISTRICTS = ['Dhaka','Chattogram','Sylhet','Khulna','Rajshahi','Barishal','Rangpur','Mymensingh','Cumilla','Bogura'];
+
+// rows: { key, type, enabled, weight }
+var rows = [];
+var seq = 0;
+
+function addCriterion(type, preset){
+  preset = preset || {};
+  var key = type + '-' + (++seq);
+  rows.push({ key:key, type:type, enabled: preset.enabled !== false, weight: preset.weight || 0 });
+  if(preset.skipRedistribute){ renderRows(); }
+  else { redistribute(); }
+  renderPopover();
+}
+
+function renderRows(){
+  var list = document.getElementById('critList');
+  list.innerHTML = '';
+  rows.forEach(function(r){ list.appendChild(buildRow(r)); });
+  seedChips();
+  updateTotal();
+}
+
+function buildRow(r){
+  var meta = CATALOG[r.type];
+  var el = document.createElement('div');
+  el.className = 'crit-row' + (r.enabled ? '' : ' off');
+  el.id = 'row-' + r.key;
+  el.setAttribute('data-testid','tpl-row-' + r.type);
+
+  var left = document.createElement('div');
+  left.className = 'crit-left';
+  left.innerHTML =
+    '<label class="toggle">' +
+      '<input type="checkbox" ' + (r.enabled?'checked':'') + ' data-testid="tpl-enable-' + r.type + '" onchange="toggleRow(\'' + r.key + '\', this.checked)">' +
+      '<span class="track"></span>' +
+      '<span>' + (r.enabled?'Enabled':'Disabled') + '</span>' +
+    '</label>' +
+    '<div class="crit-name">' + meta.name + '</div>' +
+    '<div class="crit-sub">' + meta.sub + '</div>';
+
+  var center = document.createElement('div');
+  center.className = 'crit-center';
+  center.innerHTML = renderCenter(r);
+
+  var right = document.createElement('div');
+  right.className = 'crit-right';
+  right.innerHTML =
+    '<button class="crit-remove" title="Remove criterion" data-testid="tpl-remove-' + r.type + '" onclick="removeRow(\'' + r.key + '\')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+    '</button>' +
+    '<label style="font-size:11.5px;font-weight:600;color:var(--muted)">Weight</label>' +
+    '<input type="range" min="0" max="100" value="' + r.weight + '" ' + (r.enabled?'':'disabled') + ' id="wrng-' + r.key + '" data-testid="tpl-weight-' + r.type + '" oninput="onWeight(\'' + r.key + '\', this.value)">' +
+    '<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">' +
+      '<div class="stepper">' +
+        '<button type="button" data-testid="tpl-weight-minus-' + r.type + '" title="Decrease weight 5%" aria-label="Decrease weight" ' + (r.enabled?'':'disabled') + ' onclick="weightStep(\'' + r.key + '\',-5)">&minus;</button>' +
+        '<span class="val weight-read" id="wr-' + r.key + '">' + r.weight + '%</span>' +
+        '<button type="button" data-testid="tpl-weight-plus-' + r.type + '" title="Increase weight 5%" aria-label="Increase weight" ' + (r.enabled?'':'disabled') + ' onclick="weightStep(\'' + r.key + '\',5)">+</button>' +
+      '</div>' +
+    '</div>';
+
+  el.appendChild(left);
+  el.appendChild(center);
+  el.appendChild(right);
+  return el;
+}
+
+function renderCenter(r){
+  switch(r.type){
+    case 'skills':
+      var sug = SKILL_SUGGESTIONS.map(function(s){
+        return '<span class="chip sug" data-testid="tpl-skill-sug" onclick="addChip(\'' + r.key + '\',\'' + esc(s) + '\')">+ ' + s + '</span>';
+      }).join('');
+      return '<div class="suggest-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>AI suggestions for this position</div>' +
+        '<div class="suggest-row">' + sug + '</div>' +
+        '<div class="chipbox"><span id="chips-' + r.key + '" style="display:contents"></span>' +
+        '<input type="text" data-testid="tpl-skill-input" placeholder="Type a skill, press Enter…" onkeydown="chipKey(event,\'' + r.key + '\')">' +
+        '</div>';
+
+    case 'age':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Acceptable age range</label>' +
+        '<div class="range-wrap">' +
+          '<input type="number" class="num" min="18" max="65" value="25" data-testid="tpl-age-min" style="width:64px;padding:7px 8px;border:1px solid var(--border);border-radius:8px;font:inherit" oninput="ageNum(\'' + r.key + '\',\'min\',this.value)">' +
+          '<div class="dual">' +
+            '<input type="range" min="18" max="65" value="25" data-testid="tpl-age-range-min" oninput="ageSlide(\'' + r.key + '\',\'min\',this.value)">' +
+            '<input type="range" min="18" max="65" value="45" data-testid="tpl-age-range-max" oninput="ageSlide(\'' + r.key + '\',\'max\',this.value)">' +
+          '</div>' +
+          '<input type="number" class="num" min="18" max="65" value="45" data-testid="tpl-age-max" style="width:64px;padding:7px 8px;border:1px solid var(--border);border-radius:8px;font:inherit" oninput="ageNum(\'' + r.key + '\',\'max\',this.value)">' +
+        '</div>';
+
+    case 'gender':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Gender preference</label>' +
+        '<div class="seg" data-testid="tpl-gender-seg">' +
+          ['Any','Male','Female','Other'].map(function(g,i){
+            return '<button type="button" class="' + (i===0?'on':'') + '" data-testid="tpl-gender-' + g.toLowerCase() + '" onclick="segPick(this)">' + g + '</button>';
+          }).join('') +
+        '</div>';
+
+    case 'education':
+      return '<div class="field" style="margin-bottom:10px"><label>Minimum level</label>' +
+        '<select data-testid="tpl-edu-min"><option>SSC</option><option>HSC</option><option>Diploma</option><option selected>Bachelor\'s</option><option>Master\'s</option><option>PhD</option></select></div>' +
+        '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Preferred fields of study (optional)</label>' +
+        '<div class="chipbox"><span id="chips-' + r.key + '" style="display:contents" data-seed="Marketing|Business|Chemistry"></span>' +
+        '<input type="text" data-testid="tpl-edu-field-input" placeholder="Add a field…" onkeydown="chipKey(event,\'' + r.key + '\')"></div>';
+
+    case 'experience':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Minimum years of experience</label>' +
+        '<div class="stepper" data-testid="tpl-exp-stepper">' +
+          '<button type="button" data-testid="tpl-exp-dec" onclick="expStep(\'' + r.key + '\',-1)">&minus;</button>' +
+          '<span class="val" id="exp-' + r.key + '">5</span>' +
+          '<button type="button" data-testid="tpl-exp-inc" onclick="expStep(\'' + r.key + '\',1)">+</button>' +
+        '</div>' +
+        '<label class="toggle" style="margin-top:12px;color:var(--text)">' +
+          '<input type="checkbox" data-testid="tpl-exp-require" onchange="document.getElementById(\'expReq-' + r.key + '\').style.display=this.checked?\'block\':\'none\'">' +
+          '<span class="track"></span><span>Also require experience in:</span>' +
+        '</label>' +
+        '<div id="expReq-' + r.key + '" style="display:none;margin-top:8px">' +
+          '<div class="chipbox"><span id="chips-' + r.key + '" style="display:contents"></span>' +
+          '<input type="text" data-testid="tpl-exp-field-input" placeholder="Industry or role, press Enter…" onkeydown="chipKey(event,\'' + r.key + '\')"></div>' +
+        '</div>';
+
+    case 'pastpos':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Required prior job titles</label>' +
+        '<div class="chipbox"><span id="chips-' + r.key + '" style="display:contents" data-seed="Brand Manager|Sales Executive"></span>' +
+        '<input type="text" data-testid="tpl-pastpos-input" placeholder="Add a job title…" onkeydown="chipKey(event,\'' + r.key + '\')"></div>';
+
+    case 'location':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Preferred districts</label>' +
+        '<div class="chipbox autocomplete">' +
+          '<span id="chips-' + r.key + '" style="display:contents"></span>' +
+          '<input type="text" data-testid="tpl-location-input" placeholder="Type a district…" oninput="acOpen(\'' + r.key + '\',this.value)" onkeydown="acKey(event,\'' + r.key + '\')">' +
+          '<div class="ac-list" id="ac-' + r.key + '"></div>' +
+        '</div>';
+
+    case 'certs':
+      return '<label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Certifications</label>' +
+        '<div class="chipbox"><input type="text" data-testid="tpl-cert-input" placeholder="Add a certification, press Enter…" onkeydown="certKey(event,\'' + r.key + '\')" style="width:100%"></div>' +
+        '<div class="cert-list" id="certs-' + r.key + '" style="margin-top:10px"></div>';
+
+    case 'custom':
+      return '<div class="field" style="margin-bottom:10px"><label>Field label</label><input type="text" data-testid="tpl-custom-label" placeholder="e.g. Driving license"></div>' +
+        '<div class="field" style="margin-bottom:10px"><label>Expected value</label><input type="text" data-testid="tpl-custom-value" placeholder="e.g. Valid, Category B"></div>' +
+        '<div class="field" style="margin-bottom:0"><label>Match type</label><select data-testid="tpl-custom-match"><option>Contains</option><option>Exact</option><option>Regex</option></select></div>';
+  }
+  return '';
+}
+function esc(s){ return String(s).replace(/'/g,"\\'"); }
+
+/* seed default chips declared via data-seed (only if empty) */
+function seedChips(){
+  document.querySelectorAll('[data-seed]').forEach(function(span){
+    if(span.childElementCount===0){
+      var key = span.id.replace('chips-','');
+      span.getAttribute('data-seed').split('|').filter(Boolean).forEach(function(c){ addChip(key, c); });
+    }
+  });
+}
+
+/* ---------- Generic chip add / remove ---------- */
+function addChip(key, value){
+  value = (value||'').trim();
+  if(!value) return;
+  var box = document.getElementById('chips-' + key);
+  if(!box) return;
+  var exists = Array.prototype.some.call(box.children, function(c){ return c.getAttribute('data-val')===value; });
+  if(exists) return;
+  var chip = document.createElement('span');
+  chip.className = 'chip removable';
+  chip.setAttribute('data-val', value);
+  chip.setAttribute('data-testid','tpl-chip');
+  chip.innerHTML = value + ' <span class="x" data-testid="tpl-chip-remove" onclick="this.parentNode.remove()">&times;</span>';
+  box.appendChild(chip);
+}
+function chipKey(e, key){
+  if(e.key==='Enter'){ e.preventDefault(); addChip(key, e.target.value); e.target.value=''; }
+}
+/* Skills "+" add affordance: pull value from sibling input, add a chip, clear input */
+function addSkillFromInput(btn, key){
+  var box = btn.closest('.chipbox');
+  var inp = box ? box.querySelector('input') : null;
+  if(!inp) return;
+  addChip(key, inp.value);
+  inp.value='';
+  inp.focus();
+}
+
+/* ---------- Keyword chips (include / exclude) ---------- */
+function kwChip(boxId, value){
+  value=(value||'').trim(); if(!value) return;
+  var box=document.getElementById(boxId);
+  var exists = Array.prototype.some.call(box.children, function(c){ return c.getAttribute('data-val')===value; });
+  if(exists) return;
+  var chip=document.createElement('span');
+  chip.className='chip removable';
+  chip.setAttribute('data-val', value);
+  chip.setAttribute('data-testid', boxId==='includeChips'?'tpl-include-chip':'tpl-exclude-chip');
+  chip.innerHTML = value + ' <span class="x" onclick="this.parentNode.remove()">&times;</span>';
+  box.appendChild(chip);
+}
+function addKw(e, which){
+  if(e.key!=='Enter') return;
+  e.preventDefault();
+  kwChip(which==='include'?'includeChips':'excludeChips', e.target.value);
+  e.target.value='';
+}
+
+/* ---------- Certifications (chip + Required/Preferred toggle) ---------- */
+function certKey(e, key){
+  if(e.key!=='Enter') return;
+  e.preventDefault();
+  var v = e.target.value.trim(); if(!v) return;
+  var list = document.getElementById('certs-' + key);
+  var item = document.createElement('div');
+  item.className='cert-item';
+  item.setAttribute('data-testid','tpl-cert-item');
+  item.innerHTML = '<span class="chip removable" data-val="' + v + '">' + v +
+    ' <span class="x" onclick="this.closest(\'.cert-item\').remove()">&times;</span></span>' +
+    '<div class="seg sm"><button type="button" class="on" onclick="segPick(this)">Required</button><button type="button" onclick="segPick(this)">Preferred</button></div>';
+  list.appendChild(item);
+  e.target.value='';
+}
+
+/* ---------- Location autocomplete ---------- */
+function acOpen(key, val){
+  var box = document.getElementById('ac-' + key);
+  val = (val||'').toLowerCase();
+  var matches = DISTRICTS.filter(function(d){ return d.toLowerCase().indexOf(val)>-1; });
+  if(!val || matches.length===0){ box.classList.remove('open'); box.innerHTML=''; return; }
+  box.innerHTML = matches.map(function(d){
+    return '<div class="ac-item" data-testid="tpl-location-opt" onmousedown="pickDistrict(event,\'' + key + '\',\'' + d + '\')">' + d + '</div>';
+  }).join('');
+  box.classList.add('open');
+}
+function pickDistrict(e, key, d){
+  e.preventDefault();
+  addChip(key, d);
+  var box=document.getElementById('ac-'+key);
+  box.classList.remove('open'); box.innerHTML='';
+  var inp = box.parentNode.querySelector('input'); if(inp) inp.value='';
+}
+function acKey(e, key){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    var v=e.target.value.trim();
+    var m = DISTRICTS.filter(function(d){ return d.toLowerCase().indexOf(v.toLowerCase())>-1; });
+    if(m.length) addChip(key, m[0]);
+    e.target.value=''; document.getElementById('ac-'+key).classList.remove('open');
+  }
+}
+
+/* ---------- Age dual range ---------- */
+function ageSlide(key, side, val){
+  val = parseInt(val,10);
+  var row = document.getElementById('row-' + key);
+  var minS = row.querySelector('[data-testid="tpl-age-range-min"]');
+  var maxS = row.querySelector('[data-testid="tpl-age-range-max"]');
+  var minN = row.querySelector('[data-testid="tpl-age-min"]');
+  var maxN = row.querySelector('[data-testid="tpl-age-max"]');
+  if(side==='min'){ if(val > parseInt(maxS.value,10)) val=parseInt(maxS.value,10); minS.value=val; minN.value=val; }
+  else { if(val < parseInt(minS.value,10)) val=parseInt(minS.value,10); maxS.value=val; maxN.value=val; }
+}
+function ageNum(key, side, val){
+  var row = document.getElementById('row-' + key);
+  var minS = row.querySelector('[data-testid="tpl-age-range-min"]');
+  var maxS = row.querySelector('[data-testid="tpl-age-range-max"]');
+  if(side==='min') minS.value=val; else maxS.value=val;
+}
+
+/* ---------- Experience stepper ---------- */
+function expStep(key, dir){
+  var el = document.getElementById('exp-' + key);
+  var v = parseInt(el.textContent,10) + dir;
+  if(v<0) v=0; if(v>40) v=40;
+  el.textContent = v;
+}
+
+/* ---------- Segmented control ---------- */
+function segPick(btn){
+  var sibs = btn.parentNode.children;
+  for(var i=0;i<sibs.length;i++) sibs[i].classList.remove('on');
+  btn.classList.add('on');
+}
+
+/* ---------- Enable / disable a row ---------- */
+function toggleRow(key, on){
+  var r = rows.find(function(x){ return x.key===key; });
+  if(!r) return;
+  r.enabled = on;
+  if(!on) r.weight = 0;
+  redistribute();
+}
+
+/* ---------- Weight slider (manual) ---------- */
+function onWeight(key, val){
+  var r = rows.find(function(x){ return x.key===key; });
+  if(!r) return;
+  r.weight = parseInt(val,10);
+  var read = document.getElementById('wr-' + key);
+  if(read) read.textContent = r.weight + '%';
+  updateTotal();
+}
+
+/* ---------- Weight +/- stepper (adjusts weight %, ±5) ---------- */
+function weightStep(key, dir){
+  var r = rows.find(function(x){ return x.key===key; });
+  if(!r || !r.enabled) return;
+  var v = r.weight + dir;
+  if(v<0) v=0; if(v>100) v=100;
+  r.weight = v;
+  var rng = document.getElementById('wrng-' + key);
+  if(rng) rng.value = v;                          // keep slider in sync
+  var read = document.getElementById('wr-' + key);
+  if(read) read.textContent = v + '%';            // update % readout
+  updateTotal();                                  // recompute live total
+}
+
+/* ---------- Remove a row ---------- */
+function removeRow(key){
+  rows = rows.filter(function(x){ return x.key!==key; });
+  redistribute();
+  renderPopover();
+}
+
+/* ---------- Redistribute weights proportionally across enabled rows ---------- */
+function redistribute(){
+  var enabled = rows.filter(function(r){ return r.enabled; });
+  rows.forEach(function(r){ if(!r.enabled) r.weight = 0; });
+  if(enabled.length>0){
+    var base = Math.floor(100 / enabled.length);
+    var rem = 100 - base*enabled.length;
+    enabled.forEach(function(r,i){ r.weight = base + (i<rem?1:0); });
+  }
+  renderRows();
+}
+
+/* ---------- Live total ---------- */
+function updateTotal(){
+  var total = rows.filter(function(r){ return r.enabled; })
+                  .reduce(function(s,r){ return s + r.weight; }, 0);
+  var pill = document.getElementById('totalPill');
+  pill.textContent = 'Total: ' + total + '%';
+  pill.className = 'total-pill ' + (total===100 ? 'total-ok' : (total>100 ? 'total-bad' : 'total-warn'));
+}
+
+/* ---------- Threshold ---------- */
+function onThreshold(v){
+  var r = document.getElementById('thReadout');
+  r.textContent = v + '%';
+  r.className = 'total-pill ' + (v>=70 ? 'total-ok' : (v>=50 ? 'total-warn' : 'total-bad'));
+  r.style.minWidth='64px'; r.style.textAlign='center';
+}
+
+/* ---------- Add-criterion popover ---------- */
+function renderPopover(){
+  var pop = document.getElementById('addPopover');
+  var used = rows.map(function(r){ return r.type; });
+  var available = Object.keys(CATALOG).filter(function(t){ return used.indexOf(t)===-1; });
+  if(available.length===0){
+    pop.innerHTML = '<div class="pop-empty">All criteria have been added.</div>';
+    return;
+  }
+  pop.innerHTML = available.map(function(t){
+    return '<button class="pop-item" data-testid="tpl-addopt-' + t + '" onclick="pickFromPopover(\'' + t + '\')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+      CATALOG[t].name + '</button>';
+  }).join('');
+}
+function toggleAddPopover(e){
+  e.stopPropagation();
+  document.getElementById('addPopover').classList.toggle('open');
+}
+function pickFromPopover(type){
+  document.getElementById('addPopover').classList.remove('open');
+  addCriterion(type);
+}
+document.addEventListener('click', function(e){
+  var pop = document.getElementById('addPopover');
+  if(pop && !e.target.closest('.pop-wrap')) pop.classList.remove('open');
+  document.querySelectorAll('.ac-list.open').forEach(function(l){
+    if(!l.parentNode.contains(e.target)) l.classList.remove('open');
+  });
+});
+
+/* ============================================================
+   Apply prompt — lightweight keyword detection -> auto-adjust
+   criteria, skills & weights from the natural-language prompt.
+============================================================ */
+
+/* Ensure a criterion of `type` exists and is enabled; returns the row. */
+function ensureCriterion(type){
+  var r = rows.find(function(x){ return x.type===type; });
+  if(!r){
+    addCriterion(type, { enabled:true, skipRedistribute:true });
+    r = rows[rows.length-1];
+  }
+  r.enabled = true;
+  return r;
+}
+
+/* Add skill chips to the skills row (DOM must already be rendered). */
+function addSkillsToRow(skills){
+  var r = rows.find(function(x){ return x.type==='skills'; });
+  if(!r) return;
+  skills.forEach(function(s){ addChip(r.key, s); }); // addChip already dedupes
+}
+
+/* Add preferred education fields to the education row. */
+function addEduFields(fields){
+  var r = rows.find(function(x){ return x.type==='education'; });
+  if(!r) return;
+  fields.forEach(function(f){ addChip(r.key, f); });
+}
+
+/* Set the Years of Experience minimum stepper value. */
+function setExperienceMin(years){
+  var r = rows.find(function(x){ return x.type==='experience'; });
+  if(!r) return;
+  var el = document.getElementById('exp-' + r.key);
+  if(el){ var v = parseInt(years,10); if(v<0) v=0; if(v>40) v=40; el.textContent = v; }
+}
+
+/* Distribute a suggested weight map (by type) across enabled rows, sum=100. */
+function applyWeightMap(map){
+  var enabled = rows.filter(function(r){ return r.enabled; });
+  if(enabled.length===0) return;
+  // raw desired weights from the map (default 10 for unlisted enabled rows)
+  enabled.forEach(function(r){ r.weight = (map[r.type] != null) ? map[r.type] : 10; });
+  // normalise so enabled weights sum to exactly 100
+  var sum = enabled.reduce(function(s,r){ return s + r.weight; }, 0) || 1;
+  var acc = 0;
+  enabled.forEach(function(r,i){
+    if(i < enabled.length-1){
+      r.weight = Math.round(r.weight * 100 / sum);
+      acc += r.weight;
+    } else {
+      r.weight = 100 - acc; // last row absorbs rounding remainder
+    }
+    if(r.weight<0) r.weight=0;
+  });
+  rows.forEach(function(r){ if(!r.enabled) r.weight = 0; });
+}
+
+function showPromptNote(msg){
+  var n = document.getElementById('promptNote');
+  if(!n) return;
+  n.textContent = msg;
+  n.style.display = 'inline-flex';
+}
+
+function applyPrompt(){
+  var ta = document.querySelector('[data-testid="tpl-prompt"]');
+  var raw = ta ? ta.value : '';
+  var text = (raw || '').toLowerCase();
+
+  var enabledTypes = {}; // type -> true
+  var skills = [];
+  var eduFields = [];
+  var expYears = null;
+  var weightMap = {};
+
+  function enable(t){ ensureCriterion(t); enabledTypes[t] = true; }
+  function pushSkill(s){ if(skills.indexOf(s)===-1) skills.push(s); }
+  function pushEdu(f){ if(eduFields.indexOf(f)===-1) eduFields.push(f); }
+
+  var matched = false;
+
+  // FMCG / marketing / brand / trade / sales / distribution -> Skills
+  if(/fmcg|marketing|brand|trade|sales|distribution/.test(text)){
+    matched = true;
+    enable('skills');
+    if(/fmcg/.test(text)) pushSkill('FMCG');
+    if(/trade|trade marketing/.test(text)) pushSkill('Trade Marketing');
+    if(/brand/.test(text)) pushSkill('Brand Management');
+    if(/distribution/.test(text)) pushSkill('Distribution');
+    if(/sales|field/.test(text)) pushSkill('Field Sales');
+  }
+
+  // bilingual / bangla / english
+  if(/bangla|bengali|english|bilingual/.test(text)){
+    matched = true;
+    enable('skills');
+    pushSkill('Bangla & English');
+  }
+
+  // travel / trade visit / field -> Field Sales / Willing to travel + Location
+  if(/travel|trade visit|field/.test(text)){
+    matched = true;
+    enable('skills');
+    pushSkill('Field Sales');
+    pushSkill('Willing to travel');
+    enable('location');
+  }
+
+  // N year(s) of experience -> enable Experience + set minimum
+  var ym = text.match(/(\d{1,2})\s*\+?\s*years?/);
+  if(ym){
+    matched = true;
+    enable('experience');
+    expYears = parseInt(ym[1],10);
+  }
+
+  // chemist / chemistry / lab -> chemistry skills + education field
+  if(/chemist|chemistry|lab/.test(text)){
+    matched = true;
+    enable('skills');
+    pushSkill('Chemistry');
+    pushSkill('Lab Analysis');
+    enable('education');
+    pushEdu('Chemistry');
+  }
+
+  // Sensible default set if nothing matched
+  if(!matched){
+    enable('skills');
+    enable('experience');
+    enable('education');
+  }
+
+  // Always make sure a baseline trio is sensible: if skills got enabled by a
+  // match but experience/education weren't, still seed them for a full template.
+  enable('skills');
+  enable('experience');
+  enable('education');
+
+  // Suggested weight distribution (sums to 100 across enabled rows).
+  weightMap = { skills:40, experience:30, education:20, location:10 };
+  applyWeightMap(weightMap);
+
+  // Render the structural changes (rows / enabled state / weights), then
+  // overlay the derived skill chips & values, then refresh the live total.
+  renderRows();
+  if(skills.length) addSkillsToRow(skills);
+  if(eduFields.length) addEduFields(eduFields);
+  if(expYears != null) setExperienceMin(expYears);
+  updateTotal();
+
+  showPromptNote('Criteria & skills auto-adjusted from your prompt');
+}
+
+/* ---------- Save ---------- */
+function saveTemplate(){
+  window.location.href = 'import-cvs.page.html';
+}
+
+/* ---------- Init: pre-add Skills, Years of Experience, Education (all enabled) ---------- */
+addCriterion('skills',     { skipRedistribute:true });
+addCriterion('experience', { skipRedistribute:true });
+addCriterion('education',  { skipRedistribute:true });
+redistribute();   // -> 34 / 33 / 33
+kwChip('includeChips','FMCG');
+kwChip('includeChips','Trade Marketing');
+kwChip('excludeChips','Fresh graduate');
+onThreshold(75);
+</script>
+</body>
+</html>

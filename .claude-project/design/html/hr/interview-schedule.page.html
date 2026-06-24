@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule Interviews · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* wf-stepper (round-3 fix, unique classes) */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+</style>
+<!-- page-local style: existing design tokens only -->
+<style>
+.sched td{vertical-align:top}
+.sched .dt{display:flex;gap:8px;flex-wrap:wrap}
+.sched .dt input{width:auto;min-width:130px;padding:7px 10px}
+.sched select{padding:7px 10px;min-width:150px}
+.panel-pick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.panel-pick .chip{cursor:default}
+.panel-pick .chip .x{font-size:14px;line-height:1}
+.panel-pick .add{border:1px dashed var(--border);background:transparent;color:var(--primary);padding:5px 10px;border-radius:999px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.panel-pick .add svg{width:13px;height:13px}
+.tpl-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+.preview{background:var(--surface-2);border-radius:8px;padding:16px;font-size:13px}
+.preview .pv-sub{font-weight:700;margin-bottom:10px;font-size:14px}
+.preview .pv-body{white-space:pre-wrap;color:var(--text);line-height:1.6}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:var(--success-s);color:var(--success);font-weight:600;font-size:13px;margin-bottom:18px;border:1px solid var(--success)}
+.toast svg{width:18px;height:18px;flex:none}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 20px;border-top:1px solid var(--border)}
+@media(max-width:1024px){.tpl-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item active" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Interviews / <b>Schedule</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <a class="wf-step done" href="template-builder.page.html" data-testid="step-1"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Template</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="import-cvs.page.html" data-testid="step-2"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Import</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="processing.page.html" data-testid="step-3"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Process</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="cv-review.page.html" data-testid="step-4"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Review</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="results.page.html" data-testid="step-5"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Shortlist</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="../hiring-manager/shortlist.page.html" data-testid="step-6"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hiring Manager</a>
+    <span class="wf-sep done"></span>
+    <span class="wf-step current" data-testid="step-7"><span class="wf-dot">7</span>Interview</span>
+    <span class="wf-sep"></span>
+    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Hire</span>
+  </nav>
+      <div class="page-head">
+        <div>
+          <h1>Schedule interviews — Sr. Brand Manager</h1>
+          <p>Set slots, choose a platform, and assign panel members for confirmed candidates.</p>
+        </div>
+        <button class="btn btn-primary" id="sendBtn" data-testid="sched-send" onclick="sendInvites()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send invites
+        </button>
+      </div>
+
+      <div class="toast" id="sentToast" data-testid="sched-sent-toast" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Invites sent to all confirmed candidates. They are now being tracked below.</span>
+      </div>
+
+      <!-- ============ SCHEDULE FORM (hidden after sending) ============ -->
+      <div id="scheduleForm" data-testid="schedule-form">
+
+      <!-- Schedule grid -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-head"><h2>Confirmed candidates (4)</h2><span class="hint">Position: Sr. Brand Manager · Marketing</span></div>
+        <table class="sched">
+          <thead><tr><th style="width:24%">Candidate</th><th style="width:24%">Date &amp; time</th><th style="width:20%">Platform</th><th>Panel members</th></tr></thead>
+          <tbody>
+            <tr data-testid="sched-row-1">
+              <td><div class="cand"><span class="ava">MR</span><div>Mahmudur Rahman<small>Dhaka · 96% match</small></div></div></td>
+              <td><div class="dt"><input type="date" value="2026-06-30" data-testid="sched-1-date"><input type="time" value="10:30" data-testid="sched-1-time"></div></td>
+              <td><select data-testid="sched-1-platform"><option>Google Meet</option><option>Zoom</option><option>Gmail</option><option>In-person</option></select></td>
+              <td><div class="panel-pick" data-testid="sched-1-panel"><span class="chip">Md. Kamrul Hasan <span class="x" data-testid="sched-1-panel-rm-0" onclick="rmChip(this)">&times;</span></span><span class="chip">Shahana Begum <span class="x" data-testid="sched-1-panel-rm-1" onclick="rmChip(this)">&times;</span></span><button class="add" data-testid="sched-1-panel-add" onclick="addPanel(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button></div></td>
+            </tr>
+            <tr data-testid="sched-row-2">
+              <td><div class="cand"><span class="ava">SK</span><div>Sadia Karim<small>Chattogram · 93% match</small></div></div></td>
+              <td><div class="dt"><input type="date" value="2026-06-30" data-testid="sched-2-date"><input type="time" value="12:00" data-testid="sched-2-time"></div></td>
+              <td><select data-testid="sched-2-platform"><option>Zoom</option><option>Google Meet</option><option>Gmail</option><option>In-person</option></select></td>
+              <td><div class="panel-pick" data-testid="sched-2-panel"><span class="chip">Md. Kamrul Hasan <span class="x" data-testid="sched-2-panel-rm-0" onclick="rmChip(this)">&times;</span></span><button class="add" data-testid="sched-2-panel-add" onclick="addPanel(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button></div></td>
+            </tr>
+            <tr data-testid="sched-row-3">
+              <td><div class="cand"><span class="ava">TI</span><div>Tanvir Islam<small>Dhaka · 91% match</small></div></div></td>
+              <td><div class="dt"><input type="date" value="2026-07-01" data-testid="sched-3-date"><input type="time" value="11:00" data-testid="sched-3-time"></div></td>
+              <td><select data-testid="sched-3-platform"><option>In-person</option><option>Google Meet</option><option>Zoom</option><option>Gmail</option></select></td>
+              <td><div class="panel-pick" data-testid="sched-3-panel"><span class="chip">Imrul Hossain <span class="x" data-testid="sched-3-panel-rm-0" onclick="rmChip(this)">&times;</span></span><span class="chip">Shahana Begum <span class="x" data-testid="sched-3-panel-rm-1" onclick="rmChip(this)">&times;</span></span><button class="add" data-testid="sched-3-panel-add" onclick="addPanel(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button></div></td>
+            </tr>
+            <tr data-testid="sched-row-4">
+              <td><div class="cand"><span class="ava">NF</span><div>Nusrat Fariha<small>Sylhet · 89% match</small></div></div></td>
+              <td><div class="dt"><input type="date" value="2026-07-01" data-testid="sched-4-date"><input type="time" value="14:30" data-testid="sched-4-time"></div></td>
+              <td><select data-testid="sched-4-platform"><option>Google Meet</option><option>Zoom</option><option>Gmail</option><option>In-person</option></select></td>
+              <td><div class="panel-pick" data-testid="sched-4-panel"><span class="chip">Md. Kamrul Hasan <span class="x" data-testid="sched-4-panel-rm-0" onclick="rmChip(this)">&times;</span></span><button class="add" data-testid="sched-4-panel-add" onclick="addPanel(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Template editor + live preview -->
+      <div class="card">
+        <div class="card-head"><h2>Email invite template</h2><span class="hint">Merge tokens are replaced per candidate when invites are sent.</span></div>
+        <div class="card-body">
+          <div class="tpl-grid">
+            <div>
+              <div class="field">
+                <label for="tplSubject">Subject</label>
+                <input type="text" id="tplSubject" data-testid="tpl-subject" value="Interview Invitation — {{position}} at Square Toiletries" oninput="renderPreview()">
+              </div>
+              <div class="field" style="margin-bottom:10px">
+                <label for="tplBody">Body</label>
+                <textarea id="tplBody" rows="11" data-testid="tpl-body" oninput="renderPreview()">Dear {{candidate_name}},
+
+Thank you for applying for the {{position}} role at Square Toiletries Limited. We are pleased to invite you to an interview.
+
+Date: {{date}}
+Time: {{time}}
+Join link / Venue: {{platform_link}}
+Interview panel: {{panel_members}}
+
+Please confirm your availability by replying to this email.
+
+Best regards,
+Farzana Akter
+HR Department, Square Toiletries Limited</textarea>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;cursor:pointer">
+                  <input type="checkbox" id="tplDefault" data-testid="tpl-default" style="width:16px;height:16px"> Use as default for this position
+                </label>
+                <button class="btn btn-ghost btn-sm" data-testid="tpl-save" onclick="saveDefault()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save as default
+                </button>
+              </div>
+              <p class="hint" id="saveMsg" style="display:none;color:var(--success);font-weight:600">Template saved as default for Sr. Brand Manager.</p>
+            </div>
+
+            <div>
+              <div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Live preview <span class="hint" style="font-weight:500">— sample: Mahmudur Rahman</span></div>
+              <div class="preview" data-testid="tpl-preview">
+                <div class="pv-sub" id="pvSubject"></div>
+                <div class="pv-body" id="pvBody"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div><!-- /#scheduleForm -->
+
+      <!-- ============ INVITES TRACKING (shown after sending) ============ -->
+      <div id="invitesTracking" data-testid="invites-tracking" style="display:none">
+        <div class="page-head" style="margin-bottom:16px">
+          <div>
+            <h2 style="font-size:18px;font-weight:700">Interview invites sent</h2>
+            <p style="color:var(--muted);font-size:13px;margin-top:3px">4 candidates notified for Sr. Brand Manager · Marketing. Track responses below.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-ghost" href="interviews.page.html" data-testid="track-view-interviews">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>View all interviews
+            </a>
+            <button class="btn btn-primary" data-testid="sched-new" onclick="scheduleNew()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Schedule new interview
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Sent invites (4)</h2><span class="hint">Last sent just now · by Farzana Akter</span></div>
+          <table data-testid="invites-table">
+            <thead><tr><th>Candidate</th><th>Date &amp; time</th><th>Platform</th><th>Panel</th><th>Status</th><th>Notification</th></tr></thead>
+            <tbody>
+              <tr data-testid="invite-row-1">
+                <td><div class="cand"><span class="ava">MR</span><div>Mahmudur Rahman<small>Dhaka · 96% match</small></div></div></td>
+                <td>30 Jun 2026 · 10:30 AM</td>
+                <td>Google Meet</td>
+                <td>Md. Kamrul Hasan, Shahana Begum</td>
+                <td><span class="badge b-inf">Scheduled</span></td>
+                <td><span class="badge b-suc">Sent</span></td>
+              </tr>
+              <tr data-testid="invite-row-2">
+                <td><div class="cand"><span class="ava">SK</span><div>Sadia Karim<small>Chattogram · 93% match</small></div></div></td>
+                <td>30 Jun 2026 · 12:00 PM</td>
+                <td>Zoom</td>
+                <td>Md. Kamrul Hasan</td>
+                <td><span class="badge b-inf">Scheduled</span></td>
+                <td><span class="badge b-suc">Sent</span></td>
+              </tr>
+              <tr data-testid="invite-row-3">
+                <td><div class="cand"><span class="ava">TI</span><div>Tanvir Islam<small>Dhaka · 91% match</small></div></div></td>
+                <td>01 Jul 2026 · 11:00 AM</td>
+                <td>In-person</td>
+                <td>Imrul Hossain, Shahana Begum</td>
+                <td><span class="badge b-inf">Scheduled</span></td>
+                <td><span class="badge b-suc">Sent</span></td>
+              </tr>
+              <tr data-testid="invite-row-4">
+                <td><div class="cand"><span class="ava">NF</span><div>Nusrat Fariha<small>Sylhet · 89% match</small></div></div></td>
+                <td>01 Jul 2026 · 02:30 PM</td>
+                <td>Google Meet</td>
+                <td>Md. Kamrul Hasan</td>
+                <td><span class="badge b-inf">Scheduled</span></td>
+                <td><span class="badge b-suc">Sent</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add-panelist modal -->
+<div class="modal-mask" id="panelModal" data-testid="panel-modal" style="display:none">
+  <div class="modal" style="max-width:420px">
+    <div class="card-head">
+      <h3>Add panel member</h3>
+      <button class="icon-btn" data-testid="panel-modal-close" onclick="closePanel()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="field" style="margin-bottom:0">
+        <label for="panelSelect">Select panelist</label>
+        <select id="panelSelect" data-testid="panel-select">
+          <option value="Md. Kamrul Hasan">Md. Kamrul Hasan — Head of Marketing</option>
+          <option value="Shahana Begum">Shahana Begum — Brand Lead, Personal Care</option>
+          <option value="Imrul Hossain">Imrul Hossain — GM, Marketing &amp; Sales</option>
+          <option value="Rezaul Karim">Rezaul Karim — HR Business Partner</option>
+          <option value="Naznin Sultana">Naznin Sultana — Sr. Brand Manager, Oral Care</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-testid="panel-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn btn-primary" data-testid="panel-confirm" onclick="confirmPanel()">Add member</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var SAMPLE = {
+  candidate_name:'Mahmudur Rahman',
+  position:'Sr. Brand Manager',
+  date:'30 Jun 2026',
+  time:'10:30 AM',
+  platform_link:'https://meet.google.com/stl-sbm-rahman',
+  panel_members:'Md. Kamrul Hasan, Shahana Begum'
+};
+function fill(str){
+  return str.replace(/\{\{(\w+)\}\}/g, function(m,k){ return SAMPLE[k]!==undefined ? SAMPLE[k] : m; });
+}
+function renderPreview(){
+  document.getElementById('pvSubject').textContent = fill(document.getElementById('tplSubject').value);
+  document.getElementById('pvBody').textContent = fill(document.getElementById('tplBody').value);
+}
+function saveDefault(){
+  document.getElementById('tplDefault').checked = true;
+  document.getElementById('saveMsg').style.display = 'block';
+}
+
+/* panel chip management */
+var panelTargetRow = null;
+function addPanel(row){ panelTargetRow = row; document.getElementById('panelModal').style.display='grid'; }
+function closePanel(){ document.getElementById('panelModal').style.display='none'; }
+function confirmPanel(){
+  var val = document.getElementById('panelSelect').value;
+  var container = document.querySelector('[data-testid="sched-'+panelTargetRow+'-panel"]');
+  var addBtn = container.querySelector('.add');
+  var chip = document.createElement('span');
+  chip.className = 'chip';
+  chip.innerHTML = val + ' <span class="x" onclick="rmChip(this)">&times;</span>';
+  container.insertBefore(chip, addBtn);
+  closePanel();
+}
+function rmChip(x){ var chip = x.parentNode; chip.parentNode.removeChild(chip); }
+
+/* view swap: after sending, hide the scheduling form and show the tracking view.
+   The form is NOT shown again until "Schedule new interview" is clicked. */
+function sendInvites(){
+  document.getElementById('scheduleForm').style.display='none';
+  document.getElementById('sendBtn').style.display='none';
+  document.getElementById('invitesTracking').style.display='block';
+  document.getElementById('sentToast').style.display='flex';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+/* re-open the previous scheduling process to repeat it */
+function scheduleNew(){
+  document.getElementById('invitesTracking').style.display='none';
+  document.getElementById('sentToast').style.display='none';
+  document.getElementById('scheduleForm').style.display='block';
+  document.getElementById('sendBtn').style.display='inline-flex';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderPreview();
+</script>
+</body>
+</html>

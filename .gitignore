@@ -1,0 +1,6 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+# node (none committed, just in case)
+node_modules/

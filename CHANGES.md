@@ -128,3 +128,13 @@ File: **`hr/onboarding.page.html`**.
 ## QA (round 3)
 - 35/35 pages reachable from login · 0 broken links · 0 emoji/glyph icons · Square blue on 35/35 · stepper styled on all 9 flow pages · HM nav consistent across 6 pages.
 - Inventory: auth 2 · hr 18 · hiring-manager 6 · viewer 4 · admin 5.
+
+---
+
+# Round 4 — UI fixes + GitHub Pages deploy (2026-06-24)
+
+- **Template builder:** removed the standalone skill "+" button (`tpl-skill-add`) from the Skills criterion — skills add via typing/Enter + AI-suggestion chips; the +/- steppers remain on the weight %.
+- **CV file = downloadable link:** in `cv-review` the CV filename is now a download link (`downloadCv()` generates a mock CV file via Blob) alongside the view-drawer icon; `application-detail`'s "View original PDF" became a working **Download CV** link (data-URI download).
+- **"Create & send invitation"** (`hr/interviews.page.html`) now works: submitting shows an "Invitation created & sent — Scheduled" confirmation and disables the button (no page reload).
+- **Hosting:** added `docs/` (deployable copy of the prototype) with `docs/index.html` redirecting to the **login page** as the site entry point, plus `.nojekyll`. README documents the GitHub Pages setup. Pushed the whole project to `github.com/sadiasajarun/Square_ATS` (`main`).
+- **QA:** canonical tree 35/35 reachable · `docs/` 36/36 reachable from `index.html` · 0 broken links · `docs/` byte-identical to the canonical `html/` tree.

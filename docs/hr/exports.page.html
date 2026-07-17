@@ -160,10 +160,22 @@ tbody tr:hover td{background:var(--primary-soft)}
       </a>
       <a class="nav-item" href="results.page.html" data-testid="nav-results">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>      <a class="nav-item" href="cv-analysis-dashboard.page.html" data-testid="nav-cv-analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>CV Analysis
       </a>
+      <a class="nav-item" href="online-visibility-analysis.page.html" data-testid="nav-online-presence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Online Presence
+      </a>
+      <a class="nav-item" href="written-exam.page.html" data-testid="nav-written-exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Written Exam
+      </a>
+
       <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>      <a class="nav-item" href="assessment-summary-report.page.html" data-testid="nav-assessment-report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13l2 2 4-4"/></svg>Summary Report
       </a>
+
       <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
       </a>
@@ -256,6 +268,27 @@ tbody tr:hover td{background:var(--primary-soft)}
                   </span>
                   <span class="tc-txt"><b>Interview panel summary</b><small>Panel, slots &amp; feedback rollup</small></span>
                 </label>
+                <label class="type-card" data-type-card="assessment-report">
+                  <input type="radio" name="export-type" value="assessment-report" data-testid="type-assessment-report" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13l2 2 4-4"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Assessment report</b><small>Written + viva merit sheet</small></span>
+                </label>
+                <label class="type-card" data-type-card="cv-analysis">
+                  <input type="radio" name="export-type" value="cv-analysis" data-testid="type-cv-analysis" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>CV analysis export</b><small>Pool insights + evaluation summaries</small></span>
+                </label>
+                <label class="type-card" data-type-card="online-presence">
+                  <input type="radio" name="export-type" value="online-presence" data-testid="type-online-presence" onchange="onTypeChange()">
+                  <span class="tc-ic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  </span>
+                  <span class="tc-txt"><b>Online-presence export</b><small>Verified identities &amp; findings</small></span>
+                </label>
               </div>
             </div>
 
@@ -268,22 +301,12 @@ tbody tr:hover td{background:var(--primary-soft)}
                 <label class="scope-pill"><input type="radio" name="export-scope" value="Selected candidate" data-testid="scope-selected" onchange="onScopeChange()"> Selected candidate</label>
                 <label class="scope-pill"><input type="radio" name="export-scope" value="By position" data-testid="scope-position" onchange="onScopeChange()"> By position</label>
               </div>
+              <!-- Options are bound to the shared fixture (STLF.POS) so Scope genuinely filters -->
               <div id="scope-position-wrap" class="hide" style="margin-top:10px">
-                <select id="scope-position-select" data-testid="scope-position-select">
-                  <option value="Sr. Brand Manager">Sr. Brand Manager — Marketing</option>
-                  <option value="QA Chemist">QA Chemist — Quality Assurance</option>
-                  <option value="Territory Sales Officer">Territory Sales Officer — Sales (Sylhet)</option>
-                  <option value="Production Officer">Production Officer — Manufacturing (Gazipur)</option>
-                  <option value="Digital Marketing Executive">Digital Marketing Executive — Marketing</option>
-                </select>
+                <select id="scope-position-select" data-testid="scope-position-select" onchange="onFieldChange()"></select>
               </div>
               <div id="scope-selected-wrap" class="hide" style="margin-top:10px">
-                <select id="scope-selected-select" data-testid="scope-selected-select">
-                  <option value="Tahmina Rahman">Tahmina Rahman — Sr. Brand Manager</option>
-                  <option value="Rifat Hossain">Rifat Hossain — QA Chemist</option>
-                  <option value="Nusrat Jahan">Nusrat Jahan — Digital Marketing Executive</option>
-                  <option value="Abdullah Al Mamun">Abdullah Al Mamun — Territory Sales Officer</option>
-                </select>
+                <select id="scope-selected-select" data-testid="scope-selected-select" onchange="onFieldChange()"></select>
               </div>
             </div>
 
@@ -306,31 +329,37 @@ tbody tr:hover td{background:var(--primary-soft)}
                     <button type="button" class="link-btn" data-testid="fields-clear" onclick="setAllFields(false)">Clear</button>
                   </span>
                 </div>
+                <!-- Field order here IS the exported column order.
+                     Age and gender are deliberately absent — not merely unchecked.
+                     PRD Open Question 7 is unresolved, so they are not offered at all. -->
                 <div class="fields-grid">
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Name" data-testid="field-name" checked> Name</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Contact number" data-testid="field-contact" checked> Contact number</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Email" data-testid="field-email" checked> Email</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Home district" data-testid="field-district" checked> Home district</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Education" data-testid="field-education"> Education</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Experience" data-testid="field-experience"> Experience</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Skills" data-testid="field-skills"> Skills</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Match score" data-testid="field-match-score" checked> Match score</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Interview rating" data-testid="field-interview-rating"> Interview rating</label>
-                  <label class="fchk"><input type="checkbox" class="excel-field" value="Tags" data-testid="field-tags"> Tags</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Name" data-testid="field-name" checked onchange="onFieldChange()"> Name</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Contact number" data-testid="field-contact" checked onchange="onFieldChange()"> Contact number</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Email" data-testid="field-email" checked onchange="onFieldChange()"> Email</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Home district" data-testid="field-district" checked onchange="onFieldChange()"> Home district</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Education" data-testid="field-education" onchange="onFieldChange()"> Education</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Total experience" data-testid="field-experience" onchange="onFieldChange()"> Total experience</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Current / last position" data-testid="field-position" onchange="onFieldChange()"> Current / last position</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Current / last company" data-testid="field-company" onchange="onFieldChange()"> Current / last company</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Position applied" data-testid="field-applied-position" onchange="onFieldChange()"> Position applied</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Skills" data-testid="field-skills" onchange="onFieldChange()"> Skills</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Match score" data-testid="field-match-score" checked onchange="onFieldChange()"> Match score</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Parsing confidence" data-testid="field-confidence" onchange="onFieldChange()"> Parsing confidence</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Stage / status" data-testid="field-stage" checked onchange="onFieldChange()"> Stage / status</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Source" data-testid="field-source" onchange="onFieldChange()"> Source</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Tags" data-testid="field-tags" onchange="onFieldChange()"> Tags</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Red flags" data-testid="field-redflags" onchange="onFieldChange()"> Red flags</label>
+                  <label class="fchk"><input type="checkbox" class="excel-field" value="Applied date" data-testid="field-applied-date" onchange="onFieldChange()"> Applied date</label>
                 </div>
+                <div class="hint" style="margin-top:8px">Age and gender are not offered as export fields, pending STL policy &amp; local labour-law approval.</div>
               </div>
 
               <!-- Final candidate summary options -->
               <div id="opt-stl-summary" class="opt-pane hide" data-testid="opt-stl-summary">
                 <div class="note-box">Uses STL standard summary template.</div>
                 <div style="margin-top:10px">
-                  <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Position</label>
-                  <select id="stl-position-select" data-testid="stl-position-select">
-                    <option value="Sr. Brand Manager">Sr. Brand Manager — Marketing</option>
-                    <option value="QA Chemist">QA Chemist — Quality Assurance</option>
-                    <option value="Territory Sales Officer">Territory Sales Officer — Sales (Sylhet)</option>
-                    <option value="Production Officer">Production Officer — Manufacturing (Gazipur)</option>
-                  </select>
+                  <label for="stl-position-select" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Position</label>
+                  <select id="stl-position-select" data-testid="stl-position-select" onchange="onFieldChange()"></select>
                 </div>
               </div>
 
@@ -355,7 +384,34 @@ tbody tr:hover td{background:var(--primary-soft)}
 
               <!-- CV bundle options -->
               <div id="opt-cv-bundle" class="opt-pane hide" data-testid="opt-cv-bundle">
-                <div class="note-box">Exports original CV files as a .zip.</div>
+                <div class="note-box">Exports a real .zip containing a <b>manifest.csv</b> (candidate, position, score, filename) plus one stand-in file per CV. The prototype holds no CV binaries — in production these stream from object storage.</div>
+              </div>
+
+              <!-- Assessment report options -->
+              <div id="opt-assessment-report" class="opt-pane hide" data-testid="opt-assessment-report">
+                <label class="toggle-row">
+                  <span>Qualified in both (written + viva) only</span>
+                  <input type="checkbox" id="assess-qualified-only" data-testid="toggle-qualified-only" checked class="switch" onchange="onFieldChange()">
+                </label>
+                <div class="hint">Merit sheet with roll/ID, marks, weighted combined, result and rank — matching the Summary Report page (Written ≥50, Viva ≥60, weighted 60/40).</div>
+              </div>
+
+              <!-- CV analysis options -->
+              <div id="opt-cv-analysis" class="opt-pane hide" data-testid="opt-cv-analysis">
+                <div class="note-box">Two sheets: <b>Pool insights</b> (score distribution, skill coverage, red-flag frequency, confidence bands, experience/education mix, source &amp; district spread) and <b>Evaluation summaries</b> (ranked candidates with AI summary and key signals).</div>
+              </div>
+
+              <!-- Online-presence options -->
+              <div id="opt-online-presence" class="opt-pane hide" data-testid="opt-online-presence">
+                <div class="note-box">Confirmed identities only. Carries the governance note as a header line: <i>publicly available professional info; HR-verified; assistive only.</i></div>
+              </div>
+            </div>
+
+            <!-- Live preview — what the file will actually contain -->
+            <div class="field" id="preview-block">
+              <label>4 &middot; Preview <span id="preview-count" class="hint" style="font-weight:400;margin-left:6px"></span></label>
+              <div id="export-preview" class="note-box" data-testid="export-preview" style="overflow-x:auto;padding:0">
+                <div style="padding:12px">Select an export type to preview its output.</div>
               </div>
             </div>
 
@@ -427,23 +483,98 @@ tbody tr:hover td{background:var(--primary-soft)}
   </div>
 </div>
 
+<!-- Shared, dependency-free writers + the single source-of-truth fixture.
+     The R12 brief suggested SheetJS/JSZip via CDN on the assumption that a static
+     page cannot emit a real .xlsx. It can: stl-xlsx.js writes genuine Office Open
+     XML (merged cells, styles, frozen panes, multi-sheet) and real .zip archives in
+     ~120 lines, verified by an openpyxl round-trip. Keeping it local preserves the
+     prototype's no-dependency / no-build-step rule and keeps it working offline and
+     from file://. stl-fixtures.js is the same data the CV Analysis dashboard and the
+     Summary Report render, so exports can never drift from what HR sees. -->
+<script src="../assets/js/stl-xlsx.js"></script>
+<script src="../assets/js/stl-fixtures.js"></script>
 <script>
 (function(){
+  /* Fail loudly rather than silently producing nothing */
+  if(typeof STLX==='undefined'||typeof STLF==='undefined'){
+    document.addEventListener('DOMContentLoaded',function(){
+      var v=document.getElementById('export-validation');
+      if(v){v.textContent='Export engine failed to load (assets/js/stl-xlsx.js, assets/js/stl-fixtures.js). Exports are unavailable until the page is reloaded.';v.classList.remove('hide')}
+      var b=document.querySelector('[data-testid="export-generate"]');if(b)b.disabled=true;
+    });
+    return;
+  }
+
   var TYPE_LABEL = {
     'cv-bundle': 'Bulk CV download',
     'excel': 'Excel export',
     'stl-summary': 'Final candidate summary',
     'screening-report': 'Screening report',
-    'panel-summary': 'Interview panel summary'
+    'panel-summary': 'Interview panel summary',
+    'assessment-report': 'Assessment report',
+    'cv-analysis': 'CV analysis export',
+    'online-presence': 'Online-presence export'
   };
   var TYPE_BADGE = {
     'cv-bundle': 'b-cau',
     'excel': 'b-inf',
     'stl-summary': 'b-inf',
     'screening-report': 'b-mut',
-    'panel-summary': 'b-warn'
+    'panel-summary': 'b-warn',
+    'assessment-report': 'b-suc',
+    'cv-analysis': 'b-inf',
+    'online-presence': 'b-cau'
   };
   var historySeq = 4; // seeded h1..h3
+
+  /* Generated files are held in-session so history "Download" re-downloads the very
+     file that was produced. In the real build these persist in object storage. */
+  var FILES = {};
+  var S = STLX.S;
+  var TODAY = '2026-07-17';
+  var USER = 'Farzana Akter';
+
+  /* ── Scope genuinely filters the shared fixture ────────────────────────── */
+  function posKey(){
+    var v=document.getElementById('scope-position-select').value;
+    return v||'sbm';
+  }
+  function cfgFor(k){return STLF.POS[k]}
+  function scopedPool(){
+    var scope = selectedScopeRadio() ? selectedScopeRadio().value : 'All candidates';
+    if(scope==='By position'){var k=posKey();return STLF.pool(cfgFor(k))}
+    var all = STLF.pool(STLF.POS.sbm);
+    if(scope==='Shortlisted only') return all.filter(function(c){return c.st==='SHORTLISTED'||c.st==='ADVANCED'||c.st==='IN_INTERVIEW'});
+    if(scope==='Selected candidate'){
+      var n=document.getElementById('scope-selected-select').value;
+      return all.filter(function(c){return c.n===n});
+    }
+    return all;
+  }
+
+  /* ── Field → value mapping (order follows the checkbox order) ─────────── */
+  var FIELD_VAL = {
+    'Name':function(c){return c.n},
+    'Contact number':function(c){return c.phone},
+    'Email':function(c){return c.e},
+    'Home district':function(c){return c.d},
+    'Education':function(c){return c.ed},
+    'Total experience':function(c){return {v:c.yr,n:true}},
+    'Current / last position':function(c){return c.role},
+    'Current / last company':function(c){return c.co},
+    'Position applied':function(c){return c.pos},
+    'Skills':function(c){return c.sk.join(', ')},
+    'Match score':function(c){return {v:c.sc,n:true}},
+    'Parsing confidence':function(c){return {v:c.cf,n:true}},
+    'Stage / status':function(c){return c.stL},
+    'Source':function(c){return c.so},
+    'Tags':function(c){return c.tags.join(', ')},
+    'Red flags':function(c){return c.rf.join(', ')},
+    'Applied date':function(c){return c.applied}
+  };
+  var FIELD_W = {'Name':22,'Contact number':15,'Email':30,'Home district':14,'Education':16,'Total experience':14,
+    'Current / last position':24,'Current / last company':24,'Position applied':22,'Skills':38,'Match score':12,
+    'Parsing confidence':16,'Stage / status':24,'Source':14,'Tags':18,'Red flags':30,'Applied date':13};
 
   function selectedType(){
     var r = document.querySelector('input[name="export-type"]:checked');
@@ -462,7 +593,8 @@ tbody tr:hover td{background:var(--primary-soft)}
       c.classList.toggle('sel', input && input.checked);
     });
     // show only matching options pane
-    var panes = ['none','cv-bundle','excel','stl-summary','screening-report','panel-summary'];
+    var panes = ['none','cv-bundle','excel','stl-summary','screening-report','panel-summary',
+                 'assessment-report','cv-analysis','online-presence'];
     panes.forEach(function(p){
       var el = document.getElementById('opt-' + p);
       if(el) el.classList.add('hide');
@@ -471,6 +603,7 @@ tbody tr:hover td{background:var(--primary-soft)}
     if(!target) target = document.getElementById('opt-none');
     target.classList.remove('hide');
     clearValidation();
+    renderPreview();
   };
 
   // ---- Scope switching ----
@@ -479,12 +612,14 @@ tbody tr:hover td{background:var(--primary-soft)}
     document.getElementById('scope-position-wrap').classList.toggle('hide', val !== 'By position');
     document.getElementById('scope-selected-wrap').classList.toggle('hide', val !== 'Selected candidate');
     clearValidation();
+    renderPreview();
   };
 
   // ---- Excel field controls ----
   window.setAllFields = function(state){
     document.querySelectorAll('.excel-field').forEach(function(cb){ cb.checked = state; });
     clearValidation();
+    renderPreview();
   };
 
   function checkedFields(){
@@ -544,63 +679,361 @@ tbody tr:hover td{background:var(--primary-soft)}
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ---- Generate ----
+  /* ══════════════════════════════════════════════════════════════════════
+     BUILDERS — each returns {file, sheets|zip, preview}
+     Every builder reads the shared fixture, so the file always matches the
+     numbers HR sees on the dashboard / report pages.
+     ══════════════════════════════════════════════════════════════════════ */
+  function metaRows(title, scope, extra, cols){
+    var r=[
+      [{v:'Square Toiletries Limited',s:S.TITLE}],
+      [{v:title,s:S.META}],
+      [{v:'Scope: '+scope+(extra?' · '+extra:'')+' · Generated '+TODAY+' by '+USER+' · Audit-logged',s:S.META}],
+      []
+    ];
+    return r;
+  }
+  function mergeMeta(cols){
+    return ['A1:'+STLX.colName(cols-1)+'1','A2:'+STLX.colName(cols-1)+'2','A3:'+STLX.colName(cols-1)+'3'];
+  }
+
+  function buildExcel(){
+    var fields=checkedFields(), pool=scopedPool();
+    var cols=fields.length;
+    var rows=metaRows('Candidate export — customizable fields', scopeText(), fields.length+' fields', cols);
+    rows.push(fields.map(function(f){return {v:f,s:S.HEAD}}));
+    pool.forEach(function(c){
+      rows.push(fields.map(function(f){
+        var v=FIELD_VAL[f](c);
+        if(v&&typeof v==='object'){v.s=S.NUM;return v}
+        return {v:v,s:S.BODY};
+      }));
+    });
+    return {
+      file:'STL_Candidates_'+scopeText().replace(/[^A-Za-z0-9]+/g,'_')+'_'+TODAY+'.xlsx',
+      sheets:[{name:'Candidates',rows:rows,widths:fields.map(function(f){return FIELD_W[f]||16}),
+               merges:mergeMeta(cols),freeze:'A6'}],
+      preview:{head:fields,rows:pool.slice(0,5).map(function(c){return fields.map(function(f){var v=FIELD_VAL[f](c);return (v&&typeof v==='object')?v.v:v})}),total:pool.length}
+    };
+  }
+
+  /* TODO: swap to STL predefined format once the client confirms it for this artifact.
+     (Summary format.xlsx governs the assessment merit sheet; this shortlist summary
+     is still on the STL default layout — PRD Open Question 3.) */
+  function buildStlSummary(){
+    var k=document.getElementById('stl-position-select').value;
+    var pool=STLF.pool(cfgFor(k)).filter(function(c){return c.st==='SHORTLISTED'||c.st==='ADVANCED'||c.st==='IN_INTERVIEW'})
+      .sort(function(a,b){return b.sc-a.sc});
+    var head=['Rank','Name','Contact','Email','Position','Match score','Key matched skills','Red flags','Recommendation'];
+    var rows=metaRows('Final candidate summary — '+cfgFor(k).name, 'Shortlisted', 'STL standard template', head.length);
+    rows.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    pool.forEach(function(c,i){
+      rows.push([{v:i+1,s:S.BOLD,n:true},{v:c.n,s:S.BODY},{v:c.phone,s:S.BODY},{v:c.e,s:S.BODY},
+        {v:c.pos,s:S.BODY},{v:c.sc,s:S.NUM,n:true},{v:c.sk.join(', '),s:S.WRAP},
+        {v:c.rf.join(', ')||'None',s:S.WRAP},
+        {v:c.sc>=88?'Strongly recommend interview':(c.sc>=80?'Recommend interview':'Consider'),s:S.BODY}]);
+    });
+    return {
+      file:'STL_Final_Candidate_Summary_'+cfgFor(k).name.replace(/[^A-Za-z0-9]+/g,'_')+'_'+TODAY+'.xlsx',
+      sheets:[{name:'Final summary',rows:rows,widths:[6,22,15,30,22,12,38,28,26],merges:mergeMeta(head.length),freeze:'A6'}],
+      preview:{head:head,rows:pool.slice(0,5).map(function(c,i){return [i+1,c.n,c.phone,c.e,c.pos,c.sc,c.sk.join(', '),c.rf.join(', ')||'None',c.sc>=88?'Strongly recommend interview':(c.sc>=80?'Recommend interview':'Consider')]}),total:pool.length}
+    };
+  }
+
+  /* The explainability artifact: one row per criterion per candidate. */
+  function buildScreeningReport(){
+    var incl=document.getElementById('incl-explanations').checked;
+    var pool=scopedPool();
+    var head=incl?['Candidate','Position','Final score','Criterion','Weight %','Contribution','Evidence','Red flags']
+                 :['Candidate','Position','Final score','Red flags'];
+    var rows=metaRows('Screening report — scores'+(incl?' + per-criterion explanations':''), scopeText(),
+      'AI-assistive; every score traces to criteria and CV evidence. Human review required before any rejection.', head.length);
+    rows.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    var merges=mergeMeta(head.length),r=6;
+    pool.forEach(function(c){
+      if(!incl){
+        rows.push([{v:c.n,s:S.BODY},{v:c.pos,s:S.BODY},{v:c.sc,s:S.NUM,n:true},{v:c.rf.join(', ')||'None',s:S.WRAP}]);
+        r++;return;
+      }
+      var ex=STLF.explain(c),top=r;
+      ex.forEach(function(e,i){
+        rows.push([
+          i===0?{v:c.n,s:S.BODY}:{v:'',s:S.BODY},
+          i===0?{v:c.pos,s:S.BODY}:{v:'',s:S.BODY},
+          i===0?{v:c.sc,s:S.NUM,n:true}:{v:'',s:S.BODY},
+          {v:e.crit,s:S.BODY},{v:e.weight,s:S.NUM,n:true},{v:e.contribution,s:S.NUM,n:true},
+          {v:e.evidence,s:S.WRAP},
+          i===0?{v:c.rf.join(', ')||'None',s:S.WRAP}:{v:'',s:S.BODY}
+        ]);r++;
+      });
+      [0,1,2,7].forEach(function(ci){merges.push(STLX.colName(ci)+top+':'+STLX.colName(ci)+(r-1))});
+    });
+    return {
+      file:'STL_Screening_Report_'+scopeText().replace(/[^A-Za-z0-9]+/g,'_')+'_'+TODAY+'.xlsx',
+      sheets:[{name:'Screening report',rows:rows,widths:incl?[22,22,12,22,10,13,60,28]:[22,22,12,30],merges:merges,freeze:'A6'}],
+      preview:{head:head,rows:(function(){
+        var out=[];pool.slice(0,2).forEach(function(c){
+          if(!incl){out.push([c.n,c.pos,c.sc,c.rf.join(', ')||'None']);return}
+          STLF.explain(c).forEach(function(e,i){out.push([i===0?c.n:'',i===0?c.pos:'',i===0?c.sc:'',e.crit,e.weight,e.contribution,e.evidence,i===0?(c.rf.join(', ')||'None'):''])});
+        });return out.slice(0,6)})(),total:pool.length}
+    };
+  }
+
+  function buildAssessment(){
+    var A=STLF.assess(),pw=50,pv=60,ww=60,wv=40;
+    var rows0=A.map(function(c){return Object.assign({},c,{q:c.w>=pw&&c.v>=pv,comb:Math.round((c.w*ww+c.v*wv)/100)})})
+                .sort(function(a,b){return b.comb-a.comb});
+    var qual=rows0.filter(function(c){return c.q});
+    var merit={};qual.forEach(function(c,i){merit[c.roll]=i+1});
+    var only=document.getElementById('assess-qualified-only').checked;
+    var shown=only?qual:rows0;
+    var head=['Merit','Roll / ID','Name','District','Written /100','Viva /100','Combined %','AI match %','Result','Remarks'];
+    var rows=metaRows('Combined Assessment Summary — Written Examination & Viva Voce', only?'Qualified in both only':'All assessed',
+      'Written ≥'+pw+', Viva ≥'+pv+' · Combined = Written×'+ww+'% + Viva×'+wv+'% · '+qual.length+' of '+rows0.length+' qualified', head.length);
+    rows.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    shown.forEach(function(c){
+      var mk=merit[c.roll]||'';
+      var res=!c.q?'Not qualified':(mk<=STLF.OPENINGS?'Selected':'Waitlisted');
+      rows.push([{v:mk===''?'—':mk,s:S.BOLD,n:mk!==''},{v:c.roll,s:S.BODY},{v:c.n,s:S.BODY},{v:c.d,s:S.BODY},
+        {v:c.w,s:S.NUM,n:true},{v:c.v,s:S.NUM,n:true},{v:c.comb,s:S.NUM,n:true},{v:c.ai,s:S.NUM,n:true},
+        {v:res,s:S.BODY},{v:c.rem||'',s:S.WRAP}]);
+    });
+    return {
+      file:'STL_Assessment_Report_'+(only?'Qualified':'All')+'_'+TODAY+'.xlsx',
+      sheets:[{name:'Merit list',rows:rows,widths:[7,13,22,13,13,12,12,12,15,34],merges:mergeMeta(head.length),freeze:'A6'}],
+      preview:{head:head,rows:shown.slice(0,5).map(function(c){var mk=merit[c.roll]||'';return [mk||'—',c.roll,c.n,c.d,c.w,c.v,c.comb,c.ai,!c.q?'Not qualified':(mk<=STLF.OPENINGS?'Selected':'Waitlisted'),c.rem||'']}),total:shown.length}
+    };
+  }
+
+  /* Two sheets — the numbers are recomputed from the same pool the dashboard charts. */
+  function buildCvAnalysis(){
+    var k=posKey(),cfg=cfgFor(k),P=STLF.pool(cfg),N=P.length||1;
+    var ins=[[{v:'Square Toiletries Limited',s:S.TITLE}],
+             [{v:'CV analysis — pool insights · '+cfg.name+' · '+cfg.dept,s:S.META}],
+             [{v:'Generated '+TODAY+' by '+USER+' · '+P.length+' CVs · AI-assistive, read-only · demographic (age/gender) analytics intentionally excluded',s:S.META}],[]];
+    function sec(t){ins.push([{v:t,s:S.HEAD},{v:'Count',s:S.HEAD},{v:'% of pool',s:S.HEAD}])}
+    sec('Match-score distribution');
+    STLF.SCB.forEach(function(b){var n=P.filter(function(c){return c.sc>=b.lo&&c.sc<b.hi}).length;
+      ins.push([{v:b.l,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Required-skill coverage');
+    STLF.SKILLS.forEach(function(s){var n=P.filter(function(c){return c.sk.indexOf(s)>-1}).length;
+      ins.push([{v:s,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Red-flag frequency');
+    STLF.FLAGS.forEach(function(f){var n=P.filter(function(c){return c.rf.indexOf(f)>-1}).length;
+      ins.push([{v:f,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Parsing-confidence bands');
+    STLF.CFB.forEach(function(b){var n=P.filter(function(c){return c.cf>=b.lo&&c.cf<b.hi}).length;
+      ins.push([{v:b.l,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Experience mix');
+    STLF.EXB.forEach(function(b){var n=P.filter(function(c){return STLF.exK(c.yr)===b.k}).length;
+      ins.push([{v:b.l,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Education mix');
+    STLF.EDU.forEach(function(e){var n=P.filter(function(c){return c.ed===e}).length;
+      ins.push([{v:e,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('Source spread');
+    STLF.SRCS.forEach(function(s){var n=P.filter(function(c){return c.so===s}).length;
+      ins.push([{v:s,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+    ins.push([]);sec('District spread');
+    STLF.DISTS.forEach(function(d){var n=P.filter(function(c){return c.d===d}).length;
+      ins.push([{v:d,s:S.BODY},{v:n,s:S.NUM,n:true},{v:Math.round(n/N*100),s:S.NUM,n:true}])});
+
+    var head=['Rank','Candidate','Email','Match score','AI evaluation summary','Key signals','Red flags','Parsing confidence'];
+    var ev=metaRows('CV analysis — evaluation summaries · '+cfg.name,'All candidates','ranked by match score',head.length);
+    ev.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    var ranked=P.slice().sort(function(a,b){return b.sc-a.sc});
+    ranked.forEach(function(c,i){
+      ev.push([{v:i+1,s:S.BOLD,n:true},{v:c.n,s:S.BODY},{v:c.e,s:S.BODY},{v:c.sc,s:S.NUM,n:true},
+        {v:STLF.summary(c,cfg),s:S.WRAP},{v:c.sk.join(', '),s:S.WRAP},{v:c.rf.join(', ')||'None',s:S.WRAP},{v:c.cf,s:S.NUM,n:true}]);
+    });
+    return {
+      file:'STL_CV_Analysis_'+cfg.name.replace(/[^A-Za-z0-9]+/g,'_')+'_'+TODAY+'.xlsx',
+      sheets:[
+        {name:'Pool insights',rows:ins,widths:[30,10,12],merges:mergeMeta(3)},
+        {name:'Evaluation summaries',rows:ev,widths:[6,22,30,12,64,38,28,12],merges:mergeMeta(head.length),freeze:'A6'}
+      ],
+      preview:{sheets:['Pool insights ('+(ins.length-4)+' rows)','Evaluation summaries ('+ranked.length+' candidates)'],
+               head:head,rows:ranked.slice(0,4).map(function(c,i){return [i+1,c.n,c.e,c.sc,STLF.summary(c,cfg),c.sk.join(', '),c.rf.join(', ')||'None',c.cf]}),total:ranked.length}
+    };
+  }
+
+  /* Confirmed identities only — mirrors the verify-first rule on the report page. */
+  function buildOnlinePresence(){
+    var head=['Candidate','Position','Identity match','Online-presence score','Matched','Unmatched','Extra','Source URLs'];
+    var D=[
+      ['Tanvir Hasan','Sr. Brand Manager','High',68,3,0,1,'https://linkedin.com/in/example-tanvir-hasan; https://example.com/tanvir-portfolio; https://example.com/fmcg-summit-2025'],
+      ['Rumana Parvin','Sr. Brand Manager','High',76,3,0,2,'https://linkedin.com/in/example-rumana-parvin; https://example.com/marketing-review-bd; https://example.com/brandcon-2024; https://example.com/mab-directory'],
+      ['Sabrina Yeasmin','Sr. Brand Manager','High',83,2,0,3,'https://linkedin.com/in/example-sabrina-y; https://github.com/example-sabrina; https://example.com/sabrina-work; https://example.com/dm-quarterly'],
+      ['Kazi Nazrul Haque','Sr. Brand Manager','High',32,1,1,0,'https://linkedin.com/in/example-kazi-nh; https://example.com/sales-directory-bd-2'],
+      ['Nusrat Jahan','Sr. Brand Manager','High',52,1,0,1,'https://linkedin.com/in/example-nusrat-j; https://example.com/dm-blog-bd'],
+      ['Anisur Rahman','Sr. Brand Manager','High',70,2,0,1,'https://linkedin.com/in/example-anisur-r; https://example.com/sales-summit-2025; https://example.com/business-daily'],
+      ['Ishrat Jahan Mim','Sr. Brand Manager','High',56,2,0,1,'https://linkedin.com/in/example-ishrat-m; https://example.com/ishrat-portfolio'],
+      ['Sadia Rahman','Sr. Brand Manager','High',56,1,0,1,'https://linkedin.com/in/example-sadia-r; https://example.com/mab-directory-2']
+    ];
+    var rows=[
+      [{v:'Square Toiletries Limited',s:S.TITLE}],
+      [{v:'Online-presence analysis — confirmed identities',s:S.META}],
+      [{v:'Publicly available professional info; HR-verified; assistive only — never a screening input and never an automated decision. Generated '+TODAY+' by '+USER,s:S.META}],
+      []
+    ];
+    rows.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    D.forEach(function(r){
+      rows.push([{v:r[0],s:S.BODY},{v:r[1],s:S.BODY},{v:r[2],s:S.BODY},{v:r[3],s:S.NUM,n:true},
+        {v:r[4],s:S.NUM,n:true},{v:r[5],s:S.NUM,n:true},{v:r[6],s:S.NUM,n:true},{v:r[7],s:S.WRAP}]);
+    });
+    return {
+      file:'STL_Online_Presence_'+TODAY+'.xlsx',
+      sheets:[{name:'Online presence',rows:rows,widths:[22,22,15,20,10,12,8,70],merges:mergeMeta(head.length),freeze:'A6'}],
+      preview:{head:head,rows:D.slice(0,5),total:D.length,
+        note:'Only HR-confirmed identities are exported — unconfirmed matches are excluded by design.'}
+    };
+  }
+
+  function buildPanelSummary(){
+    var A=STLF.assess().filter(function(c){return c.w>=50&&c.v>=60}).sort(function(a,b){return b.v-a.v});
+    var head=['Candidate','Roll / ID','Technical','Communication','Culture fit','Domain','Overall','Average /5','Viva %','Recommendation'];
+    var rows=metaRows('Interview panel summary — '+document.getElementById('panel-position-select').value,'Qualified candidates',
+      'Panel: '+STLF.PANEL.map(function(p){return p.name+' ('+p.role+')'}).join(' · '), head.length);
+    rows.push(head.map(function(h){return {v:h,s:S.HEAD}}));
+    A.forEach(function(c){
+      var k=c.crit,avg=Math.round((k.Technical+k.Communication+k['Culture fit']+k.Domain+k.Overall)/5*10)/10;
+      rows.push([{v:c.n,s:S.BODY},{v:c.roll,s:S.BODY},
+        {v:k.Technical,s:S.NUM,n:true},{v:k.Communication,s:S.NUM,n:true},{v:k['Culture fit'],s:S.NUM,n:true},
+        {v:k.Domain,s:S.NUM,n:true},{v:k.Overall,s:S.NUM,n:true},{v:avg,s:S.NUM,n:true},{v:c.v,s:S.NUM,n:true},
+        {v:avg>=4.5?'Strongly recommend':(avg>=3.5?'Recommend':'Hold'),s:S.BODY}]);
+    });
+    return {
+      file:'STL_Interview_Panel_Summary_'+TODAY+'.xlsx',
+      sheets:[{name:'Panel summary',rows:rows,widths:[22,13,11,15,12,10,10,12,10,22],merges:mergeMeta(head.length),freeze:'A6'}],
+      preview:{head:head,rows:A.slice(0,5).map(function(c){var k=c.crit,avg=Math.round((k.Technical+k.Communication+k['Culture fit']+k.Domain+k.Overall)/5*10)/10;
+        return [c.n,c.roll,k.Technical,k.Communication,k['Culture fit'],k.Domain,k.Overall,avg,c.v,avg>=4.5?'Strongly recommend':(avg>=3.5?'Recommend':'Hold')]}),total:A.length}
+    };
+  }
+
+  /* Real .zip: a manifest plus one stand-in per CV. Honest about the placeholders —
+     the prototype has no CV binaries; production streams them from object storage. */
+  function buildCvBundle(){
+    var pool=scopedPool();
+    var man=[['Candidate','Position','District','Match score','Stage','CV filename']];
+    var files=[];
+    pool.forEach(function(c){
+      var fn=c.n.replace(/[^A-Za-z0-9]+/g,'_')+'_CV.txt';
+      man.push([c.n,c.pos,c.d,c.sc,c.stL,fn]);
+      files.push({name:'cvs/'+fn,data:
+        'STL ATS — CV placeholder\r\n========================\r\n\r\nCandidate: '+c.n+'\r\nEmail: '+c.e+
+        '\r\nPhone: '+c.phone+'\r\nPosition applied: '+c.pos+'\r\nDistrict: '+c.d+
+        '\r\nCurrent/last: '+c.role+' at '+c.co+'\r\nExperience: '+c.yr+' yrs\r\nEducation: '+c.ed+
+        '\r\nSkills: '+c.sk.join(', ')+'\r\nMatch score: '+c.sc+'%\r\nParsing confidence: '+c.cf+'%'+
+        '\r\nStage: '+c.stL+'\r\nRed flags: '+(c.rf.join(', ')||'None')+
+        '\r\n\r\nNOTE: this is a prototype stand-in. The real archive contains the original\r\nPDF/Word/image CV streamed from object storage.\r\n'});
+    });
+    files.unshift({name:'manifest.csv',data:STLX.csv(man)});
+    files.push({name:'README.txt',data:'STL ATS — bulk CV export\r\nScope: '+scopeText()+'\r\nGenerated: '+TODAY+' by '+USER+
+      '\r\nCandidates: '+pool.length+'\r\n\r\nmanifest.csv lists every candidate in this archive.\r\ncvs/ holds one file per candidate.\r\nThis export is audit-logged.\r\n'});
+    return {
+      file:'STL_CV_Bundle_'+scopeText().replace(/[^A-Za-z0-9]+/g,'_')+'_'+TODAY+'.zip',
+      zip:files,
+      preview:{head:man[0],rows:man.slice(1,6),total:pool.length,note:'Archive contains manifest.csv + '+pool.length+' CV stand-in files.'}
+    };
+  }
+
+  var BUILDERS={excel:buildExcel,'stl-summary':buildStlSummary,'screening-report':buildScreeningReport,
+    'assessment-report':buildAssessment,'cv-analysis':buildCvAnalysis,'online-presence':buildOnlinePresence,
+    'panel-summary':buildPanelSummary,'cv-bundle':buildCvBundle};
+
+  /* ── Preview ──────────────────────────────────────────────────────────── */
+  window.onFieldChange=function(){clearValidation();renderPreview()};
+  function renderPreview(){
+    var type=selectedType(),box=document.getElementById('export-preview'),cnt=document.getElementById('preview-count');
+    if(!type){box.innerHTML='<div style="padding:12px">Select an export type to preview its output.</div>';cnt.textContent='';return}
+    if(type==='excel'&&checkedFields().length===0){
+      box.innerHTML='<div style="padding:12px">Select at least one field to preview.</div>';cnt.textContent='';return;
+    }
+    var b;
+    try{b=BUILDERS[type]()}catch(e){box.innerHTML='<div style="padding:12px">Preview unavailable.</div>';cnt.textContent='';return}
+    var p=b.preview,h='';
+    if(p.sheets)h+='<div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px"><b>Sheets:</b> '+p.sheets.map(esc).join(' · ')+'</div>';
+    if(p.note)h+='<div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px">'+esc(p.note)+'</div>';
+    h+='<table style="font-size:11.5px"><thead><tr>'+p.head.map(function(x){return '<th style="padding:7px 10px;white-space:nowrap">'+esc(x)+'</th>'}).join('')+'</tr></thead><tbody>';
+    p.rows.forEach(function(r){
+      h+='<tr>'+r.map(function(x){var s=String(x==null?'':x);return '<td style="padding:6px 10px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(s)+'</td>'}).join('')+'</tr>';
+    });
+    h+='</tbody></table>';
+    box.innerHTML=h;
+    cnt.textContent='· first '+p.rows.length+' of '+p.total+' row'+(p.total===1?'':'s')+' · file: '+b.file;
+  }
+
+  // ---- Generate: builds and downloads a real file ----
   window.generateExport = function(){
     var type = selectedType();
-    if(!type){
-      showValidation('Please choose an export type before generating.');
-      return;
-    }
+    if(!type){showValidation('Please choose an export type before generating.');return}
     if(type === 'excel' && checkedFields().length === 0){
-      showValidation('Select at least one field to include in the Excel export.');
-      return;
+      showValidation('Select at least one field to include in the Excel export.');return;
     }
     clearValidation();
 
     var btn = document.querySelector('[data-testid="export-generate"]');
     var label = document.getElementById('generate-label');
     var prev = label.textContent;
-    btn.disabled = true;
-    btn.style.opacity = '.7';
-    btn.style.cursor = 'wait';
+    btn.disabled = true;btn.style.opacity='.7';btn.style.cursor='wait';
     label.textContent = 'Generating…';
 
-    var typeLabel = TYPE_LABEL[type];
-    var scope = scopeText();
-    var opts = optionsText(type);
-    var date = todayISO();
-    var name = typeLabel + ' — ' + scope + ' — ' + date;
-    var badge = TYPE_BADGE[type];
-    var idx = historySeq++;
+    var typeLabel = TYPE_LABEL[type], scope = scopeText(), opts = optionsText(type);
+    var date = TODAY, name = typeLabel + ' — ' + scope + ' — ' + date;
+    var badge = TYPE_BADGE[type], idx = historySeq++;
 
     setTimeout(function(){
+      var blob,fname;
+      try{
+        var b=BUILDERS[type]();
+        fname=b.file;
+        blob=b.zip?STLX.zip(b.zip):STLX.build(b.sheets);
+      }catch(e){
+        btn.disabled=false;btn.style.opacity='';btn.style.cursor='';label.textContent=prev;
+        showValidation('Could not generate this export: '+e.message);return;
+      }
+      STLX.save(blob,fname);
+      FILES[name]={blob:blob,file:fname};
+
       var tbody = document.getElementById('export-history-body');
       var tr = document.createElement('tr');
       tr.setAttribute('data-testid', 'export-row-h' + idx);
       tr.innerHTML =
-        '<td><div style="font-weight:600">' + esc(name) + '</div></td>' +
+        '<td><div style="font-weight:600">' + esc(name) + '</div><small style="color:var(--muted)">' + esc(fname) + ' · ' + Math.max(1,Math.round(blob.size/1024)) + ' KB</small></td>' +
         '<td><span class="badge ' + badge + '">' + esc(typeLabel) + '</span></td>' +
         '<td>' + esc(scope) + '</td>' +
         '<td>' + esc(opts) + '</td>' +
-        '<td>Farzana Akter</td>' +
+        '<td>' + USER + '</td>' +
         '<td>' + date + '</td>' +
         '<td><span class="badge b-suc">Ready</span></td>' +
         '<td><a class="dl-link" href="#" data-testid="export-h' + idx + '-download" onclick="downloadExport(event,\'' + esc(name).replace(/'/g,'&#39;') + '\')">Download</a></td>';
       tbody.insertBefore(tr, tbody.firstChild);
 
-      btn.disabled = false;
-      btn.style.opacity = '';
-      btn.style.cursor = '';
-      label.textContent = prev;
-      showToast('Export ready: ' + name);
-    }, 1200);
+      btn.disabled=false;btn.style.opacity='';btn.style.cursor='';label.textContent=prev;
+      showToast('Downloaded: ' + fname);
+    }, 500);
   };
 
-  // ---- Download (history rows) ----
+  // ---- Download (history rows) — re-downloads the file produced this session ----
   window.downloadExport = function(ev, name){
     if(ev) ev.preventDefault();
-    showToast('Downloading: ' + name);
+    var f = FILES[name];
+    if(f){STLX.save(f.blob,f.file);showToast('Downloading: '+f.file);return}
+    /* Seeded rows predate this session — in the real build they resolve from storage. */
+    showToast('This export was created in an earlier session — regenerate it to download.');
   };
+
+  // ---- Populate scope/position selects from the shared fixture ----
+  (function initSelects(){
+    var opts=Object.keys(STLF.POS).map(function(k){
+      return '<option value="'+k+'">'+STLF.POS[k].name+' — '+STLF.POS[k].dept+'</option>';
+    }).join('');
+    document.getElementById('scope-position-select').innerHTML=opts;
+    document.getElementById('stl-position-select').innerHTML=opts;
+    var pool=STLF.pool(STLF.POS.sbm).slice(0,8);
+    document.getElementById('scope-selected-select').innerHTML=pool.map(function(c){
+      return '<option value="'+c.n+'">'+c.n+' — '+c.pos+' ('+c.sc+'%)</option>';
+    }).join('');
+  })();
 
   // init default state
   onScopeChange();

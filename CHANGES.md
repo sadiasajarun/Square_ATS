@@ -138,3 +138,158 @@ File: **`hr/onboarding.page.html`**.
 - **"Create & send invitation"** (`hr/interviews.page.html`) now works: submitting shows an "Invitation created & sent — Scheduled" confirmation and disables the button (no page reload).
 - **Hosting:** added `docs/` (deployable copy of the prototype) with `docs/index.html` redirecting to the **login page** as the site entry point, plus `.nojekyll`. README documents the GitHub Pages setup. Pushed the whole project to `github.com/sadiasajarun/Square_ATS` (`main`).
 - **QA:** canonical tree 35/35 reachable · `docs/` 36/36 reachable from `index.html` · 0 broken links · `docs/` byte-identical to the canonical `html/` tree.
+
+---
+
+# Round 5 — Advanced candidate filtering (2026-07-16)
+
+**Scope:** `hr/candidates.page.html` only (per R5 spec). The filter block is built as a self-contained, reusable `flt-` component intended to be dropped onto `cv-review.page.html` and `results.page.html` in a later round.
+
+- **Quick-filter row extended** — Skills became a multi-select chip dropdown; added a **Stage** multi-select over the `ApplicationStatus` values (`SCREENED`, `SHORTLISTED`, `IN_INTERVIEW`, `ADVANCED`, `RETURNED_TO_HR`, `REJECTED_PENDING_REVIEW`, `REJECTED`), each option rendered with its semantic status badge (color + icon + label, never color alone). `REJECTED_PENDING_REVIEW` and `REJECTED` stay distinct facets — the pending state is the human-in-the-loop guard.
+- **"Advanced filters" expandable panel** (chevron toggle + active-facet count badge), grouped: **Scoring** (AI match score + parsing confidence dual-handle 0–100 sliders, score-band-colored readout), **Experience & qualifications** (years min/max, certifications multi-select), **Position context** (requisition + department multi-selects), **Source** (Bulk upload / LinkedIn / BDJobs / Email inbox + batch multi-select), **Signals** (red-flag multi-select + "Has any red flag" toggle), **Application history** (previously applied/shortlisted Yes/No/Any segments, last-applied date range, application-count range).
+- **Sensitive criteria gated** — Age range + Gender controls render **visibly disabled** with the note "Pending STL policy & local labour-law approval" (Open Question 7); they are excluded from `fltMatch()` and cannot affect results.
+- **Filter behavior** — AND across groups, OR within a multi-select; every applied facet appears as a removable chip in the Active-filters strip + Clear all; **live results count** in the table header and on the panel's "Show N results" button.
+- **Saved views** — "Save current filters" names the current set and pins it as a clickable pill above the quick row; 2 pre-seeded examples ("Dhaka · Shortlisted · Score >80", "Pending review · Has red flag"). In-memory only (no localStorage).
+- **Table** — new **STAGE** column (between District and Tags) with icon+label status badges; stage colors follow the established prototype mapping (`b-dan` for Rejected-pending, `b-mut` for final Rejected). Card view rebuilt data-driven and reflects the same filtered set.
+- **Mock data** — candidate set expanded 8 → **45**, each with the full attribute set (stage, score, confidence, years, certs, source, requisition/department, red flags, history flags, application count, batch, last-applied); FMCG/Bangladesh realism preserved.
+- **QA:** inline JS syntax-checked clean · all new controls labeled + `data-testid` + focus rings · no emoji icons (inline SVG only) · handler names all `flt`-prefixed (no native-DOM shadowing) · responsive 1440/1280/1024/768 · `docs/hr/candidates.page.html` byte-identical to canonical (SHA256 verified).
+
+---
+
+# Round 6 — CV Analysis Dashboard (2026-07-16)
+
+**Scope:** new `hr/cv-analysis-dashboard.page.html` (pool-level analytics) + minimal wiring. Per the R6 spec's "no major change" constraint, the per-candidate evaluation is NOT duplicated — the dashboard links into the existing `candidate-detail.page.html`.
+
+- **New page** — breadcrumb + scope selector (Position: Sr. Brand Manager 120 CVs / Trade Marketing Officer 86 / QA Chemist 64 · Batch filter), live summary line ("N CVs analyzed · N scoring ≥75% · avg match · avg confidence"), **"Export to Excel"** button funneling into the existing Exports flow.
+- **Six insight cards** (pure inline-SVG charts, `cva-` namespace, no libraries; noted in code these become recharts in the React build): match-score histogram (6 buckets, score-band colors), required-skill coverage bars (surfaces the biggest gap), red-flag frequency bars, parsing-confidence bands (≥90/70–89/<70), experience + education mix, source donut + top districts. Every card carries a plain-language takeaway caption; all charts labeled + legends (never color-only).
+- **Evaluation Summaries table** — ranked standout readout (top 15 + "Show all N" expander): rank, candidate, match-score bar, **one-sentence AI evaluation summary** assembled from the candidate's own attributes (so text never contradicts the chips), key-signal chips (top skills + red-flag badge), confidence mini-bar, **View → candidate-detail.page.html**. Sortable by score/confidence (default: score desc).
+- **Internally consistent mock data** — pool generated per scope with a seeded deterministic PRNG (mulberry32), so charts and table always reconcile and every load shows identical numbers; FMCG/Bangladesh realism (Bangla + English names, BD districts/companies).
+- **Wiring** — "CV Analysis" nav item added to all 19 HR sidebars (between Screening Results and Interviews); "Open CV Analysis" button on `results.page.html`; "View pool analysis" link on `candidate-detail.page.html`. `wf-` stepper left untouched (analytics side-view, not a pipeline step).
+- **Governance** — read + drill-through only (no accept/reject actions on this surface, stated in a footer note); **no age/gender analytics at all** (deliberate Open-Question-7 omission, noted on-page).
+- **QA:** JS syntax-checked clean · all links from the new page resolve · nav item present exactly once on every HR page · `docs/hr/` all 19 pages byte-identical to canonical · tree now 36 canonical / 37 deployed pages (inventory: auth 2 · hr 19 · hiring-manager 6 · viewer 4 · admin 5).
+
+---
+
+# Round 7 — Written Exam + Viva Combined Assessment Summary Report (2026-07-16)
+
+**Scope:** new `hr/assessment-summary-report.page.html` (the star) + minimal plumbing `hr/written-exam.page.html` + stepper/nav wiring. `asr-` namespace throughout.
+
+> ⚠️ **Format dependency:** the client asked for the report "following the attached format" but no format file was provided (the shared screenshot was the Candidate Database page). The report ships a standard BD combined-result / merit-list default with a `TODO: swap to client's attached format` comment at the top — same open dependency as PRD Open Question 3. **Flag at the demo.**
+
+- **Assessment Summary Report** — official-document header (STL logo + "Combined Assessment Summary — Written Examination & Viva Voce" + meta row incl. recruitment ref), live qualification controls (written pass 50, viva pass 60, Written/Viva weighting slider summing 100, default 60/40), view toggle **"Qualified in both only"** (default) vs "Show all assessed" (non-qualified grey), merit table (Merit # among qualified · Roll STL-BM-01xx · Written /100 · Viva /100 · weighted Combined · AI match · Result badge **Selected**(top-5 vacancies)/**Waitlisted**/**Not qualified** with icon+label · Remarks · View → candidate-detail), sortable by written/viva/combined. Per-row expandable consolidation: written breakdown (MCQ/30 + Written/50 + Case/20), viva per-criterion bars (Technical/Communication/Culture fit/Domain/Overall from interview-rating), AI evaluation sentence, red flags, contact. Signature block (2 viva panel members, HR Manager, Approving Authority) + **print stylesheet** (chrome hidden, header/table/signatures intact) + **Export to Excel** via existing Exports flow.
+- **Written Exam page** (plumbing) — position/batch selector, per-section totals (MCQ 30 / Written 50 / Case 20, editable), 28-candidate marks-entry table with auto total/%/status (Marks entered / Pending — last 3 pending to show the state), Save marks → toast. Viva marks are NOT re-captured — they come from interview-rating.
+- **Mapping decision** — Viva = the existing interview/interview-rating stage (5-pt × 20); Written Exam = new. No second viva UI.
+- **`wf-` stepper grew to 9 steps** on all 9 flow pages: `Template → Import → Process → Review → Shortlist → Hiring Manager → Written Exam → Viva → Hire` (Interview relabeled Viva; done/current/future states preserved per page; `_WORKFLOW_COMPONENTS.md` updated).
+- **Wiring** — "Written Exam" + "Assessment Report" nav items on all 21 HR sidebars; "Open Assessment Report" button on `interviews.page.html`; "View assessment report" on `final-selection.page.html`.
+- **Internally consistent mock data** — verified programmatically: exactly **12 of 28** qualify at default thresholds; edge cases included and verified (strong written 82 / weak viva 48 → not qualified; weak written 44 / strong viva 84 → not qualified) so the "performed well in both" filter visibly works.
+- **Governance** — decision-support only (stated on-page); "Not qualified" is an assessment outcome distinct from ATS `REJECTED`; no auto-select; no age/gender surfaced.
+- **QA:** both pages' JS syntax-checked clean · qualification math verified by script · all links resolve · nav items exactly once per page · steppers verified on all 9 flow pages (no stray "Interview" label) · `docs/hr/` all 21 pages byte-identical · tree now 38 canonical / 39 deployed (inventory: auth 2 · hr 21 · hiring-manager 6 · viewer 4 · admin 5).
+
+---
+
+# Round 8 — Online Presence & Public-Information Analysis (2026-07-16)
+
+**Scope:** new `hr/online-visibility-analysis.page.html` (`ovi-` namespace) + minimal wiring. **Highest-governance feature in the prototype** — guardrails are built into the code, not bolted on. Everything is fixture data; nothing is retrieved from any real source.
+
+> ⚠️ **New open dependency (raise at demo, added as PRD Open Question 9):** which enrichment/search provider, is it approved by STL Legal, and what candidate-notice/consent policy applies? `TODO` comment at the top of the page. Same class of blocker as Open Question 7.
+
+- **Persistent governance banner** (info-styled, no dismiss control): public professional information only · assistive, never a screening input or automated decision · identity matches are AI suggestions requiring HR confirmation · personal/social/protected-characteristic data excluded by design · every lookup audit-logged, opt-in per position.
+- **Sample-set run surface** — "Analyze default sample set — 12 CVs" card with name-preview chips; **Run analysis** plays a deterministic ~3s mocked progress listing the *source types* checked (professional network, code/portfolio, publications, directories/associations, news/conference mentions).
+- **Results table** — per candidate: online-visibility score 0–100 (tooltip: *strength of footprint, NOT candidate quality — low visibility is neutral*; neutral color palette, not score-band), profiles-found count, identity-match badge (High / Medium—verify / Low—verify with caution icon), CV-corroboration badge (Corroborated / Partial / Discrepancy found / Not found online), **View report**. Summary line: "12 analyzed · 8 high-confidence identity matches · 1 discrepancy flagged · 1 minimal presence (neutral)". **Generate & export all reports** → existing Exports flow.
+- **Per-candidate report drawer** (print stylesheet renders it as a standalone clean document): header with score + AI one-liner → **identity-verification block first** (N potential matches, per-profile source/URL/confidence/snippet + `Confirm — this is them` / `Not them` / `Unsure`) → public professional info → CV-claim cross-check table → excluded-by-design notice → Export / Print / Add-to-record (audited) / Close.
+- **The gate is code, not copy:** sections 4c/4d render a locked placeholder until HR confirms at least one profile; per-claim evidence stays "Pending" until its specific source profile is confirmed.
+- **Instructive fixtures** (12, clearly fictional): Mahmudul Hasan = common name → Low confidence + 2 namesakes (verify-first workflow); Kazi Nazrul Haque = CV says 2021–2023, public profile shows Aug 2022–Jun 2024 → Discrepancy (anti-fraud path); Farhana Karim = minimal presence → shown neutral, explicitly not a red flag.
+- **Wiring** — "Online Presence" nav item on all 22 HR sidebars (next to CV Analysis); "Run online presence analysis" entry links on `candidate-detail` and `cv-analysis-dashboard`. **Deliberately NOT added to the `wf-` stepper** — optional research side-tool, not a pipeline gate, so it can never become an automated-rejection lever.
+- **Governance enforced** — visibility score appears nowhere near match-score computation and is not selectable as a screening criterion; nothing on this surface can change a candidate's pipeline status; architecture comment notes the real build is a pluggable enrichment adapter stubbed in v1 (like OCR/SMS).
+- **QA:** JS syntax-checked clean · all internal links resolve · nav item exactly once on all 22 HR pages · `docs/hr/` all 22 pages byte-identical · tree now 39 canonical / 40 deployed (inventory: auth 2 · hr 22 · hiring-manager 6 · viewer 4 · admin 5).
+
+---
+
+# Round 9 — Assessment Summary Report reworked to the client's format (2026-07-16)
+
+**Trigger:** the client's actual format arrived — `Summary format.xlsx` (sheet "12.07.2026") — resolving the R7 TODO and closing the format half of Open Question 3. `hr/assessment-summary-report.page.html` reworked to match it.
+
+- **Client layout implemented:** title in the client's wording ("Summary for the Position of Sr. Brand Manager, Marketing Dept.") + date; columns **Sl · Name · Age · Degree · Educational Institution · Passing Year · Result · Working Experience · Year of Exp. · Written Marks · Remarks** — exactly the sheet's column set.
+- **Row-block structure like the sheet:** one candidate = a block of rows, one row per education level (MBA/BBA/HSC/SSC with institution, passing year, CGPA/GPA), with Sl, Name (+phone +roll/district), Age, the multi-org Working Experience cell (Org/Position/Duration lines), Year of Exp. ("N Y / M M"), marks, and Remarks row-spanned across the block. Block-start rows carry a heavier rule, education sub-rows a dashed one.
+- **Platform additions kept, format-safe:** Viva Marks + Combined columns sit after Written Marks; the Result badge (Selected/Waitlisted/Not qualified) lives in the Remarks cell; the Action column (expander + View) is **on-screen only — hidden on print, so the printed sheet matches the client format**. Pass-mark/weighting controls, qualified-only toggle, sorting, per-candidate expansion (written/viva breakdown + AI sentence) all preserved. The AI-match column was removed from the table (not in the client format) — it remains in the expansion panel.
+- **Fixtures enriched** for all 28 candidates: phone, age, 2–4-row education history (BD universities/colleges/schools), current + previous employer with durations — derived deterministically so every load is identical; qualification math unchanged (verified: still exactly 12 of 28 at defaults).
+- **⚠️ Age column governance note:** Age is part of STL's own provided format and is rendered as provided, with an on-page note that it is never a screening criterion and its display remains subject to Open Question 7. Worth an explicit confirmation from STL Legal/HR at the demo.
+- **QA:** JS syntax-checked clean · data-shape validated by script (no candidate missing client-format fields) · `docs/` byte-identical.
+
+---
+
+# Round 10 — Interactive CV Analysis + dropdown spacing fix + report rename (2026-07-17)
+
+## Dropdown spacing bug (`hr/candidates.page.html`)
+- **Root cause:** `.field label` (specificity 0,1,1) outranked `.flt-ms-opt` (0,1,0), forcing the quick-row **Skills** and **Stage** option rows to `display:block` — which killed the flex `gap` (checkbox flush against the label) and leaked `font-weight:600` + `margin-bottom`. The advanced-panel dropdowns were unaffected because they don't sit inside a `.field`.
+- **Fix:** scoped to `.flt-ms .flt-ms-opt` (0,2,0) so the option layout wins, with explicit `margin:0` / `font-weight:400` resets. Comment records why the descendant selector must stay.
+
+## Rename — "Assessment Report" → "Summary Report"
+- Sidebar nav, page title, `<h1>`, breadcrumb, and both entry-point links ("Open Summary Report" on `interviews`, "View summary report" on `final-selection`, head link on `written-exam`) — 22 files. Filename and `data-testid`s left unchanged so links and selectors stay stable. Matches the client's own "Summary format.xlsx" wording.
+
+## CV Analysis Dashboard → decision-grade (R9 prompt)
+Every number was previously a dead end; now every chart element is a live entry point.
+- **Clickable cross-filtering** — score histogram, confidence bands, skill-coverage bars, red-flag bars, experience/education rows, source donut (slices *and* legend rows) and top-district chips are all selectable. Selections **AND across facet types, OR within one facet**; clicking an active segment de-selects. **A chart never filters itself** (`cvaCohort(except)`) so its segments stay visible and clickable while every *other* chart recomputes for the cohort — click "Career break" and their score distribution redraws underneath you.
+- **Active-cohort strip** — removable chips per selection + Clear cohort, and a live read-out: cohort size, avg match, % in ≥75 band, avg confidence, red-flag rate, top-3 covered skills, top-3 gaps.
+- **Captions became drill actions** — "Biggest gap: X — only N% have it" → *View the N candidates missing it*; "N parsed below 70%" → *Review those N*; "N% scored ≥80%" → *Preview a wider shortlist (lower to 70% → N)*; plus experience and flag drills.
+- **Table drill-through** — header reflects the cohort ("Showing 21 candidates · Flag: Career break · ranked by match score"), shows the whole cohort with a Show-all expander, and **row skill chips / flag badges are themselves clickable** to pivot from one candidate to everyone like them. Empty-cohort state added.
+- **Cohort hand-offs (navigational only)** — Export to Excel (existing flow); **Open in Candidates with these filters** → deep-links `candidates.page.html?srcs=…&scMin=…&adv=1`, which now parses those params and pre-applies the Round-5 `flt-` block; **Get shortlist suggestions** → `cv-review.page.html#ai-shortlist`, which now auto-opens its existing modal. Both are genuine reuse — no rebuilt filter or modal.
+- **Implementation notes:** event delegation via `data-k`/`data-v` (no inline handlers in SVG; sidesteps quoting hazards with values like "A&P Budgeting"); band facets use safe keys (`lt50`, `90-100`) not display labels; all segments `role="button"` + `tabindex="0"` + Enter/Space + `aria-pressed` + `data-testid`; selection shown by stroke + label weight/color, never color alone. §6 cohort-compare deliberately skipped (documented in a comment) — it would double the layout at 1024px.
+- **Governance unchanged:** read-only; cohorts drill/preview/export/navigate and never change a candidate's status; **no age/gender facet**, not even as a cohort dimension; footer note kept.
+- **QA:** JS syntax clean · **cross-filter math verified by script** — every chart's segments sum to exactly 120 (score 18+33+27+24+13+5, confidence 27+59+34, experience 17+34+41+28, sources 70+27+18+5), cohort counts match independent recomputation (flag=Career break → 21 both ways; their score dist sums to 21), self-exclusion confirmed, and AND/OR verified (LinkedIn AND score≥80 → 4 both ways) · all links resolve · `docs/hr/` all 22 pages byte-identical.
+
+---
+
+# Round 11 — Online-presence identity model corrected + real .xlsx export (2026-07-17)
+
+## Summary Report — "Export to Excel" now actually exports (`hr/assessment-summary-report.page.html`)
+- The button previously just navigated to Exports. It now **generates and downloads a real `.xlsx`** — genuine Office Open XML in a ZIP, written by a self-contained CRC32 + STORE-method ZIP writer (**still zero dependencies, no build step**). A CSV or an HTML-file-renamed-`.xls` was rejected: the client's Summary format depends on **merged cells**, and only a real xlsx reproduces them (and opens without Excel's format-mismatch warning).
+- **Reproduces the client format exactly:** title + position + date rows, the 11 client columns (Sl · Name · Age · Degree · Educational Institution · Passing Year · Result · Working Experience · Year of Exp. · Written Marks · Remarks) plus Viva/Combined, and the **row-block structure** — one candidate per block with a row per education level and Sl/Name/Age/Experience/marks/Remarks merged down the block. Name carries the phone on a second line, per the client's sheet. Frozen header, column widths, wrapped multi-line Working Experience cells, landscape page setup, signature line.
+- **Exports what's on screen:** honours the current view mode, sort, pass marks and weighting; the header rows record the settings used. Filename `STL_Assessment_Summary_Sr_Brand_Manager_16.07.2026.xlsx`.
+- **Verified by round-tripping:** ran the page's own export code headless and re-opened the output with `openpyxl` — opens cleanly, sheet `16.07.2026`, dims A1:M54, **113 merged ranges**, first block `A7:A10 B7:B10 C7:C10 H7:H10 I7:I10 J7:J10 K7:K10 L7:L10 M7:M10` with education rows 7–10 nested inside, freeze pane at A7.
+- **Bug fixed (found via that dump):** R9 derived a Mr./Ms. honorific from the candidate's array index, producing *"Ms. Tanvir Hasan"*. Honorific removed — STL's format carries it, but it's a field the candidate supplies on the application form; inferring it from a name is unreliable and is a gender inference this platform does not make. Comment records the reasoning.
+
+## Online Presence — identity model rebuilt (`hr/online-visibility-analysis.page.html`)
+- **The core correction:** the R10 build asked HR to "Confirm — this is them" on *each source* (LinkedIn, portfolio, conference). That conflated *"which sources belong to this person"* with *"is this the person"*. **Identity is now ONE decision about the PERSON**, anchored on the profile photo + name; LinkedIn/GitHub/portfolio/publications are **source types** — findings attached to a confirmed person, never identity votes.
+- **Step 1 — photo-anchored identity card:** large avatar (initials placeholder, labelled "Placeholder · demo"), name, LinkedIn headline, role @ employer, location, connections, education, LinkedIn badge, confidence badge, "Open LinkedIn profile ↗", and **one primary "Confirm — this is the candidate"** + "Not a match". Caption: the photo is a recognition aid, never analyzed, never scored.
+- **Namesake picker only when names genuinely collide** — Mahmudul Hasan surfaces 2 competing real people (each with its own card/photo/headline) under "More than one person matches this name — pick the candidate, or none". The other 11 get one card, one confirm.
+- **Step 2 — sources & information** (gated on that single confirmation): icon-led source grid (LinkedIn / GitHub / site / publications / talks / news / directory) with URL, snippet and a "looks wrong? dismiss" control — **no identity buttons here** — plus a consolidated two-column facts panel (roles, tenure, education, skills, certifications, location, publications, public-code count, mentions).
+- **Step 3 — result** (gated): three visually distinct big-count buckets — **Matched with CV** (green, claim→evidence pairs), **Unmatched** (amber, split into *Contradiction — a real flag* vs *Not found publicly — neutral*, with "absence is not evidence"), **Extra — not on CV** (blue, bonus context) — plus a **score ring (0–100)** with three sub-bars (footprint breadth, CV corroboration, professional activity) and the unmissable caption that it measures footprint, not candidate quality.
+- **Numbered 1·2·3 rhythm** replaces the wall of identical cards; step headers show lock state.
+- **Step 0 confirmed present:** checkbox selection table (name, position, district, ATS score), "Load 12 sample candidates", live count, "Run online presence analysis on selected (N)", opt-in note.
+- **Governance unchanged:** fixture-only; photo never analyzed/scored; score never feeds the match score and can't change status; no protected-characteristic data; verify-first is structural (Steps 2–3 gated in code).
+- **QA:** JS clean · **verified by script** — 11 single-identity vs 1 namesake picker (2 people); **0 sources carry an identity flag** (model correction enforced in the data shape); score/sub-score derivation matches independent recomputation for all 12 (no drift); instructive cases behave — Mahmudul (namesake, 2 identities), Kazi Nazrul (contra=1 → Discrepancy), Farhana (vis=6, notfound=2 → neutral "Not found"), Sabrina (vis=83, extra=3 rich extras) · all internal links resolve · `docs/hr/` all 22 pages byte-identical.
+
+---
+
+# Round 12 — Exports produce real files (2026-07-17)
+
+## ⚠️ Deviation from the brief — no CDN dependency
+The R12 prompt's premise was that "a static prototype can't produce a true `.xlsx` with vanilla JS alone" and to load **SheetJS + JSZip from cdnjs**. That premise is false here: Round 11 already shipped a working zero-dependency `.xlsx` writer, verified by an openpyxl round-trip (merged cells, styles, frozen panes). Adding a CDN would have broken the no-dependency/no-build rule every prior round held, added an external network dependency (the prototype runs offline and from `file://`), and gained nothing. **Everything the brief asked for is delivered without a library.** If the team later wants SheetJS anyway, the builders are library-agnostic — only `STLX.build()` would swap.
+
+## New shared assets (extracted, not duplicated)
+- **`assets/js/stl-xlsx.js`** — dependency-free writers: real Office Open XML (**multi-sheet**, merged cells, styles, frozen panes, column widths, wrap, landscape) packaged in a STORE-method ZIP; a real `.zip` writer; and a CSV fallback. Generalised from the verified R11 code so there is **one** copy.
+- **`assets/js/stl-fixtures.js`** — the single source of truth (R12 §2). Seeded PRNG pool, assessment marks, per-criterion explainability, panel. **Proven identical** to the dashboard's pool by script, so exports can't drift from what HR sees.
+- **De-duplicated:** `cv-analysis-dashboard` (−5,840 chars of duplicate generator) and `assessment-summary-report` (fixture + entire inline ZIP/xlsx writer) now consume the shared modules. Both re-verified post-refactor — dashboard cross-filter maths unchanged (buckets still 18+33+27+24+13+5=120, cohort[Career break]=21, self-exclusion intact); Summary Report export byte-structure unchanged (A1:M54, 113 merges, freeze A7, same block merges).
+
+## `hr/exports.page.html` — real, meaningful downloads
+- **Generate now builds and downloads an actual file.** All **8 types** verified end-to-end by generating each headless and re-opening it with openpyxl / zipfile:
+
+  | Type | Output | Verified |
+  |---|---|---|
+  | Excel export | `Candidates` sheet | 120 rows, columns = checked fields |
+  | Final candidate summary | `Final summary` | 32 shortlisted, ranked |
+  | Screening report | `Screening report` | **725 rows, 483 merges** — one row per criterion per candidate |
+  | Assessment report | `Merit list` | 12 qualified, merit-ranked |
+  | CV analysis | **2 sheets** — `Pool insights` + `Evaluation summaries` | insights 18+33+27+24+13+5 = **120, matching the dashboard exactly** |
+  | Online-presence | `Online presence` | confirmed identities only |
+  | Interview panel summary | `Panel summary` | per-criterion rollup + average |
+  | Bulk CV download | **real `.zip`** | valid archive, 122 entries: `manifest.csv` + 120 CV stand-ins + README |
+
+- **Meaningful, not just contact fields:** the screening report carries per-criterion **weight → contribution → CV evidence** (contributions verified to sum to each candidate's real match score); CV analysis carries the full pool insight tables; assessment carries marks/combined/result; online-presence carries identity confidence, score, bucket counts and source URLs.
+- **Field selection genuinely drives columns** (verified: 2 fields → 2 columns, 8 fields → 8 columns, in checkbox order). **Scope genuinely filters rows** (verified: All → 120, Shortlisted only → 32, matching the fixture's stage distribution). New fields added per brief: Current/last position, Current/last company, Position applied, Parsing confidence, Stage/status, Source, Red flags, Applied date.
+- **Live preview** (step 4) shows the first rows × selected columns, the sheet list for multi-sheet exports, the row count and the exact filename — updating on every type/scope/field change.
+- **History "Download" re-downloads the real file** produced this session (held as a Blob); seeded rows say so honestly rather than pretending. Rows record file name + size, created-by, scope and options.
+- **Graceful degradation:** if the shared scripts fail to load, the page shows a clear message and disables Generate rather than failing silently.
+- **Governance:** age and gender are **not offered as fields at all** (not merely unchecked) with an on-page note; online-presence and screening exports carry their assistive-only header line; `REJECTED_PENDING_REVIEW` stays distinct from `REJECTED` in every status column; every generate still writes an audit-style history row.
+- **QA:** all script blocks + both shared libs syntax-clean · every generated file opens · shared assets resolve from `hr/` and return 200 over the server · `docs/` 22 HR pages + 2 JS assets byte-identical.

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<!-- Format source: client's "Summary format.xlsx" (received 16 Jul 2026, sheet "12.07.2026") —
+     resolves the R7 TODO and PRD Open Question 3 for this report.
+     Client layout implemented: title "Summary for the Position of …" + date row; columns
+     Sl · Name(+phone) · Age · Degree · Educational Institution · Passing Year · Result ·
+     Working Experience · Year of Exp. · Written Marks · Remarks; one ROW-BLOCK per candidate
+     (a row per education level, other cells row-spanned). Platform additions kept to the
+     right of Written Marks (Viva, Combined) + an on-screen-only Action column (hidden on print
+     so the printed sheet matches the client format).
+     NOTE: the Age column exists in STL's own format and is rendered as provided — flag against
+     Open Question 7 (age/gender permissibility) at the demo. -->
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summary Report · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.crumb a:hover{color:var(--primary)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-body{padding:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 14px;position:sticky;top:0}
+td{padding:11px 14px;border-top:1px solid var(--border);font-size:13.5px;vertical-align:middle}
+tbody tr:hover td{background:var(--primary-soft)}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge.b-ic::before{display:none}
+.badge.b-ic svg{width:12px;height:12px;flex:none}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.field select{cursor:pointer}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:var(--surface-2);font-size:12px;font-weight:500}
+
+/* ══════════════════════════════════════════════════════════════════
+   ASR — Assessment Summary Report block (`asr-` namespace).
+   Combined Written Examination + Viva Voce merit sheet.
+   Viva scores come from the existing interview-rating flow (5-pt × 20);
+   written marks come from written-exam.page.html. Decision-support
+   only — final selection stays the Hiring Manager's action.
+   ══════════════════════════════════════════════════════════════════ */
+.asr-doc-head{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:2px solid var(--primary)}
+.asr-doc-head img{height:46px;width:auto}
+.asr-doc-title{flex:1;text-align:center}
+.asr-doc-title .co{font-size:16px;font-weight:700;letter-spacing:.02em}
+.asr-doc-title .rep{font-size:13.5px;font-weight:600;color:var(--primary);margin-top:2px}
+.asr-doc-title .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.asr-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px;padding:14px 24px;border-bottom:1px solid var(--border);font-size:12.5px}
+.asr-meta b{font-weight:600}
+.asr-meta span{color:var(--muted)}
+.asr-controls{display:grid;grid-template-columns:120px 120px 1.6fr auto;gap:16px;align-items:end;padding:16px 20px;border-bottom:1px solid var(--border)}
+.asr-w{display:flex;flex-direction:column;gap:6px}
+.asr-w label{font-size:12.5px;font-weight:600}
+.asr-w .row{display:flex;align-items:center;gap:10px}
+.asr-w input[type=range]{flex:1;accent-color:var(--primary);cursor:pointer;height:22px}
+.asr-w input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.asr-w b{font-variant-numeric:tabular-nums;width:70px;font-size:12.5px}
+.asr-view{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.asr-view button{padding:8px 12px;background:var(--surface);border:0;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.asr-view button+button{border-left:1px solid var(--border)}
+.asr-view button:hover{background:var(--surface-2)}
+.asr-view button:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--accent)}
+.asr-view button.on{background:var(--primary-soft);color:var(--primary)}
+.asr-sumline{padding:12px 20px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--border)}
+.asr-sumline b{color:var(--text);font-variant-numeric:tabular-nums}
+.asr-marks{font-variant-numeric:tabular-nums;white-space:nowrap}
+.asr-marks small{color:var(--muted);font-size:11px}
+.asr-comb{font-variant-numeric:tabular-nums;font-weight:700;font-size:14px}
+.asr-rank{font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);width:34px}
+.asr-roll{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.asr-exp-btn{width:26px;height:26px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:grid;place-items:center;color:var(--muted)}
+.asr-exp-btn:hover{border-color:var(--primary);color:var(--primary)}
+.asr-exp-btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--primary-soft)}
+.asr-exp-btn svg{width:13px;height:13px;transition:transform .15s ease}
+.asr-exp-btn.on svg{transform:rotate(180deg)}
+tr.asr-dim td{opacity:.55}
+tr.asr-exp-row>td{background:var(--surface-2);padding:16px 20px}
+tr.asr-exp-row:hover>td{background:var(--surface-2)}
+.asr-exp-grid{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:20px;font-size:12.5px}
+.asr-exp-grid h4{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.asr-kv{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.asr-kv b{font-variant-numeric:tabular-nums}
+.asr-mini{display:flex;align-items:center;gap:8px}
+.asr-mini .tr{flex:1;height:5px;border-radius:5px;background:var(--border);overflow:hidden}
+.asr-mini .tr i{display:block;height:100%;border-radius:5px}
+.asr-sign{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding:44px 24px 24px}
+.asr-sign div{text-align:center;font-size:12px;color:var(--muted)}
+.asr-sign .ln{border-top:1px solid var(--text);margin-bottom:6px;padding-top:6px;font-weight:600;color:var(--text)}
+.asr-tw{overflow-x:auto}
+.asr-sort{background:none;border:0;color:var(--muted);font:inherit;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px;padding:0}
+.asr-sort:hover,.asr-sort.on{color:var(--primary)}
+.asr-sort:focus-visible{outline:none;text-decoration:underline;color:var(--primary)}
+.asr-sort svg{width:12px;height:12px}
+.asr-note{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--border)}
+.asr-note svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--info)}
+/* Client block format: one candidate = one row-block (a row per education level).
+   Block-start rows carry a heavier top rule, like the printed sheet. */
+#asr-tbody td{font-size:12.5px;padding:9px 12px;vertical-align:top}
+#asr-tbody tr:hover td{background:none}
+#asr-tbody tr.asr-blk>td{border-top:2px solid var(--border)}
+#asr-tbody tr.asr-sub>td{border-top:1px dashed var(--surface-2)}
+.asr-pre{white-space:pre-line;font-size:12px;line-height:1.45;min-width:200px;max-width:280px}
+.asr-name{font-weight:600}
+.asr-name small{display:block;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+.asr-edu-i{min-width:150px}
+@media (max-width:1280px){.asr-controls{grid-template-columns:1fr 1fr;}.asr-meta{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:1024px){.app{grid-template-columns:1fr}.sidebar{display:none}.asr-exp-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:768px){
+  .content{padding:16px}.topbar{padding:0 16px}.search{width:auto;flex:1}
+  .asr-controls,.asr-meta{grid-template-columns:1fr}
+  .asr-exp-grid{grid-template-columns:1fr}
+  .asr-sign{grid-template-columns:repeat(2,1fr)}
+}
+/* Print — official document: hide app chrome + the on-screen Action column, so the
+   printed sheet matches the client's Summary format exactly */
+@media print{
+  .sidebar,.topbar,.page-head,.asr-controls,.asr-view,.asr-note,.asr-exp-btn,.btn,.asr-act{display:none!important}
+  .app{display:block}
+  .content{padding:0;overflow:visible}
+  .card{border:0;box-shadow:none}
+  body{background:#fff}
+  th{position:static}
+  tr.asr-exp-row{display:none}
+  .asr-sign{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item" href="cv-analysis-dashboard.page.html" data-testid="nav-cv-analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>CV Analysis
+      </a>
+      <a class="nav-item" href="online-visibility-analysis.page.html" data-testid="nav-online-presence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Online Presence
+      </a>
+      <a class="nav-item" href="written-exam.page.html" data-testid="nav-written-exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Written Exam
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item active" href="assessment-summary-report.page.html" data-testid="nav-assessment-report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13l2 2 4-4"/></svg>Summary Report
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><a href="interviews.page.html">Interviews</a> / <b>Summary Report</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Summary Report</h1>
+          <p>Combined written-examination + viva merit sheet · decision-support for Final Selection (HM decides)</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="field" style="margin:0;min-width:250px">
+            <label for="asr-scope" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Position scope</label>
+            <select id="asr-scope" data-testid="asr-scope-position" onchange="asrRender()">
+              <option selected>Sr. Brand Manager — Marketing · Jun-2026</option>
+              <option>Trade Marketing Officer — Marketing · Jun-2026</option>
+            </select>
+          </div>
+          <button class="btn btn-ghost" data-testid="asr-export-excel" onclick="asrExportXlsx()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export to Excel
+          </button>
+          <!-- Exported sheet mirrors the merit-table columns; MUST conform to the client's
+               format once provided (Open Question 3). -->
+          <button class="btn btn-primary" data-testid="asr-print" onclick="asrPrint()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print / Save as PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- 1a. Official-document header -->
+        <div class="asr-doc-head" data-testid="asr-doc-head">
+          <img src="../assets/img/logo-square.webp" alt="Square Toiletries Limited">
+          <div class="asr-doc-title">
+            <div class="co">Square Toiletries Limited</div>
+            <!-- Title wording per client's Summary format.xlsx -->
+            <div class="rep">Summary for the Position of Sr. Brand Manager, Marketing Dept.</div>
+            <div class="sub">16.07.2026 · Written Examination &amp; Viva Voce · Human Resources Division</div>
+          </div>
+          <div style="width:46px"></div>
+        </div>
+        <div class="asr-meta" data-testid="asr-meta">
+          <div><span>Position:</span> <b>Sr. Brand Manager</b></div>
+          <div><span>Department:</span> <b>Marketing</b></div>
+          <div><span>Grade:</span> <b>Manager (Grade 6)</b></div>
+          <div><span>Recruitment ref:</span> <b>STL/HR/2026/BM-04 · Jun-2026 Trade Mktg Drive</b></div>
+          <div><span>Report generated:</span> <b>16 Jul 2026</b></div>
+          <div><span>Prepared by:</span> <b>Farzana Akter, HR Manager</b></div>
+        </div>
+
+        <!-- 1b. Pass / qualification controls -->
+        <div class="asr-controls" data-testid="asr-controls">
+          <div class="field" style="margin:0">
+            <label for="asr-pass-w">Written pass mark</label>
+            <input id="asr-pass-w" type="number" min="0" max="100" value="50" data-testid="asr-pass-written" oninput="asrRender()">
+          </div>
+          <div class="field" style="margin:0">
+            <label for="asr-pass-v">Viva pass mark</label>
+            <input id="asr-pass-v" type="number" min="0" max="100" value="60" data-testid="asr-pass-viva" oninput="asrRender()">
+          </div>
+          <div class="asr-w">
+            <label id="asr-w-lbl">Weighting — <span id="asr-w-out" style="font-variant-numeric:tabular-nums">Written 60% · Viva 40%</span></label>
+            <div class="row">
+              <input type="range" min="0" max="100" value="60" id="asr-w-slider" aria-labelledby="asr-w-lbl" data-testid="asr-weight-written" oninput="asrRender()">
+              <b id="asr-w-sum">Σ 100%</b>
+            </div>
+          </div>
+          <div class="asr-view" role="group" aria-label="View mode" data-testid="asr-view-toggle">
+            <button type="button" class="on" id="asr-view-q" data-testid="asr-view-qualified" onclick="asrView('q')">Qualified in both only</button>
+            <button type="button" id="asr-view-all" data-testid="asr-view-all" onclick="asrView('all')">Show all assessed</button>
+          </div>
+        </div>
+
+        <div class="asr-sumline" id="asr-sumline" data-testid="asr-summary-line"></div>
+
+        <!-- 1c. Merit table -->
+        <div class="asr-tw">
+          <table data-testid="asr-merit-table">
+            <!-- Column set = client's Summary format.xlsx (Sl … Remarks), plus the
+                 platform's Viva/Combined columns after Written Marks and an on-screen
+                 Action column (hidden on print so the sheet matches the client format). -->
+            <thead>
+              <tr>
+                <th>Sl</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Degree</th>
+                <th>Educational Institution</th>
+                <th>Passing Year</th>
+                <th>Result</th>
+                <th>Working Experience</th>
+                <th>Year of Exp.</th>
+                <th><button class="asr-sort" id="asr-s-w" data-testid="asr-sort-written" onclick="asrSort('w')">Written Marks <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></th>
+                <th><button class="asr-sort" id="asr-s-v" data-testid="asr-sort-viva" onclick="asrSort('v')">Viva Marks <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></th>
+                <th><button class="asr-sort on" id="asr-s-c" data-testid="asr-sort-combined" onclick="asrSort('c')">Combined <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></th>
+                <th>Remarks</th>
+                <th class="asr-act">Action</th>
+              </tr>
+            </thead>
+            <tbody id="asr-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- 1e. Approval / signature block -->
+        <div class="asr-sign" data-testid="asr-signatures">
+          <div><div class="ln">Rashedul Islam</div>Viva Panel Member<br>Head of Marketing · Date: ____________</div>
+          <div><div class="ln">Tasnuva Chowdhury</div>Viva Panel Member<br>Sr. Manager, Brand · Date: ____________</div>
+          <div><div class="ln">Farzana Akter</div>HR Manager<br>Prepared by · Date: ____________</div>
+          <div><div class="ln">&nbsp;</div>Approving Authority<br>Head of HR · Date: ____________</div>
+        </div>
+
+        <div class="asr-note" data-testid="asr-governance-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>Decision-support artifact — final selection remains the Hiring Manager's action on the Final Selection page. "Not qualified" is an assessment outcome, not an ATS rejection; no candidate is rejected from this report. Viva scores come from the interview-rating stage (5-point scale × 20). Layout follows STL's provided Summary format (received 16 Jul 2026). <b>Note:</b> the Age column is part of STL's own format and is displayed as provided — it is never a screening criterion; its display remains subject to Open Question 7 (STL Legal/HR).</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Shared, dependency-free .xlsx writer + the single source-of-truth fixture -->
+<script src="../assets/js/stl-xlsx.js"></script>
+<script src="../assets/js/stl-fixtures.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ASR — merit computation. Raw marks are the only data; every %,
+   combined score, rank, and the summary count are computed, so the
+   sheet is always internally consistent.
+   Written: MCQ /30 + Written /50 + Case /20 = /100 (from written-exam page).
+   Viva: 5 criteria (Technical/Communication/Culture fit/Domain/Overall)
+   1–5 from interview-rating; viva% = avg × 20.
+   All globals `asr`/`ASR`-prefixed — no native-DOM shadowing.
+   ══════════════════════════════════════════════════════════════════ */
+/* Marks, education history and employment history come from the shared fixture
+   (assets/js/stl-fixtures.js) — the same module exports.page.html reads, so the
+   Assessment report export can never disagree with this page. */
+var ASR_OPENINGS=STLF.OPENINGS;   /* vacancies → merit 1..N = Selected, rest Waitlisted */
+var ASR_DATA=STLF.assess();
+
+var ASR_SORT='c',ASR_VIEW='q',ASR_OPEN={};
+
+function asrBandHex(v){return v<50?'var(--danger)':v<75?'var(--warn)':'var(--success)'}
+function asrMarks(got,pct){
+  return '<span class="asr-marks"><b style="color:'+asrBandHex(pct)+'">'+got+'</b><small>/100</small> <small>('+pct+'%)</small></span>';
+}
+function asrResultBadge(r){
+  if(r==='sel')return '<span class="badge b-ic b-suc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Selected</span>';
+  if(r==='wait')return '<span class="badge b-ic b-inf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Waitlisted</span>';
+  /* assessment outcome — deliberately NOT the ATS REJECTED status */
+  return '<span class="badge b-ic b-mut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Not qualified</span>';
+}
+function asrSummarySentence(c,q){
+  var s='AI match '+c.ai+'% at screening; written '+c.w+'/100 ('+(c.w>=75?'strong':c.w>=50?'cleared':'below cut-off')+'); viva '+(c.v/20).toFixed(1)+'/5';
+  s+=q?' — qualified in both.':(c.w>=+document.getElementById('asr-pass-w').value?' — viva below the bar.':' — written below the cut-off.');
+  return s;
+}
+
+function asrSort(k){ASR_SORT=k;asrRender()}
+function asrView(v){ASR_VIEW=v;asrRender()}
+function asrToggle(roll){ASR_OPEN[roll]=!ASR_OPEN[roll];asrRender()}
+function asrPrint(){window.print()}
+
+/* ══════════════════════════════════════════════════════════════════
+   Excel export — writes a real .xlsx (Office Open XML in a ZIP) via the
+   shared, dependency-free writer in assets/js/stl-xlsx.js. Not a CSV and
+   not an HTML file renamed .xls, because the client's Summary format
+   depends on MERGED CELLS: one candidate = one row-block with a row per
+   education level and the other columns merged down the block. Only a
+   genuine xlsx reproduces that, and Excel opens it without a
+   format-mismatch warning.
+   The sheet mirrors exactly what the page renders — same view mode,
+   sort, pass marks and weighting.
+   ══════════════════════════════════════════════════════════════════ */
+var S=STLX.S;
+
+function asrExportXlsx(){
+  /* Rebuild the same rows the table is showing right now */
+  var pw=+document.getElementById('asr-pass-w').value||0;
+  var pv=+document.getElementById('asr-pass-v').value||0;
+  var ww=+document.getElementById('asr-w-slider').value,wv=100-ww;
+  var rows0=ASR_DATA.map(function(c){
+    return Object.assign({},c,{q:c.w>=pw&&c.v>=pv,comb:Math.round((c.w*ww+c.v*wv)/100)});
+  });
+  var key=ASR_SORT==='w'?'w':ASR_SORT==='v'?'v':'comb';
+  rows0.sort(function(a,b){return b[key]-a[key]});
+  var qualified=rows0.filter(function(c){return c.q});
+  var merit={};qualified.forEach(function(c,i){merit[c.roll]=i+1});
+  var shown=ASR_VIEW==='q'?qualified:rows0;
+
+  var COLS=13; /* A..M — client's 11 columns + Viva + Combined */
+  var LAST=STLX.colName(COLS-1);
+  var HEAD=['Sl','Name','Age','Degree','Educational Institution','Passing Year','Result',
+            'Working Experience','Year of Exp.','Written Marks','Viva Marks','Combined (%)','Remarks'];
+  var rows=[],merges=[],heights=[];
+
+  /* Title block — mirrors the client's sheet (title row + date row) */
+  rows.push([{v:'Square Toiletries Limited',s:S.TITLE}]);heights.push(20);
+  rows.push([{v:'Summary for the Position of Sr. Brand Manager, Marketing Dept.',s:S.TITLE}]);heights.push(18);
+  rows.push([{v:'16.07.2026 · Written Examination & Viva Voce · Ref STL/HR/2026/BM-04 · Prepared by Farzana Akter, HR Manager',s:S.META}]);heights.push(null);
+  rows.push([{v:'Pass marks — Written ≥'+pw+', Viva ≥'+pv+' · Combined = Written×'+ww+'% + Viva×'+wv+'% · '+qualified.length+' of '+rows0.length+' qualified in both · View: '+(ASR_VIEW==='q'?'Qualified in both only':'All assessed'),s:S.META}]);heights.push(null);
+  merges.push('A1:'+LAST+'1','A2:'+LAST+'2','A3:'+LAST+'3','A4:'+LAST+'4');
+  rows.push([]);heights.push(null);
+  rows.push(HEAD.map(function(h){return {v:h,s:S.HEAD}}));heights.push(30);
+
+  var r=7; /* first data row (1-indexed) */
+  shown.forEach(function(c){
+    var mk=merit[c.roll]||'',span=c.edu.length,top=r;
+    var res=!c.q?'Not qualified':(mk<=ASR_OPENINGS?'Selected':'Waitlisted');
+    var rem=res+(c.rem?' — '+c.rem:'');
+    c.edu.forEach(function(ed,ei){
+      var row=[];
+      if(ei===0){
+        row[0]={v:mk===''?'—':mk,s:S.BOLD,n:mk!==''};
+        row[1]={v:c.title+c.n+"\n"+c.phone,s:S.WRAP};
+        row[2]={v:c.age,s:S.BOLD,n:true};
+      }else{row[0]={v:'',s:S.BODY};row[1]={v:'',s:S.WRAP};row[2]={v:'',s:S.BODY}}
+      row[3]={v:ed[0],s:S.BODY};row[4]={v:ed[1],s:S.WRAP};
+      row[5]={v:ed[2],s:S.BODY,n:true};row[6]={v:ed[3],s:S.BODY};
+      if(ei===0){
+        row[7]={v:c.exp,s:S.WRAP};
+        row[8]={v:c.expY.replace("\n",' '),s:S.BODY};
+        row[9]={v:c.w,s:S.BOLD,n:true};
+        row[10]={v:c.v,s:S.BOLD,n:true};
+        row[11]={v:c.comb,s:S.BOLD,n:true};
+        row[12]={v:rem,s:S.WRAP};
+      }else{
+        row[7]={v:'',s:S.WRAP};row[8]={v:'',s:S.BODY};row[9]={v:'',s:S.BODY};
+        row[10]={v:'',s:S.BODY};row[11]={v:'',s:S.BODY};row[12]={v:'',s:S.WRAP};
+      }
+      rows.push(row);heights.push(ei===0?34:16);
+      r++;
+    });
+    /* Merge the block-level columns down the education rows — the client's structure */
+    if(span>1){
+      [0,1,2,7,8,9,10,11,12].forEach(function(ci){
+        merges.push(STLX.colName(ci)+top+':'+STLX.colName(ci)+(top+span-1));
+      });
+    }
+  });
+
+  /* Signature block */
+  rows.push([]);heights.push(null);
+  r=rows.length+1;
+  rows.push([{v:'Viva Panel: Rashedul Islam (Head of Marketing)   ·   Tasnuva Chowdhury (Sr. Manager, Brand)   ·   Prepared by: Farzana Akter (HR Manager)   ·   Approved by: ____________ (Head of HR)',s:S.META}]);
+  heights.push(null);
+  merges.push('A'+r+':'+LAST+r);
+
+  STLX.write('STL_Assessment_Summary_Sr_Brand_Manager_16.07.2026.xlsx',[{
+    name:'16.07.2026',rows:rows,heights:heights,merges:merges,freeze:'A7',
+    widths:[5,26,6,9,30,11,14,46,10,13,11,11,30]
+  }]);
+
+  var btn=document.querySelector('[data-testid="asr-export-excel"]');
+  var old=btn.innerHTML;
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg>Exported — '+shown.length+' candidates';
+  setTimeout(function(){btn.innerHTML=old},2400);
+}
+
+function asrRender(){
+  var pw=+document.getElementById('asr-pass-w').value||0;
+  var pv=+document.getElementById('asr-pass-v').value||0;
+  var ww=+document.getElementById('asr-w-slider').value,wv=100-ww;
+  document.getElementById('asr-w-out').textContent='Written '+ww+'% · Viva '+wv+'%';
+  document.getElementById('asr-w-sum').textContent='Σ 100%';
+
+  var rows=ASR_DATA.map(function(c){
+    var q=c.w>=pw&&c.v>=pv;
+    return Object.assign({},c,{q:q,comb:Math.round((c.w*ww+c.v*wv)/100)});
+  });
+  var key=ASR_SORT==='w'?'w':ASR_SORT==='v'?'v':'comb';
+  rows.sort(function(a,b){return b[key]-a[key]});
+  ['w','v','c'].forEach(function(k){document.getElementById('asr-s-'+k).classList.toggle('on',ASR_SORT===k)});
+  document.getElementById('asr-view-q').classList.toggle('on',ASR_VIEW==='q');
+  document.getElementById('asr-view-all').classList.toggle('on',ASR_VIEW==='all');
+
+  var qualified=rows.filter(function(c){return c.q});
+  document.getElementById('asr-sumline').innerHTML=
+    '<b>'+qualified.length+'</b> of <b>'+rows.length+'</b> assessed candidates qualified in both written (≥'+pw+') and viva (≥'+pv+') · vacancies: <b>'+ASR_OPENINGS+'</b> · combined = written × '+ww+'% + viva × '+wv+'%';
+
+  /* merit rank among qualified only; Selected = top vacancies, rest Waitlisted */
+  var merit={};qualified.forEach(function(c,i){merit[c.roll]=i+1});
+  var shown=ASR_VIEW==='q'?qualified:rows;
+
+  /* Client block format: candidate = a row-block, one row per education
+     level; Sl/Name/Age/Experience/marks/Remarks row-span the block. */
+  var h='';
+  shown.forEach(function(c){
+    var mk=merit[c.roll]||null;
+    var res=!c.q?'nq':(mk<=ASR_OPENINGS?'sel':'wait');
+    var open=!!ASR_OPEN[c.roll];
+    var span=c.edu.length,dim=!c.q?' asr-dim':'';
+    c.edu.forEach(function(ed,ei){
+      if(ei===0){
+        h+='<tr class="asr-blk'+dim+'" data-testid="asr-row-'+c.roll+'">'+
+          '<td class="asr-rank" rowspan="'+span+'">'+(mk?mk:'—')+'</td>'+
+          '<td rowspan="'+span+'"><div class="asr-name">'+c.title+c.n+'<small>'+c.phone+'</small><small>'+c.roll+' · '+c.d+'</small></div></td>'+
+          /* Age column is part of STL's provided format — flagged against Open Question 7 */
+          '<td rowspan="'+span+'" style="font-variant-numeric:tabular-nums">'+c.age+'</td>'+
+          '<td>'+ed[0]+'</td>'+
+          '<td class="asr-edu-i">'+ed[1]+'</td>'+
+          '<td style="font-variant-numeric:tabular-nums">'+ed[2]+'</td>'+
+          '<td>'+ed[3]+'</td>'+
+          '<td rowspan="'+span+'"><div class="asr-pre">'+c.exp+'</div></td>'+
+          '<td rowspan="'+span+'"><span class="asr-pre" style="min-width:38px">'+c.expY+'</span></td>'+
+          '<td rowspan="'+span+'">'+asrMarks(c.w,c.w)+'</td>'+
+          '<td rowspan="'+span+'">'+asrMarks(c.v,c.v)+'</td>'+
+          '<td rowspan="'+span+'" class="asr-comb">'+c.comb+'%</td>'+
+          '<td rowspan="'+span+'" style="max-width:170px">'+asrResultBadge(res)+(c.rem?'<div style="margin-top:6px;font-size:12px">'+c.rem+'</div>':'')+'</td>'+
+          '<td rowspan="'+span+'" class="asr-act"><div style="display:flex;gap:6px;align-items:center">'+
+            '<button class="asr-exp-btn'+(open?' on':'')+'" aria-expanded="'+open+'" aria-label="Toggle summary for '+c.n+'" data-testid="asr-expand-'+c.roll+'" onclick="asrToggle(\''+c.roll+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>'+
+            '<a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="asr-view-'+c.roll+'">View</a>'+
+          '</div></td>'+
+        '</tr>';
+      }else{
+        h+='<tr class="asr-sub'+dim+'">'+
+          '<td>'+ed[0]+'</td>'+
+          '<td class="asr-edu-i">'+ed[1]+'</td>'+
+          '<td style="font-variant-numeric:tabular-nums">'+ed[2]+'</td>'+
+          '<td>'+ed[3]+'</td>'+
+        '</tr>';
+      }
+    });
+    if(open){
+      /* 1d. per-candidate consolidation — assessment-relevant only; full profile lives on candidate-detail */
+      var vh='';
+      Object.keys(c.crit).forEach(function(k){
+        vh+='<div class="asr-kv"><span>'+k+'</span><div class="asr-mini" style="width:110px"><div class="tr"><i style="width:'+(c.crit[k]*20)+'%;background:'+asrBandHex(c.crit[k]*20)+'"></i></div><b>'+c.crit[k]+'/5</b></div></div>';
+      });
+      h+='<tr class="asr-exp-row"><td colspan="14"><div class="asr-exp-grid">'+
+        '<div><h4>Written breakdown</h4>'+
+          '<div class="asr-kv"><span>MCQ</span><b>'+c.mcq+'/30</b></div>'+
+          '<div class="asr-kv"><span>Written</span><b>'+c.wrs+'/50</b></div>'+
+          '<div class="asr-kv"><span>Case study</span><b>'+c.cs+'/20</b></div>'+
+          '<div class="asr-kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px"><span>Total</span><b style="color:'+asrBandHex(c.w)+'">'+c.w+'/100</b></div>'+
+        '</div>'+
+        '<div><h4>Viva breakdown (interview rating)</h4>'+vh+'</div>'+
+        '<div><h4>AI evaluation &amp; signals</h4>'+
+          '<p style="margin-bottom:8px">'+asrSummarySentence(c,c.q)+'</p>'+
+          (c.rf.length?c.rf.map(function(f){return '<span class="badge b-cau" style="margin:0 4px 4px 0">'+f+'</span>'}).join(''):'<span class="badge b-mut">No red flags</span>')+
+          '<div style="margin-top:8px;font-size:12px;color:var(--muted)">'+c.e+' · <a href="candidate-detail.page.html" style="color:var(--primary);font-weight:600" data-testid="asr-detail-'+c.roll+'">Full profile →</a></div>'+
+        '</div>'+
+      '</div></td></tr>';
+    }
+  });
+  document.getElementById('asr-tbody').innerHTML=h;
+}
+asrRender();
+</script>
+</body>
+</html>

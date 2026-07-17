@@ -500,9 +500,10 @@ square_ats/
 |:-:|----------|-----------------|-------|--------|
 | 1 | Which OCR provider for production (Azure vs Google vs on-prem)? | Affects scanned-CV accuracy + data residency; v1 uses stub adapter. | STL | ⏳ Open |
 | 2 | Which SMS gateway will STL provide? | SMS is stubbed until chosen; affects Module 6 delivery. | STL | ⏳ Open |
-| 3 | Exact STL predefined Excel summary format? | Module 5 final-summary export must match STL's template exactly. | STL HR | ⏳ Open |
+| 3 | Exact STL predefined Excel summary format? | Module 5 final-summary export must match STL's template exactly. **Update 16 Jul 2026:** client provided `Summary format.xlsx` — implemented in the R9 assessment-summary report. Remaining: confirm the same format governs the Module 5 Excel *export*, and confirm the Age column with Legal (see #7). | STL HR | 🟡 Partially resolved |
 | 4 | Email-inbox / job-portal import credentials & APIs? | Determines whether import is active in v1 or adapter-only. | STL IT | ⏳ Open |
 | 5 | Data-retention durations + archival/deletion policy specifics? | Drives retention workflows + audit; configurable but needs defaults. | STL | ⏳ Open |
 | 6 | Ground-truth annotated CV set for accuracy validation? | Required for Module 7 accuracy benchmark report. | STL HR | ⏳ Open |
 | 7 | Are gender/age criteria permitted under STL policy + local labour law? | Governance: sensitive criteria only within client-approved configs. | STL Legal/HR | ⏳ Open |
 | 8 | Deployment target for first release (cloud vs on-prem vs hybrid)? | Affects OCR/LLM connectivity + infra setup. | STL IT | ⏳ Open |
+| 9 | Online-presence analysis (R8): which enrichment/search provider? Approved by STL Legal? What candidate-notice/consent policy applies? | Blocks live use of the online-visibility feature; prototype ships fixture-data-only with the workflow gated on HR identity confirmation. Same class of blocker as #7. | STL Legal/HR/IT | ⏳ Open |

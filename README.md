@@ -17,10 +17,10 @@ The root redirects straight to the login screen. From login you can **explore ev
 
 | Path | Contents |
 |------|----------|
-| `docs/` | **The hosted prototype** (GitHub Pages serves this). `index.html` → login. 36 interlinked pages across `auth/ hr/ hiring-manager/ viewer/ admin/` + `assets/`. |
+| `docs/` | **The hosted prototype** (GitHub Pages serves this). `index.html` → login. 40 interlinked pages across `auth/ hr/ hiring-manager/ viewer/ admin/` + `assets/`. |
 | `.claude-project/` | Pipeline artifacts: `docs/PRD.md`, `design/` (DESIGN_SYSTEM, design guide, the canonical `html/` source the `docs/` copy is generated from), `status/`. |
 | `.claude/` | Build pipeline / rules tooling. |
-| `CHANGES.md` | Full per-round revision log (rounds 1–3). |
+| `CHANGES.md` | Full per-round revision log (rounds 1–8). |
 
 > Note: `docs/` is a deployable copy of `.claude-project/design/html/` (Pages can't serve the dotted `.claude-project` folder). Edit the canonical tree, then re-copy into `docs/`.
 

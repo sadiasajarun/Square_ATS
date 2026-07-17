@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Analysis Dashboard · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.crumb a:hover{color:var(--primary)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.card-head h2{font-size:15px;font-weight:600}
+.card-body{padding:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 16px;position:sticky;top:0}
+td{padding:12px 16px;border-top:1px solid var(--border);font-size:13.5px;vertical-align:middle}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:110px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:38px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:var(--surface-2);font-size:12px;font-weight:500}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none;cursor:pointer}
+.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+
+/* ══════════════════════════════════════════════════════════════════
+   CVA — CV Analysis Dashboard block (`cva-` namespace).
+   Decision-grade: every chart segment is a live entry point that
+   cross-filters the whole dashboard and drills the summaries table.
+   Pool-level only — per-candidate evaluation stays on
+   candidate-detail.page.html (View drills into it).
+   Charts are pure inline SVG — in the eventual React build these
+   become recharts components.
+   Governance: read-only. Cohorts drill / preview / export / navigate;
+   nothing here changes a candidate's status. No age/gender facets.
+   ══════════════════════════════════════════════════════════════════ */
+.cva-scope{display:grid;grid-template-columns:2fr 1.4fr auto auto;gap:12px;align-items:end}
+.cva-sum{font-size:13px;color:var(--muted);margin-top:12px}
+.cva-sum b{color:var(--text);font-variant-numeric:tabular-nums}
+.cva-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+.cva-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;min-width:0;display:flex;flex-direction:column}
+.cva-card h3{font-size:13.5px;font-weight:600;margin-bottom:12px}
+.cva-take{font-size:12px;color:var(--muted);margin-top:auto;padding-top:9px;border-top:1px solid var(--border)}
+.cva-take b{color:var(--text)}
+.cva-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.cva-chart text{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif}
+.cva-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.cva-legend span{display:inline-flex;align-items:center;gap:5px}
+.cva-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+
+/* Clickable chart segments + drill actions */
+.cva-hit{cursor:pointer}
+.cva-hit:hover{opacity:.78}
+.cva-hit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cva-act{background:none;border:0;padding:0;margin-top:6px;color:var(--primary);font-size:12px;font-weight:600;text-align:left;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.cva-act:hover{color:var(--primary-hover);text-decoration:underline;opacity:1}
+.cva-act:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.cva-act svg{width:12px;height:12px;flex:none}
+.cva-dchip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:500;color:var(--muted)}
+.cva-dchip:hover{border-color:var(--primary);color:var(--primary)}
+.cva-dchip.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:600}
+.cva-dchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Active-cohort strip */
+.cva-co{background:var(--primary-soft);border:1px solid var(--primary);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px}
+.cva-co-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cva-co-lbl{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em}
+.cva-cochip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--primary);border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:600;color:var(--primary)}
+.cva-cochip .f{color:var(--muted);font-weight:500}
+.cva-cochip button{background:none;border:0;padding:0;color:var(--primary);font-size:14px;line-height:1;display:grid;place-items:center}
+.cva-cochip button:hover{color:var(--danger);opacity:1}
+.cva-cochip button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.cva-co-stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid rgba(11,97,194,.2)}
+.cva-st{font-size:12px;color:var(--muted)}
+.cva-st b{display:block;font-size:16px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;margin-top:1px}
+.cva-st .sm{display:block;font-size:12px;font-weight:600;color:var(--text);margin-top:1px}
+.cva-co-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid rgba(11,97,194,.2)}
+
+.cva-sort{background:none;border:0;color:var(--muted);font:inherit;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px;padding:0}
+.cva-sort:hover{color:var(--primary)}
+.cva-sort:focus-visible{outline:none;color:var(--primary);text-decoration:underline}
+.cva-sort svg{width:12px;height:12px}
+.cva-sort.on{color:var(--primary)}
+.cva-rank{font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);width:36px}
+.cva-summary{max-width:360px;font-size:12.5px;color:var(--text)}
+.cva-conf{display:flex;align-items:center;gap:7px;min-width:90px}
+.cva-conf .bar{height:6px}
+.cva-conf b{font-size:12px;font-variant-numeric:tabular-nums}
+.cva-tw{overflow-x:auto}
+.cva-note{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--border)}
+.cva-note svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--info)}
+.cva-empty{text-align:center;padding:40px 20px;color:var(--muted)}
+@media (max-width:1280px){.cva-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:1024px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .cva-scope{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .content{padding:16px}
+  .topbar{padding:0 16px}
+  .search{width:auto;flex:1}
+  .cva-grid{grid-template-columns:1fr}
+  .cva-scope{grid-template-columns:1fr}
+  .cva-co-stats{gap:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+            <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+      </a>
+      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
+      </a>
+    </nav>
+    <div class="nav-label">Hiring Workflow</div>
+    <nav>
+      <a class="nav-item" href="import-cvs.page.html" data-testid="nav-import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
+      </a>
+      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
+      </a>
+      <a class="nav-item" href="results.page.html" data-testid="nav-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
+      </a>
+      <a class="nav-item active" href="cv-analysis-dashboard.page.html" data-testid="nav-cv-analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>CV Analysis
+      </a>
+      <a class="nav-item" href="online-visibility-analysis.page.html" data-testid="nav-online-presence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Online Presence
+      </a>
+      <a class="nav-item" href="written-exam.page.html" data-testid="nav-written-exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Written Exam
+      </a>
+      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
+      </a>
+      <a class="nav-item" href="assessment-summary-report.page.html" data-testid="nav-assessment-report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13l2 2 4-4"/></svg>Summary Report
+      </a>
+      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
+      </a>
+    </nav>
+    <div class="nav-label">Talent & System</div>
+    <nav>
+      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
+      </a>
+      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
+      </a>
+      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </a>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><a href="results.page.html">Screening Results</a> / <b>CV Analysis Dashboard</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>CV Analysis Dashboard</h1>
+          <p>Click any chart segment to build a cohort · AI-assistive, read-only — decisions stay with HR</p>
+        </div>
+        <a class="btn btn-ghost" href="exports.page.html" data-testid="cva-export-excel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export to Excel
+        </a>
+      </div>
+
+      <!-- Scope selector -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-body">
+          <div class="cva-scope">
+            <div class="field" style="margin:0">
+              <label for="cva-position">Position</label>
+              <select id="cva-position" data-testid="cva-scope-position" onchange="cvaScope()">
+                <option value="sbm" selected>Sr. Brand Manager — Marketing</option>
+                <option value="tmo">Trade Marketing Officer — Marketing</option>
+                <option value="qac">QA Chemist — QA/QC</option>
+              </select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="cva-batch">Batch</label>
+              <select id="cva-batch" data-testid="cva-scope-batch" onchange="cvaScope()">
+                <option value="" selected>All batches</option>
+                <option value="Jun-2026 Trade Mktg Drive">Jun-2026 Trade Mktg Drive</option>
+                <option value="May-2026 Sales Expansion">May-2026 Sales Expansion</option>
+              </select>
+            </div>
+            <a class="btn btn-ghost" href="online-visibility-analysis.page.html" data-testid="cva-open-presence" style="height:38px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Run online presence analysis
+            </a>
+            <a class="btn btn-ghost" href="results.page.html" data-testid="cva-open-results" style="height:38px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Open screening results
+            </a>
+          </div>
+          <div class="cva-sum" id="cva-summary" data-testid="cva-summary-line"></div>
+        </div>
+      </div>
+
+      <!-- Active-cohort strip — appears only when a chart selection is live -->
+      <div class="cva-co" id="cva-co" style="display:none" data-testid="cva-cohort">
+        <div class="cva-co-top">
+          <span class="cva-co-lbl">Cohort</span>
+          <span id="cva-co-chips" style="display:contents"></span>
+          <button class="btn btn-ghost btn-sm" data-testid="cva-clear-cohort" onclick="cvaClear()" style="margin-left:auto">Clear cohort</button>
+        </div>
+        <div class="cva-co-stats" id="cva-co-stats"></div>
+        <!-- Hand-offs are navigational/suggestive only — no bulk shortlist or reject from here. -->
+        <div class="cva-co-acts">
+          <a class="btn btn-ghost btn-sm" href="exports.page.html" data-testid="cva-co-export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export this cohort to Excel
+          </a>
+          <a class="btn btn-ghost btn-sm" id="cva-co-cand" href="candidates.page.html" data-testid="cva-co-candidates">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Open in Candidates with these filters
+          </a>
+          <a class="btn btn-ghost btn-sm" href="cv-review.page.html#ai-shortlist" data-testid="cva-co-shortlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Get shortlist suggestions for this cohort
+          </a>
+        </div>
+      </div>
+
+      <!-- Insight cards — every segment is clickable and cross-filters the rest -->
+      <div class="cva-grid" data-testid="cva-insight-grid">
+        <div class="cva-card" data-testid="cva-card-score">
+          <h3>Match-score distribution</h3>
+          <div class="cva-chart" id="cva-ch-score"></div>
+          <div class="cva-legend">
+            <span><i style="background:var(--danger)"></i>&lt;50 low</span>
+            <span><i style="background:var(--warn)"></i>50–74 mid</span>
+            <span><i style="background:var(--success)"></i>&ge;75 strong</span>
+          </div>
+          <div class="cva-take" id="cva-tk-score"></div>
+        </div>
+        <div class="cva-card" data-testid="cva-card-skills">
+          <h3>Required-skill coverage</h3>
+          <div class="cva-chart" id="cva-ch-skills"></div>
+          <div class="cva-take" id="cva-tk-skills"></div>
+        </div>
+        <div class="cva-card" data-testid="cva-card-flags">
+          <h3>Red-flag frequency</h3>
+          <div class="cva-chart" id="cva-ch-flags"></div>
+          <div class="cva-take" id="cva-tk-flags"></div>
+        </div>
+        <div class="cva-card" data-testid="cva-card-conf">
+          <h3>Parsing-confidence bands</h3>
+          <div class="cva-chart" id="cva-ch-conf"></div>
+          <div class="cva-legend">
+            <span><i style="background:var(--success)"></i>&ge;90 high</span>
+            <span><i style="background:var(--warn)"></i>70–89 medium</span>
+            <span><i style="background:var(--danger)"></i>&lt;70 low</span>
+          </div>
+          <div class="cva-take" id="cva-tk-conf"></div>
+        </div>
+        <div class="cva-card" data-testid="cva-card-exp">
+          <h3>Experience &amp; education mix</h3>
+          <div class="cva-chart" id="cva-ch-exp"></div>
+          <div class="cva-take" id="cva-tk-exp"></div>
+        </div>
+        <div class="cva-card" data-testid="cva-card-src">
+          <h3>Source &amp; district spread</h3>
+          <div class="cva-chart" id="cva-ch-src"></div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px" id="cva-ch-dist" data-testid="cva-districts"></div>
+          <div class="cva-take" id="cva-tk-src"></div>
+        </div>
+      </div>
+
+      <!-- Evaluation summaries — drills to the active cohort; View → candidate-detail -->
+      <div class="card">
+        <div class="card-head">
+          <h2>Evaluation Summaries <span style="color:var(--muted);font-weight:500" id="cva-tbl-sub"></span></h2>
+          <span style="font-size:12px;color:var(--muted)">AI-assistive · human decision required</span>
+        </div>
+        <div class="cva-tw">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Candidate</th>
+                <th><button class="cva-sort on" id="cva-sort-sc" data-testid="cva-sort-score" onclick="cvaSort('sc')">Match score <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></th>
+                <th>AI evaluation summary</th>
+                <th>Key signals</th>
+                <th><button class="cva-sort" id="cva-sort-cf" data-testid="cva-sort-confidence" onclick="cvaSort('cf')">Confidence <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="cva-tbody"></tbody>
+          </table>
+        </div>
+        <div id="cva-empty" class="cva-empty" style="display:none" data-testid="cva-empty">
+          <div style="font-weight:600;color:var(--text);font-size:15px">No candidates in this cohort</div>
+          <p style="margin-top:6px;font-size:13px">Remove a filter to widen it.</p>
+          <button class="btn btn-ghost btn-sm" onclick="cvaClear()" style="margin-top:12px" data-testid="cva-empty-clear">Clear cohort</button>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);text-align:center" id="cva-expand-wrap">
+          <button class="btn btn-ghost btn-sm" id="cva-expand" data-testid="cva-show-all" onclick="cvaExpand()">Show all</button>
+        </div>
+        <div class="cva-note" data-testid="cva-governance-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>Summaries are AI-assistive rankings, not decisions — no candidate is rejected or advanced from this view. Cohort filtering, exports and hand-offs never change a candidate's status. Open a candidate to review evidence and act. Demographic (age/gender) analytics are intentionally not shown, pending STL policy &amp; local labour-law approval.</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Single source-of-truth fixture, shared with exports.page.html so the numbers
+     in an export can never drift from the numbers on this dashboard. -->
+<script src="../assets/js/stl-fixtures.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   CVA — pool analytics with cross-filtering.
+   SINGLE SOURCE OF TRUTH: CVA_POOL. Every chart, the cohort stats and
+   the table all derive from it, so any selection produces a cohort
+   whose recomputed numbers add up. No hard-coded chart values.
+   Charts are hand-built inline SVG (no libraries); in the React build
+   these become recharts. All globals `cva`/`CVA`-prefixed — no
+   native-DOM shadowing.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Data comes from the shared fixture (assets/js/stl-fixtures.js) — the same
+   module exports.page.html reads, so chart counts and export rows always agree.
+   The pool is seeded, so every load yields the identical 120 candidates. */
+var CVA_SKILLS=STLF.SKILLS;
+/* Skills that also exist in candidates.page.html's FLT_SKILLS vocabulary — only these
+   survive the "Open in Candidates" hand-off; the rest are position-specific here. */
+var CVA_R5_SKILLS=['Brand Management','Trade Marketing','Market Research'];
+var CVA_FLAGS=STLF.FLAGS,CVA_SRCS=STLF.SRCS,CVA_DISTS=STLF.DISTS,CVA_EDU=STLF.EDU;
+var CVA_SCB=STLF.SCB,CVA_CFB=STLF.CFB,CVA_EXB=STLF.EXB,CVA_POS=STLF.POS;
+function cvaScK(v){return STLF.scK(v)}
+function cvaCfK(v){return STLF.cfK(v)}
+function cvaExK(v){return STLF.exK(v)}
+function cvaBandL(b,k){return STLF.bandL(b,k)}
+function cvaBandOf(b,k){return STLF.bandOf(b,k)}
+function cvaBuildPool(cfg){return STLF.pool(cfg)}
+function cvaSummary(c,pos){return STLF.summary(c,pos)}
+
+var CVA_POOL=[],CVA_SORT='sc',CVA_ALL=false;
+
+/* ── Cohort selection ─────────────────────────────────────────────────
+   AND across facet types, OR within one facet's segments.
+   Deliberately NO age/gender facet — the sensitive-criteria line. */
+function cvaBlank(){return{score:[],conf:[],skillHas:[],skillMissing:[],flag:[],exp:[],edu:[],src:[],dist:[]}}
+var CVA_SEL=cvaBlank();
+var CVA_FLBL={score:'Score',conf:'Confidence',skillHas:'Has skill',skillMissing:'Missing skill',flag:'Flag',exp:'Experience',edu:'Education',src:'Source',dist:'District'};
+
+/* `except` omits one facet so a chart never filters itself — every segment
+   stays visible and clickable while the OTHER charts recompute. */
+function cvaMatch(c,except){
+  var S=CVA_SEL;
+  if(except!=='score'&&S.score.length&&S.score.indexOf(cvaScK(c.sc))<0)return false;
+  if(except!=='conf'&&S.conf.length&&S.conf.indexOf(cvaCfK(c.cf))<0)return false;
+  if(except!=='skill'){
+    if(S.skillHas.length&&!S.skillHas.some(function(k){return c.sk.indexOf(k)>-1}))return false;
+    if(S.skillMissing.length&&!S.skillMissing.some(function(k){return c.sk.indexOf(k)<0}))return false;
+  }
+  if(except!=='flag'&&S.flag.length&&!S.flag.some(function(f){return c.rf.indexOf(f)>-1}))return false;
+  if(except!=='exp'&&S.exp.length&&S.exp.indexOf(cvaExK(c.yr))<0)return false;
+  if(except!=='edu'&&S.edu.length&&S.edu.indexOf(c.ed)<0)return false;
+  if(except!=='src'&&S.src.length&&S.src.indexOf(c.so)<0)return false;
+  if(except!=='dist'&&S.dist.length&&S.dist.indexOf(c.d)<0)return false;
+  return true;
+}
+function cvaCohort(except){return CVA_POOL.filter(function(c){return cvaMatch(c,except)})}
+function cvaAny(){return Object.keys(CVA_SEL).some(function(k){return CVA_SEL[k].length})}
+
+function cvaPick(k,v){
+  var a=CVA_SEL[k],i=a.indexOf(v);
+  if(i>-1)a.splice(i,1);else a.push(v);
+  CVA_ALL=false;
+  cvaRenderAll();
+}
+function cvaClear(){CVA_SEL=cvaBlank();CVA_ALL=false;cvaRenderAll()}
+
+/* Event delegation — keeps SVG segments free of inline handlers and avoids
+   quoting hazards with values like "A&P Budgeting". */
+document.addEventListener('click',function(e){
+  var t=e.target.closest?e.target.closest('.cva-hit[data-k]'):null;
+  if(t)cvaPick(t.dataset.k,t.dataset.v);
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var t=e.target.closest?e.target.closest('.cva-hit[data-k]'):null;
+  if(t){e.preventDefault();cvaPick(t.dataset.k,t.dataset.v)}
+});
+function cvaEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function cvaScope(){
+  var cfg=CVA_POS[document.getElementById('cva-position').value];
+  var batch=document.getElementById('cva-batch').value;
+  CVA_POOL=cvaBuildPool(cfg).filter(function(c){return !batch||c.ba===batch});
+  CVA_SEL=cvaBlank();CVA_ALL=false;
+  cvaRenderAll();
+}
+
+/* ── SVG helpers ─────────────────────────────────────────────────── */
+function cvaBandHex(v){return v<50?'var(--danger)':v<75?'var(--warn)':'var(--success)'}
+function cvaConfHex(v){return v>=90?'var(--success)':v>=70?'var(--warn)':'var(--danger)'}
+
+/* Vertical histogram — each bar is a selectable segment */
+function cvaHisto(el,bk,key){
+  var W=300,H=120,pad=18,max=Math.max.apply(null,bk.map(function(b){return b.v}))||1;
+  var bw=(W-8)/bk.length,any=CVA_SEL[key].length>0;
+  var s='<svg viewBox="0 0 '+W+' '+(H+pad)+'" role="group" aria-label="'+cvaEsc(CVA_FLBL[key])+' distribution — select a band to filter">';
+  bk.forEach(function(b,i){
+    var h=Math.round(b.v/max*(H-24)),x=4+i*bw,y=H-Math.max(h,2);
+    var sel=CVA_SEL[key].indexOf(b.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(b.k)+'" data-testid="cva-seg-'+key+'-'+cvaEsc(b.k)+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(b.l)+': '+b.v+' candidates'+(sel?' — selected':'')+'">';
+    s+='<rect x="'+(x+1)+'" y="0" width="'+(bw-2)+'" height="'+(H+pad)+'" fill="transparent"/>';
+    s+='<rect x="'+(x+4)+'" y="'+y+'" width="'+(bw-8)+'" height="'+Math.max(h,2)+'" rx="4" fill="'+b.c+'" fill-opacity="'+(any&&!sel?'.32':'1')+'"'+(sel?' stroke="var(--text)" stroke-width="2"':'')+'/>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(y-5)+'" font-size="10.5" font-weight="600" fill="#0F172A" text-anchor="middle">'+b.v+'</text>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(H+13)+'" font-size="9.5" fill="'+(sel?'#0B61C2':'#64748B')+'" font-weight="'+(sel?'700':'400')+'" text-anchor="middle">'+cvaEsc(b.l)+'</text>';
+    s+='</g>';
+  });
+  document.getElementById(el).innerHTML=s+'</svg>';
+}
+
+/* Horizontal labelled bars — each row selectable; rows carry their own facet key */
+function cvaHBars(el,rows,unit){
+  var W=300,rh=25,LW=118,max=Math.max.apply(null,rows.map(function(r){return r.v}))||1;
+  var s='<svg viewBox="0 0 '+W+' '+(rows.length*rh)+'" role="group" aria-label="Select a row to filter">';
+  rows.forEach(function(r,i){
+    var y=i*rh,w=Math.max(2,Math.round(r.v/max*(W-LW-42)));
+    var any=CVA_SEL[r.key].length>0,sel=CVA_SEL[r.key].indexOf(r.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+r.key+'" data-v="'+cvaEsc(r.k)+'" data-testid="cva-seg-'+r.key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(r.l)+': '+r.v+cvaEsc(unit)+(sel?' — selected':'')+'">';
+    s+='<rect x="0" y="'+y+'" width="'+W+'" height="'+rh+'" fill="transparent"/>';
+    s+='<text x="0" y="'+(y+15)+'" font-size="10.5" fill="'+(sel?'#0B61C2':'#0F172A')+'" font-weight="'+(sel?'700':'400')+'">'+cvaEsc(r.l)+'</text>';
+    s+='<rect x="'+LW+'" y="'+(y+6)+'" width="'+(W-LW-42)+'" height="11" rx="5" fill="#F1F5F9"/>';
+    s+='<rect x="'+LW+'" y="'+(y+6)+'" width="'+w+'" height="11" rx="5" fill="'+r.c+'" fill-opacity="'+(any&&!sel?'.32':'1')+'"'+(sel?' stroke="var(--text)" stroke-width="1.5"':'')+'/>';
+    s+='<text x="'+W+'" y="'+(y+15)+'" font-size="10.5" font-weight="600" fill="#0F172A" text-anchor="end">'+r.v+cvaEsc(unit)+'</text>';
+    s+='</g>';
+  });
+  document.getElementById(el).innerHTML=s+'</svg>';
+}
+
+/* Donut — each slice + its legend row selectable */
+function cvaDonut(el,slices,colors,key){
+  var total=slices.reduce(function(a,b){return a+b.v},0)||1,C=52,R=40,SW=16,circ=2*Math.PI*R,off=0;
+  var any=CVA_SEL[key].length>0;
+  var s='<svg viewBox="0 0 240 110" role="group" aria-label="Source spread — select a source to filter"><g transform="translate('+C+',55)">';
+  slices.forEach(function(sl,i){
+    var frac=sl.v/total,len=frac*circ,sel=CVA_SEL[key].indexOf(sl.k)>-1;
+    s+='<circle class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(sl.k)+'" data-testid="cva-seg-'+key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(sl.l)+': '+sl.v+' candidates'+(sel?' — selected':'')+'" r="'+R+'" fill="none" stroke="'+colors[i%colors.length]+'" stroke-opacity="'+(any&&!sel?'.3':'1')+'" stroke-width="'+(sel?SW+4:SW)+'" stroke-dasharray="'+len+' '+(circ-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90)"/>';
+    off+=len;
+  });
+  s+='<text font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle" dy="1">'+total+'</text><text font-size="8.5" fill="#64748B" text-anchor="middle" dy="13">CVs</text></g>';
+  slices.forEach(function(sl,i){
+    var y=14+i*19,sel=CVA_SEL[key].indexOf(sl.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(sl.k)+'" data-testid="cva-leg-'+key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(sl.l)+(sel?' — selected':'')+'">';
+    s+='<rect x="112" y="'+(y-11)+'" width="128" height="17" fill="transparent"/>';
+    s+='<rect x="118" y="'+(y-8)+'" width="9" height="9" rx="3" fill="'+colors[i%colors.length]+'" fill-opacity="'+(any&&!sel?'.3':'1')+'"/>';
+    s+='<text x="132" y="'+y+'" font-size="10" fill="'+(sel?'#0B61C2':'#0F172A')+'" font-weight="'+(sel?'700':'400')+'">'+cvaEsc(sl.l)+'</text>';
+    s+='<text x="236" y="'+y+'" font-size="10" font-weight="600" fill="#0F172A" text-anchor="end">'+Math.round(sl.v/total*100)+'%</text>';
+    s+='</g>';
+  });
+  document.getElementById(el).innerHTML=s+'</svg>';
+}
+
+/* ── Render ──────────────────────────────────────────────────────── */
+function cvaRenderAll(){
+  var cfg=CVA_POS[document.getElementById('cva-position').value];
+  var P=CVA_POOL,N=P.length||1;
+  var strong=P.filter(function(c){return c.sc>=75}).length;
+  var avgSc=Math.round(P.reduce(function(a,c){return a+c.sc},0)/N);
+  var avgCf=Math.round(P.reduce(function(a,c){return a+c.cf},0)/N);
+  document.getElementById('cva-summary').innerHTML=
+    '<b>'+P.length+'</b> CVs analyzed · <b>'+strong+'</b> scoring ≥75% (auto-shortlist band) · avg match <b>'+avgSc+'%</b> · avg parsing confidence <b>'+avgCf+'%</b> — '+cfg.name+' · '+cfg.dept;
+
+  /* 1 — match-score histogram */
+  var Ps=cvaCohort('score'),Ns=Ps.length||1;
+  cvaHisto('cva-ch-score',CVA_SCB.map(function(b){
+    return {k:b.k,l:b.l,c:b.c,v:Ps.filter(function(c){return c.sc>=b.lo&&c.sc<b.hi}).length};
+  }),'score');
+  var p80=Math.round(Ps.filter(function(c){return c.sc>=80}).length/Ns*100);
+  var n70=Ps.filter(function(c){return c.sc>=70}).length;
+  document.getElementById('cva-tk-score').innerHTML=
+    '<b>'+p80+'%</b> scored ≥80% — the standout band is '+(p80>=25?'deep':'thin')+'.'+
+    '<a class="cva-act" href="cv-review.page.html#ai-shortlist" data-testid="cva-drill-shortlist">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'+
+    'Preview a wider shortlist (lower to 70% → '+n70+' candidates)</a>';
+
+  /* 2 — required-skill coverage */
+  var Pk=cvaCohort('skill'),Nk=Pk.length||1;
+  var skRows=CVA_SKILLS.map(function(k){
+    return {key:'skillHas',k:k,l:k,c:'var(--primary)',v:Math.round(Pk.filter(function(c){return c.sk.indexOf(k)>-1}).length/Nk*100)};
+  }).sort(function(a,b){return b.v-a.v});
+  cvaHBars('cva-ch-skills',skRows,'%');
+  var worst=skRows[skRows.length-1],nMiss=Pk.filter(function(c){return c.sk.indexOf(worst.k)<0}).length;
+  document.getElementById('cva-tk-skills').innerHTML=
+    'Biggest gap: <b>'+cvaEsc(worst.l)+'</b> — only '+worst.v+'% of the pool has it.'+
+    '<button class="cva-act cva-hit" data-k="skillMissing" data-v="'+cvaEsc(worst.k)+'" data-testid="cva-drill-skillgap">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'View the '+nMiss+' candidates missing it</button>';
+
+  /* 3 — red flags */
+  var Pf=cvaCohort('flag'),Nf=Pf.length||1;
+  var rfRows=CVA_FLAGS.map(function(f){
+    return {key:'flag',k:f,l:f,c:'var(--caution)',v:Pf.filter(function(c){return c.rf.indexOf(f)>-1}).length};
+  }).sort(function(a,b){return b.v-a.v});
+  cvaHBars('cva-ch-flags',rfRows,'');
+  var anyRf=Pf.filter(function(c){return c.rf.length}).length;
+  document.getElementById('cva-tk-flags').innerHTML=
+    '<b>'+Math.round(anyRf/Nf*100)+'%</b> of CVs carry at least one flag. Flags are review signals, not disqualifiers.'+
+    '<button class="cva-act cva-hit" data-k="flag" data-v="'+cvaEsc(rfRows[0].k)+'" data-testid="cva-drill-flag">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'Review the '+rfRows[0].v+' with '+cvaEsc(rfRows[0].l.toLowerCase())+'</button>';
+
+  /* 4 — parsing-confidence bands */
+  var Pc=cvaCohort('conf');
+  cvaHisto('cva-ch-conf',CVA_CFB.map(function(b){
+    return {k:b.k,l:b.l,c:b.c,v:Pc.filter(function(c){return c.cf>=b.lo&&c.cf<b.hi}).length};
+  }),'conf');
+  var nLow=Pc.filter(function(c){return c.cf<70}).length;
+  document.getElementById('cva-tk-conf').innerHTML=
+    '<b>'+nLow+'</b> CVs parsed below 70% confidence — their scores rest on shaky extraction.'+
+    '<button class="cva-act cva-hit" data-k="conf" data-v="low" data-testid="cva-drill-conf">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'Review those '+nLow+' (spot-check before relying on them)</button>';
+
+  /* 5 — experience + education (two facets, one card) */
+  var Pe=cvaCohort('exp'),Pd=cvaCohort('edu');
+  var exRows=CVA_EXB.map(function(b){
+    return {key:'exp',k:b.k,l:b.l,c:'var(--primary)',v:Pe.filter(function(c){return cvaExK(c.yr)===b.k}).length};
+  });
+  var edRows=CVA_EDU.map(function(e){
+    return {key:'edu',k:e,l:e,c:'var(--info)',v:Pd.filter(function(c){return c.ed===e}).length};
+  });
+  cvaHBars('cva-ch-exp',exRows.concat(edRows),'');
+  var Nx=Pe.length||1,sweet=exRows[1].v+exRows[2].v;
+  document.getElementById('cva-tk-exp').innerHTML=
+    '<b>'+Math.round(sweet/Nx*100)+'%</b> sit in the 3–10 yr band this role targets; '+edRows[1].v+' hold a Master’s / MBA.'+
+    '<button class="cva-act cva-hit" data-k="exp" data-v="6-10" data-testid="cva-drill-exp">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'View the '+exRows[2].v+' with 6–10 yrs</button>';
+
+  /* 6 — source donut + clickable district chips */
+  var Pso=cvaCohort('src');
+  var srcS=CVA_SRCS.map(function(s){return {k:s,l:s,v:Pso.filter(function(c){return c.so===s}).length}});
+  cvaDonut('cva-ch-src',srcS,['var(--primary)','var(--accent)','var(--info)','var(--caution)'],'src');
+  var Pdi=cvaCohort('dist');
+  var dTop=CVA_DISTS.map(function(d){return {k:d,v:Pdi.filter(function(c){return c.d===d}).length}}).sort(function(a,b){return b.v-a.v}).slice(0,5);
+  document.getElementById('cva-ch-dist').innerHTML='<span style="font-size:11.5px;color:var(--muted);align-self:center;margin-right:2px">Top districts:</span>'+
+    dTop.map(function(d){
+      var sel=CVA_SEL.dist.indexOf(d.k)>-1;
+      return '<button class="cva-dchip cva-hit'+(sel?' on':'')+'" data-k="dist" data-v="'+cvaEsc(d.k)+'" data-testid="cva-seg-dist-'+cvaEsc(d.k)+'" aria-pressed="'+sel+'">'+cvaEsc(d.k)+' ('+d.v+')</button>';
+    }).join('');
+  var topSrc=srcS.slice().sort(function(a,b){return b.v-a.v})[0];
+  document.getElementById('cva-tk-src').innerHTML='<b>'+cvaEsc(topSrc.l)+'</b> is the dominant intake channel. Click a slice or district to compare cohorts.';
+
+  cvaCohortStrip();
+  cvaTable();
+}
+
+/* ── Cohort strip: chips + live stats + hand-offs ────────────────── */
+function cvaCohortStrip(){
+  var box=document.getElementById('cva-co');
+  if(!cvaAny()){box.style.display='none';return}
+  box.style.display='';
+
+  var ch='';
+  Object.keys(CVA_SEL).forEach(function(k){
+    CVA_SEL[k].forEach(function(v){
+      var lbl=k==='score'?cvaBandL(CVA_SCB,v):k==='conf'?cvaBandL(CVA_CFB,v):k==='exp'?cvaBandL(CVA_EXB,v):v;
+      ch+='<span class="cva-cochip" data-testid="cva-chip-'+k+'"><span class="f">'+CVA_FLBL[k]+':</span>'+cvaEsc(lbl)+
+        '<button class="cva-hit" data-k="'+k+'" data-v="'+cvaEsc(v)+'" aria-label="Remove filter '+cvaEsc(lbl)+'" data-testid="cva-chip-remove-'+k+'">×</button></span>';
+    });
+  });
+  document.getElementById('cva-co-chips').innerHTML=ch;
+
+  var C=cvaCohort(),n=C.length,d=n||1;
+  var avg=Math.round(C.reduce(function(a,c){return a+c.sc},0)/d);
+  var top=Math.round(C.filter(function(c){return c.sc>=75}).length/d*100);
+  var cf=Math.round(C.reduce(function(a,c){return a+c.cf},0)/d);
+  var fl=Math.round(C.filter(function(c){return c.rf.length}).length/d*100);
+  var cov=CVA_SKILLS.map(function(k){return {l:k,v:C.filter(function(c){return c.sk.indexOf(k)>-1}).length}}).sort(function(a,b){return b.v-a.v});
+  var t3=cov.slice(0,3).map(function(x){return x.l}).join(', ')||'—';
+  var g3=cov.slice(-3).reverse().map(function(x){return x.l}).join(', ')||'—';
+  document.getElementById('cva-co-stats').innerHTML=
+    '<div class="cva-st" data-testid="cva-stat-size">Candidates<b>'+n+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-avg">Avg match<b>'+(n?avg+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-strong">In ≥75 band<b>'+(n?top+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-conf">Avg confidence<b>'+(n?cf+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-flags">Red-flag rate<b>'+(n?fl+'%':'—')+'</b></div>'+
+    '<div class="cva-st" style="max-width:190px">Top skills<span class="sm">'+cvaEsc(n?t3:'—')+'</span></div>'+
+    '<div class="cva-st" style="max-width:190px">Top gaps<span class="sm">'+cvaEsc(n?g3:'—')+'</span></div>';
+
+  document.getElementById('cva-co-cand').href=cvaCandUrl();
+}
+
+/* Hand-off deep link — pre-applies the Round-5 `flt-` facets on candidates.page.html.
+   Only facets present in that page's vocabulary carry over. */
+function cvaCandUrl(){
+  var p=new URLSearchParams(),S=CVA_SEL;
+  var sk=S.skillHas.filter(function(k){return CVA_R5_SKILLS.indexOf(k)>-1});
+  if(sk.length)p.set('skills',sk.join('|'));
+  if(S.flag.length)p.set('flags',S.flag.join('|'));
+  if(S.src.length)p.set('srcs',S.src.join('|'));
+  if(S.dist.length)p.set('district',S.dist[0]);   /* R5 District is single-select */
+  if(S.edu.length)p.set('education',S.edu[0]);
+  if(S.score.length){
+    var b=S.score.map(function(k){return cvaBandOf(CVA_SCB,k)});
+    p.set('scMin',Math.min.apply(null,b.map(function(x){return x.lo})));
+    p.set('scMax',Math.max.apply(null,b.map(function(x){return x.hi-1})));
+  }
+  if(S.conf.length){
+    var b2=S.conf.map(function(k){return cvaBandOf(CVA_CFB,k)});
+    p.set('cfMin',Math.min.apply(null,b2.map(function(x){return x.lo})));
+    p.set('cfMax',Math.max.apply(null,b2.map(function(x){return x.hi-1})));
+  }
+  if(S.exp.length){
+    var b3=S.exp.map(function(k){return cvaBandOf(CVA_EXB,k)});
+    p.set('yrMin',Math.min.apply(null,b3.map(function(x){return x.lo})));
+    p.set('yrMax',Math.max.apply(null,b3.map(function(x){return x.hi})));
+  }
+  p.set('adv','1');
+  return 'candidates.page.html?'+p.toString();
+}
+
+/* ── Evaluation-summaries table (drill-through) ──────────────────── */
+function cvaSort(k){CVA_SORT=k;cvaTable()}
+function cvaExpand(){CVA_ALL=!CVA_ALL;cvaTable()}
+function cvaTable(){
+  var cfg=CVA_POS[document.getElementById('cva-position').value];
+  var rows=cvaCohort().slice().sort(function(a,b){return b[CVA_SORT]-a[CVA_SORT]});
+  var shown=CVA_ALL?rows:rows.slice(0,15);
+  document.getElementById('cva-sort-sc').classList.toggle('on',CVA_SORT==='sc');
+  document.getElementById('cva-sort-cf').classList.toggle('on',CVA_SORT==='cf');
+
+  var desc='';
+  Object.keys(CVA_SEL).forEach(function(k){
+    CVA_SEL[k].forEach(function(v){
+      var lbl=k==='score'?cvaBandL(CVA_SCB,v):k==='conf'?cvaBandL(CVA_CFB,v):k==='exp'?cvaBandL(CVA_EXB,v):v;
+      desc+=' · '+CVA_FLBL[k]+': '+lbl;
+    });
+  });
+  document.getElementById('cva-tbl-sub').textContent=
+    (cvaAny()?'Showing '+rows.length+' candidates'+desc:'top '+shown.length+' of '+rows.length)+
+    ' · ranked by '+(CVA_SORT==='sc'?'match score':'parsing confidence');
+
+  var h='';
+  shown.forEach(function(c,i){
+    var ini=c.n.split(' ').map(function(w){return w[0]}).slice(0,2).join('').toUpperCase();
+    /* Row chips are themselves cohort entry points — pivot from one candidate
+       to "everyone like this". */
+    var sig=c.sk.slice(0,2).map(function(s){
+      return '<button class="chip cva-hit" data-k="skillHas" data-v="'+cvaEsc(s)+'" data-testid="cva-rowchip-skill" aria-label="Filter to candidates with '+cvaEsc(s)+'">'+cvaEsc(s)+'</button>';
+    }).join(' ');
+    if(c.rf.length)sig+=' <button class="badge b-cau cva-hit" data-k="flag" data-v="'+cvaEsc(c.rf[0])+'" data-testid="cva-rowchip-flag" aria-label="Filter to candidates flagged '+cvaEsc(c.rf[0])+'" style="border:0">'+cvaEsc(c.rf[0])+'</button>';
+    h+='<tr data-testid="cva-row-'+(i+1)+'">'+
+      '<td class="cva-rank">'+(i+1)+'</td>'+
+      '<td><div class="cand"><span class="ava">'+ini+'</span><div><div style="font-weight:600">'+c.n+'</div><small>'+c.e+'</small></div></div></td>'+
+      '<td><div class="score"><div class="bar"><i style="width:'+c.sc+'%;background:'+cvaBandHex(c.sc)+'"></i></div><b>'+c.sc+'%</b></div></td>'+
+      '<td class="cva-summary">'+cvaEsc(cvaSummary(c,cfg))+'</td>'+
+      '<td>'+sig+'</td>'+
+      '<td><div class="cva-conf"><div class="bar"><i style="width:'+c.cf+'%;background:'+cvaConfHex(c.cf)+'"></i></div><b>'+c.cf+'%</b></div></td>'+
+      '<td><a class="btn btn-ghost btn-sm" href="candidate-detail.page.html" data-testid="cva-view-'+(i+1)+'">View</a></td>'+
+    '</tr>';
+  });
+  document.getElementById('cva-tbody').innerHTML=h;
+  document.getElementById('cva-empty').style.display=rows.length?'none':'';
+  document.getElementById('cva-expand-wrap').style.display=rows.length>15?'':'none';
+  document.getElementById('cva-expand').textContent=CVA_ALL?'Show top 15':'Show all '+rows.length;
+}
+
+/* Cohort compare (R9 §6 stretch) intentionally skipped: pinning two cohorts
+   side by side needs a second stats rail and doubles the layout at 1024px.
+   The single-cohort read-out already answers the sourcing question by
+   toggling one source slice at a time. */
+
+cvaScope();
+</script>
+</body>
+</html>

@@ -39,9 +39,9 @@ The `.side-foot` (user info + Sign out → ../auth/login.page.html) is preserved
 
 ## Step Indicator (§8)
 
-Linear flow shown at the top of every position-flow page:
+Linear flow shown at the top of every position-flow page (round 7 added Written Exam and relabeled Interview → Viva, reflecting STL's two-part assessment):
 
-`Template → Import → Process → Review → Shortlist → Hiring Manager → Interview → Hire`
+`Template → Import → Process → Review → Shortlist → Hiring Manager → Written Exam → Viva → Hire`
 
 Step → target page:
 1. Template → template-builder.page.html
@@ -50,8 +50,9 @@ Step → target page:
 4. Review → cv-review.page.html
 5. Shortlist → results.page.html
 6. Hiring Manager → ../hiring-manager/shortlist.page.html
-7. Interview → interview-schedule.page.html
-8. Hire → final-selection.page.html
+7. Written Exam → written-exam.page.html
+8. Viva → interview-schedule.page.html
+9. Hire → final-selection.page.html
 
 Rules: completed steps = green check + clickable link; current step = solid Square-blue dot (not a link); future steps = muted, not links. Injected as the first child of `<main class="content">`.
 

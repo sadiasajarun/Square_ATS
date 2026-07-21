@@ -118,6 +118,31 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
 /* ---- end workflow spine v2 ---- */
+
+/* ---- AI shortlist assistant ---- */
+.ai-think{padding:22px 20px}
+.ai-think-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ai-think-t{font-weight:700;font-size:15px}
+.ai-think-s{font-size:12.5px;color:var(--muted);margin-top:2px}
+.ai-spin{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--primary-soft);border-top-color:var(--primary);animation:aispin .7s linear infinite;flex:none}
+@keyframes aispin{to{transform:rotate(360deg)}}
+.ai-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ai-steps li{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);opacity:.45;transition:opacity .2s}
+.ai-steps li.on{opacity:1;color:var(--text)}
+.ai-steps li .dot{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border);display:grid;place-items:center;flex:none}
+.ai-steps li.on .dot{background:var(--success-s);border-color:var(--success-s);color:var(--success)}
+.ai-steps li .dot svg{width:11px;height:11px;opacity:0}
+.ai-steps li.on .dot svg{opacity:1}
+.ai-rec{display:flex;gap:12px;align-items:flex-start;background:var(--primary-soft);border:1px solid var(--primary);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.ai-rec-badge{background:var(--primary);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;flex:none}
+.ai-rec-body{font-size:13px;line-height:1.55}
+.ai-rec-body b{color:var(--primary)}
+.ai-rec-body ul{margin:6px 0 0 16px;padding:0;font-size:12.5px;color:var(--muted)}
+.sum-facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.opt-why{font-size:11.5px;color:var(--muted);margin-top:5px}
+.opt-count{font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums}
+.opt-card.reco{border-color:var(--primary)}
+.opt-reco-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:var(--primary);color:#fff;padding:2px 7px;border-radius:999px;margin-left:8px}
 </style>
 <!-- page-local style (existing tokens only) -->
 <style>
@@ -279,8 +304,9 @@ table[data-testid="review-table"] td{padding:9px 12px}
 .cvf-presrun .rp-spin{width:15px;height:15px}
 
 /* actions — vertical, tinted, colour-coded */
-.cvf-acts{display:flex;flex-direction:column;gap:4px;align-items:stretch;min-width:100px}
-.cvf-act{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:6px;font-size:11.5px;font-weight:600;border:1px solid transparent;line-height:1.25;text-align:left;background:var(--muted-s);color:var(--muted)}
+.cvf-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;align-items:stretch;min-width:186px}
+.cvf-act{justify-content:flex-start;white-space:nowrap}
+.cvf-act{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;font-size:11.5px;font-weight:600;border:1px solid transparent;line-height:1.25;text-align:left;background:var(--muted-s);color:var(--muted)}
 .cvf-act svg{width:12px;height:12px;flex:none}
 .cvf-act:hover{filter:brightness(.95)}
 .cvf-act-suc{background:var(--success-s);color:var(--success)}
@@ -414,7 +440,7 @@ table[data-testid="review-table"]{min-width:1180px}
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                                        <div class="nav-label">Workspace</div>
+                                            <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -427,12 +453,13 @@ table[data-testid="review-table"]{min-width:1180px}
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
     <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
     <a class="nav-item nav-sub" href="interview-schedule.page.html" data-testid="nav-schedule">Schedule Viva</a>
-    <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
     <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
+    <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
     <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
     <div class="nav-label">Talent &amp; System</div>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
   
   
   
@@ -798,77 +825,34 @@ table[data-testid="review-table"]{min-width:1180px}
       </button>
     </div>
     <div class="modal-body">
-      <!-- Summary -->
-      <div class="sum-box">
-        <b>500 candidates parsed.</b><br>
-        125 (25%) scored ≥80%. &nbsp;230 (46%) scored 60–79%. &nbsp;145 (29%) scored below 60%.
-        <div class="histo" data-testid="shortlist-histogram">
-          <div class="col"><b>145</b><div class="stk" style="height:42%;background:var(--danger)"></div><small>&lt;60%<br>29%</small></div>
-          <div class="col"><b>230</b><div class="stk" style="height:66%;background:var(--warn)"></div><small>60–79%<br>46%</small></div>
-          <div class="col"><b>95</b><div class="stk" style="height:55%;background:var(--info)"></div><small>80–89%<br>19%</small></div>
-          <div class="col"><b>30</b><div class="stk" style="height:30%;background:var(--success)"></div><small>≥90%<br>6%</small></div>
+
+      <!-- AI reasoning state — shown while the assistant works through the pool -->
+      <div class="ai-think" id="aiThink" data-testid="shortlist-thinking">
+        <div class="ai-think-head">
+          <span class="ai-spin" aria-hidden="true"></span>
+          <div>
+            <div class="ai-think-t">Reviewing the pool&hellip;</div>
+            <div class="ai-think-s" id="aiThinkSub">Working through every parsed CV against the screening template.</div>
+          </div>
         </div>
+        <ul class="ai-steps" id="aiSteps" data-testid="shortlist-thinking-steps"></ul>
       </div>
 
-      <!-- Strategy radio-cards -->
-      <div data-testid="shortlist-options">
-        <!-- 1: Top N by score -->
-        <div class="opt-card sel" data-opt="topn" data-testid="shortlist-opt-topn" onclick="selectOpt('topn')">
-          <div class="opt-top">
-            <span class="opt-radio"></span>
-            <div><div class="opt-title">Top N by score</div><div class="opt-desc">Pick the highest-scoring candidates overall.</div></div>
-          </div>
-          <div class="opt-controls" id="ctl-topn">
-            <label style="font-size:12.5px;font-weight:600">Number of candidates: <span id="topnVal">30</span></label>
-            <input type="range" min="5" max="100" value="30" step="1" data-testid="shortlist-topn-slider" oninput="onTopN(this.value)">
-            <div class="opt-preview" id="topnPreview" data-testid="shortlist-topn-preview">Top 30 candidates, all with score ≥78%.</div>
-          </div>
+      <!-- Everything below appears once the assistant has finished -->
+      <div id="aiResult" style="display:none">
+
+        <div class="ai-rec" data-testid="shortlist-recommendation">
+          <div class="ai-rec-badge">AI recommendation</div>
+          <div class="ai-rec-body" id="aiRecBody"></div>
         </div>
 
-        <!-- 2: Above score threshold -->
-        <div class="opt-card" data-opt="threshold" data-testid="shortlist-opt-threshold" onclick="selectOpt('threshold')">
-          <div class="opt-top">
-            <span class="opt-radio"></span>
-            <div><div class="opt-title">Above score threshold</div><div class="opt-desc">Shortlist everyone at or above a chosen match %.</div></div>
-          </div>
-          <div class="opt-controls" id="ctl-threshold" hidden>
-            <label style="font-size:12.5px;font-weight:600">Minimum score: <span id="thrVal">85</span>%</label>
-            <input type="range" min="50" max="95" value="85" step="1" data-testid="shortlist-threshold-slider" oninput="onThreshold(this.value)">
-            <div class="opt-preview" id="thrPreview" data-testid="shortlist-threshold-preview">42 candidates above 85%.</div>
-          </div>
+        <div class="sum-box">
+          <b id="sumHead"></b>
+          <div class="histo" data-testid="shortlist-histogram" id="sumHisto"></div>
+          <div class="sum-facts" id="sumFacts"></div>
         </div>
 
-        <!-- 3: Balanced by skill coverage -->
-        <div class="opt-card" data-opt="balanced" data-testid="shortlist-opt-balanced" onclick="selectOpt('balanced')">
-          <div class="opt-top">
-            <span class="opt-radio"></span>
-            <div><div class="opt-title">Balanced by skill coverage</div><div class="opt-desc">Maximise coverage of every required skill.</div></div>
-          </div>
-          <div class="opt-controls" id="ctl-balanced" hidden>
-            <div class="opt-preview" data-testid="shortlist-balanced-preview">25 candidates covering 100% of required skills.</div>
-          </div>
-        </div>
-
-        <!-- 4: Top N per location -->
-        <div class="opt-card" data-opt="location" data-testid="shortlist-opt-location" onclick="selectOpt('location')">
-          <div class="opt-top">
-            <span class="opt-radio"></span>
-            <div><div class="opt-title">Top N per location</div><div class="opt-desc">Even geographic spread across districts.</div></div>
-          </div>
-          <div class="opt-controls" id="ctl-location" hidden>
-            <label style="font-size:12.5px;font-weight:600">Candidates per district</label>
-            <input type="number" min="1" max="20" value="3" data-testid="shortlist-location-input" style="width:90px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font:inherit" oninput="onLocation(this.value)">
-            <div class="opt-preview" id="locPreview" data-testid="shortlist-location-preview">3 per district × 8 districts = 24 candidates.</div>
-          </div>
-        </div>
-
-        <!-- 5: Manual -->
-        <div class="opt-card" data-opt="manual" data-testid="shortlist-opt-manual" onclick="selectOpt('manual')">
-          <div class="opt-top">
-            <span class="opt-radio"></span>
-            <div><div class="opt-title">Manual</div><div class="opt-desc">Close this and decide row-by-row in the table.</div></div>
-          </div>
-        </div>
+        <div data-testid="shortlist-options" id="optWrap"></div>
       </div>
     </div>
     <div class="modal-foot">
@@ -1699,68 +1683,196 @@ function updateCount(){
 }
 
 /* ---------- Modal ---------- */
-function openModal(){document.getElementById('shortlistModal').style.display='grid';}
+function openModal(){
+  document.getElementById('shortlistModal').style.display='grid';
+  aiRun();                      /* every open re-runs the assistant */
+}
 function closeModal(){document.getElementById('shortlistModal').style.display='none';}
-/* Deep-link hook: the CV Analysis dashboard hands a cohort off here with
-   #ai-shortlist so it reuses this modal instead of rebuilding one. */
-if(location.hash==='#ai-shortlist')openModal();
 
-var currentOpt='topn';
-function selectOpt(opt){
-  currentOpt=opt;
-  document.querySelectorAll('.opt-card').forEach(function(c){
-    var on=c.getAttribute('data-opt')===opt;
-    c.classList.toggle('sel',on);
-    var ctl=c.querySelector('.opt-controls');
-    if(ctl) ctl.hidden=!on;
-  });
-  if(opt==='manual'){closeModal();}
+/* ══════════════════════════════════════════════════════════════════
+   AI shortlist assistant.
+   Strategies are the ones a recruiter actually reasons with: overall
+   fit, hard requirements, risk, data reliability, skill coverage and
+   geography. Every strategy reports a live count and its trade-off, so
+   the choice is informed rather than blind. Nothing here rejects a
+   candidate outright - non-selected rows go to "Rejected - pending HR
+   review", which still requires a human.
+   ══════════════════════════════════════════════════════════════════ */
+var REQ_SKILLS=['Brand Management','Trade Marketing','A&P Budgeting','Market Research','Campaign Management','Consumer Insights'];
+var MIN_EXP=3, MIN_SCORE=70, CONF_OK=90;
+
+function aiYears(c){ var m=String(c.exp||'').match(/\d+/); return m?+m[0]:0; }
+function aiSkills(c){ return (c.skills||[]).concat(c.skillsFull||[]); }
+function aiHasReq(c){ var sk=aiSkills(c); return REQ_SKILLS.filter(function(r){return sk.indexOf(r)>-1;}).length; }
+function aiPool(){ return (typeof cvfScoped==='function') ? cvfScoped() : CANDS; }
+
+/* each strategy: id, label, description, picker, trade-off sentence */
+var AI_STRATS=[
+  {id:'fit', t:'Best overall fit', d:'Highest AI match scores against the screening template.',
+   pick:function(p,n){ return p.slice().sort(function(a,b){return b.score-a.score;}).slice(0,n||10); },
+   why:function(sel){ var lo=sel.filter(function(c){return (c.flags||[]).length>0;}).length;
+     return 'Pure ranking. '+(lo?lo+' of these carry a red flag you would still need to review.':'None of these carry a red flag.'); }},
+
+  {id:'musthave', t:'Meets every must-have', d:'Required skills, minimum '+MIN_EXP+' yrs experience — hard requirements only.',
+   pick:function(p){ return p.filter(function(c){ return aiHasReq(c)>=3 && aiYears(c)>=MIN_EXP; })
+                       .sort(function(a,b){return b.score-a.score;}); },
+   why:function(sel,p){ var miss=p.length-sel.length;
+     return 'Screens on requirements rather than score — '+miss+' candidate(s) fall short of the bar.'; }},
+
+  {id:'clean', t:'Strong and clean record', d:'Score at or above '+MIN_SCORE+'% with no red flags raised.',
+   pick:function(p){ return p.filter(function(c){ return c.score>=MIN_SCORE && (c.flags||[]).length===0; })
+                       .sort(function(a,b){return b.score-a.score;}); },
+   why:function(sel,p){ var flagged=p.filter(function(c){return c.score>=MIN_SCORE&&(c.flags||[]).length>0;}).length;
+     return 'Lowest-risk pick. Excludes '+flagged+' strong scorer(s) that carry a flag — worth a second look before discarding.'; }},
+
+  {id:'reliable', t:'Reliable extraction only', d:'Parsing confidence '+CONF_OK+'%+ so scores rest on clean data.',
+   pick:function(p){ return p.filter(function(c){ return c.conf>=CONF_OK && c.score>=MIN_SCORE; })
+                       .sort(function(a,b){return b.score-a.score;}); },
+   why:function(sel,p){ var shaky=p.filter(function(c){return c.conf<CONF_OK;}).length;
+     return 'Guards against scoring on a badly parsed CV — '+shaky+' candidate(s) parsed below '+CONF_OK+'% are held back for a spot-check.'; }},
+
+  {id:'coverage', t:'Balanced skill coverage', d:'Smallest set that collectively covers every required skill.',
+   pick:function(p){ var need=REQ_SKILLS.slice(), out=[], pool=p.slice().sort(function(a,b){return b.score-a.score;});
+     while(need.length && pool.length){
+       var best=null,bi=-1,bc=-1;
+       pool.forEach(function(c,i){ var sk=aiSkills(c); var got=need.filter(function(r){return sk.indexOf(r)>-1;}).length;
+         if(got>bc){bc=got;best=c;bi=i;} });
+       if(bc<=0) break;
+       out.push(best); pool.splice(bi,1);
+       var sk=aiSkills(best); need=need.filter(function(r){return sk.indexOf(r)<0;});
+     }
+     return out; },
+   why:function(sel){ var cov={}; sel.forEach(function(c){ aiSkills(c).forEach(function(k){cov[k]=1;}); });
+     var got=REQ_SKILLS.filter(function(r){return cov[r];}).length;
+     return 'Covers '+got+' of '+REQ_SKILLS.length+' required skills with the fewest people — good for a lean interview panel.'; }},
+
+  {id:'geo', t:'Geographic spread', d:'Top performers per district, for field-facing roles.',
+   pick:function(p,n){ var per=Math.max(1,n||2), by={}, out=[];
+     p.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(c){
+       by[c.district]=by[c.district]||0; if(by[c.district]<per){by[c.district]++; out.push(c);} });
+     return out; },
+   why:function(sel){ var d={}; sel.forEach(function(c){d[c.district]=1;});
+     return 'Spreads the shortlist across '+Object.keys(d).length+' district(s) instead of concentrating on one city.'; }},
+
+  {id:'manual', t:'Decide manually', d:'Close this and work through the table row by row.',
+   pick:function(){ return []; }, why:function(){ return 'No automatic selection — every decision stays with you.'; }}
+];
+
+var currentOpt='fit', AI_N=10, AI_PER=2, AI_RECO='fit';
+
+function aiStrat(id){ for(var i=0;i<AI_STRATS.length;i++) if(AI_STRATS[i].id===id) return AI_STRATS[i]; return AI_STRATS[0]; }
+function aiSelection(id){
+  var p=aiPool(), st=aiStrat(id);
+  return st.pick(p, id==='fit' ? AI_N : (id==='geo' ? AI_PER : null)) || [];
 }
 
-/* live previews */
-function onTopN(v){
-  document.getElementById('topnVal').textContent=v;
-  var minScore = Math.max(40, 93 - Math.round(v*0.5)); // bigger N -> lower floor
-  document.getElementById('topnPreview').textContent='Top '+v+' candidates, all with score ≥'+minScore+'%.';
-}
-function onThreshold(v){
-  document.getElementById('thrVal').textContent=v;
-  // count mock candidates at/above threshold from the visible sample, scaled to the 500 pool
-  var pct = v>=90?6 : v>=85?8 : v>=80?25 : v>=70?54 : v>=60?71 : 86;
-  var cnt = Math.round(500*pct/100);
-  document.getElementById('thrPreview').textContent=cnt+' candidates above '+v+'%.';
-}
-function onLocation(v){
-  v=Math.max(1, parseInt(v||1,10));
-  document.getElementById('locPreview').textContent=v+' per district × 8 districts = '+(v*8)+' candidates.';
+/* ---------- the "thinking" pass ---------- */
+function aiRun(){
+  var think=document.getElementById('aiThink'), res=document.getElementById('aiResult');
+  if(!think||!res) return;
+  think.style.display=''; res.style.display='none';
+  var pool=aiPool();
+  var steps=[
+    'Reading '+pool.length+' parsed CVs',
+    'Scoring against the screening template',
+    'Checking required-skill coverage',
+    'Reviewing red flags and extraction confidence',
+    'Ranking and balancing the shortlist'
+  ];
+  var ul=document.getElementById('aiSteps');
+  ul.innerHTML=steps.map(function(t,i){
+    return '<li id="aiStep'+i+'"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+t+'</li>';
+  }).join('');
+  var i=0;
+  (function tick(){
+    if(i<steps.length){
+      var li=document.getElementById('aiStep'+i); if(li) li.classList.add('on');
+      var sub=document.getElementById('aiThinkSub'); if(sub) sub.textContent=steps[i]+'…';
+      i++; setTimeout(tick, 420);
+    } else {
+      think.style.display='none'; res.style.display='';
+      aiRenderResult();
+    }
+  })();
 }
 
-/* ---------- Apply suggestion: bulk update + navigate ---------- */
+/* ---------- results: recommendation + pool facts + strategy cards ---------- */
+function aiRenderResult(){
+  var pool=aiPool(), n=pool.length;
+  var strong=pool.filter(function(c){return c.score>=80;}).length;
+  var mid=pool.filter(function(c){return c.score>=60&&c.score<80;}).length;
+  var low=pool.filter(function(c){return c.score<60;}).length;
+  var clean=pool.filter(function(c){return (c.flags||[]).length===0;}).length;
+  var shaky=pool.filter(function(c){return c.conf<CONF_OK;}).length;
+  var must=pool.filter(function(c){return aiHasReq(c)>=3&&aiYears(c)>=MIN_EXP;}).length;
+
+  document.getElementById('sumHead').textContent=n+' candidates in scope.';
+  function pct(v){ return n?Math.round(v/n*100):0; }
+  function col(v,lbl,color){ var h=n?Math.max(6,Math.round(v/n*100)):6;
+    return '<div class="col"><b>'+v+'</b><div class="stk" style="height:'+h+'%;background:'+color+'"></div><small>'+lbl+'<br>'+pct(v)+'%</small></div>'; }
+  document.getElementById('sumHisto').innerHTML=
+    col(low,'&lt;60%','var(--danger)')+col(mid,'60–79%','var(--warn)')+
+    col(pool.filter(function(c){return c.score>=80&&c.score<90;}).length,'80–89%','var(--info)')+
+    col(pool.filter(function(c){return c.score>=90;}).length,'≥90%','var(--success)');
+  document.getElementById('sumFacts').innerHTML=
+    '<span class="badge b-suc">'+clean+' with no red flags</span>'+
+    '<span class="badge b-inf">'+must+' meet every must-have</span>'+
+    (shaky?'<span class="badge b-warn">'+shaky+' parsed below '+CONF_OK+'%</span>':'');
+
+  /* pick a recommendation from the data, and say why */
+  var reco='fit', reason;
+  if(must>=3 && must<=Math.max(3,Math.round(n*0.6))){ reco='musthave';
+    reason='<b>Meets every must-have</b> gives you '+must+' candidate(s) who clear the hard requirements, rather than the top of a ranking that may not.'; }
+  else if(strong>=3 && clean>=3){ reco='clean';
+    reason='<b>Strong and clean record</b> — '+strong+' scored 80%+ and '+clean+' carry no red flags, so a low-risk shortlist is available without dropping quality.'; }
+  else { reason='<b>Best overall fit</b> — the pool is thin on candidates meeting every requirement, so ranking by score is the most useful starting point.'; }
+  AI_RECO=reco;
+  document.getElementById('aiRecBody').innerHTML= reason +
+    '<ul><li>'+shaky+' CV(s) parsed below '+CONF_OK+'% — their scores rest on shaky extraction.</li>'+
+    '<li>Nothing is rejected automatically; unselected candidates go to <b>pending HR review</b>.</li></ul>';
+
+  currentOpt=reco;
+  aiRenderOptions();
+}
+
+function aiRenderOptions(){
+  var pool=aiPool();
+  document.getElementById('optWrap').innerHTML=AI_STRATS.map(function(st){
+    var sel=st.id==='manual'?[]:aiSelection(st.id);
+    var ctl='';
+    if(st.id==='fit'){
+      ctl='<div class="opt-controls"><label style="font-size:12.5px;font-weight:600">Number of candidates: <span class="opt-count" id="aiNLbl">'+AI_N+'</span></label>'+
+          '<input type="range" min="1" max="'+Math.max(1,pool.length)+'" value="'+Math.min(AI_N,Math.max(1,pool.length))+'" style="width:100%" data-testid="shortlist-topn-slider" oninput="aiSetN(this.value)"></div>';
+    } else if(st.id==='geo'){
+      ctl='<div class="opt-controls"><label style="font-size:12.5px;font-weight:600">Per district: </label>'+
+          '<input type="number" min="1" max="10" value="'+AI_PER+'" style="width:80px;padding:6px 9px;border:1px solid var(--border);border-radius:8px;font:inherit" data-testid="shortlist-location-input" oninput="aiSetPer(this.value)"></div>';
+    }
+    return '<div class="opt-card'+(st.id===currentOpt?' sel':'')+(st.id===AI_RECO?' reco':'')+'" data-opt="'+st.id+'" data-testid="shortlist-opt-'+st.id+'" onclick="selectOpt(\''+st.id+'\')">'+
+      '<div class="opt-top"><span class="opt-radio"></span><div style="flex:1">'+
+        '<div class="opt-title">'+st.t+(st.id===AI_RECO?'<span class="opt-reco-tag">AI pick</span>':'')+'</div>'+
+        '<div class="opt-desc">'+st.d+'</div>'+
+        (st.id==='manual'?'':'<div class="opt-preview" data-testid="shortlist-count-'+st.id+'"><span class="opt-count">'+sel.length+'</span> candidate(s) would be shortlisted.</div>'+
+        '<div class="opt-why">'+st.why(sel,pool)+'</div>')+
+      '</div></div>'+ctl+'</div>';
+  }).join('');
+}
+function aiSetN(v){ AI_N=Math.max(1,parseInt(v,10)||1); aiRenderOptions(); }
+function aiSetPer(v){ AI_PER=Math.max(1,parseInt(v,10)||1); aiRenderOptions(); }
+function selectOpt(opt){ currentOpt=opt; aiRenderOptions(); }
+
 function applySuggestion(){
-  if(currentOpt==='manual'){closeModal();return;}
-  var shortlistIds=[];
-  if(currentOpt==='topn'){
-    var n=parseInt(document.querySelector('[data-testid="shortlist-topn-slider"]').value,10);
-    var ranked=CANDS.slice().sort(function(a,b){return b.score-a.score;});
-    shortlistIds=ranked.slice(0,Math.min(n,ranked.length)).map(function(c){return c.id;});
-  }else if(currentOpt==='threshold'){
-    var t=parseInt(document.querySelector('[data-testid="shortlist-threshold-slider"]').value,10);
-    shortlistIds=CANDS.filter(function(c){return c.score>=t;}).map(function(c){return c.id;});
-  }else if(currentOpt==='balanced'){
-    // pick highest scorer per distinct top-skill for coverage
-    var seen={}; CANDS.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(c){
-      var k=c.skills[0]; if(!seen[k]){seen[k]=1; shortlistIds.push(c.id);} });
-  }else if(currentOpt==='location'){
-    var per=Math.max(1,parseInt(document.querySelector('[data-testid="shortlist-location-input"]').value||1,10));
-    var byDist={};
-    CANDS.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(c){
-      byDist[c.district]=byDist[c.district]||0;
-      if(byDist[c.district]<per){byDist[c.district]++; shortlistIds.push(c.id);} });
-  }
-  CANDS.forEach(function(c){ setStatus(c.id, shortlistIds.indexOf(c.id)>-1 ? 'suc' : 'dan'); });
+  if(currentOpt==='manual'){ closeModal(); return; }
+  var sel=aiSelection(currentOpt), ids={};
+  sel.forEach(function(c){ ids[c.id]=1; });
+  var pool=aiPool();
+  pool.forEach(function(c){ setStatus(c.id, ids[c.id] ? 'suc' : 'dan'); });
   closeModal();
-  window.location.href='results.page.html';
+  if(typeof toast==='function'){
+    toast(sel.length+' shortlisted · '+(pool.length-sel.length)+' moved to pending HR review ('+aiStrat(currentOpt).t+')');
+  }
+  if(typeof applyCvFilters==='function') applyCvFilters();
 }
+
 
 /* ══════════════════════════════════════════════════════════════════
    POOL ANALYSIS — collapsible container.
@@ -2112,7 +2224,6 @@ function cvaCandUrl(){
 buildRows();
 cvfPopulate();
 applyCvFilters();
-onTopN(30);
 updateCount();
 initPool();
 cvaScope();

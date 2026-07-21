@@ -454,3 +454,17 @@ Visible symptom on the Online Presence report: the stage tag rendered as raw tex
 **5. Tooling fix (root cause of the earlier CSS loss).** The nav script's *legacy* cleanup regex was still unbounded (marker → `</style>`) and destroyed CSS injected after it. Migration is complete, so it has been retired; the remaining removal is bounded by a marker pair. Proven idempotent: **3 consecutive runs, 0 pages missing CSS, 0 duplicated blocks**.
 
 **Verification (executed, not self-reported):** cv-review render + structure · filter discrimination (confidence bands 2/5/3 partition exactly despite the column removal) · **rank correctness across 9 filter states** · bulk decisions · all 3 detail pages across 6 localStorage states incl. corrupt JSON · presence report render (6 candidates + not-a-match cycle). **38/38 live pages reachable · 3/3 redirect stubs resolve · 0 broken links · 0 emoji · brand blue 41/41.**
+
+## Round 13a — assessment marks on the candidate profile · 2026-06-24
+
+Clicking **View** on the Summary Report opened a profile with no written/viva marks. Fixed:
+- **Summary Report** `View` and `Full profile →` now pass the candidate's roll (`candidate-detail.page.html?roll=STL-BM-0101`), so the profile describes the person you clicked — the header (name, roll, email, phone, district, initials) is keyed off that record rather than staying hardcoded.
+- **Candidate detail** gains an **Assessment — written exam & viva** card mirroring the Summary Report's expanded row:
+  - header strip: **Written /100 · Viva /100 · Combined %** (written ×60% + viva ×40%) + a **Qualified / Not qualified** badge, with the pass marks stated inline (written ≥50, viva ≥60);
+  - **Written breakdown** — MCQ /30, Written /50, Case study /20, Total /100;
+  - **Viva breakdown** — Technical / Communication / Culture fit / Domain / Overall, each as a 1–5 bar;
+  - **AI evaluation & signals** — the same summary sentence, red-flag chips (or "No red flags"), panel remarks, and the reminder that AI scoring is assistive and the decision stays with the Hiring Manager.
+  - Opened without a roll (or with an unknown one) it shows a neutral placeholder explaining marks are captured at Stage 7 (Written Exam) and Stage 8 (Viva) — it never renders an empty or misleading card.
+- Data comes from the shared `STLF.assess()` fixture, so the marks reconcile exactly with the Summary Report and Exports.
+
+**Verified by execution:** four entry points (two real rolls, no roll, unknown roll) plus an identity-coherence check proving the header follows the roll (`Rumana Parvin` vs `Nazia Islam`) rather than staying fixed. Values match the merit sheet — e.g. STL-BM-0101 → MCQ 26/30, Total 85/100, Qualified in both. The whole renderer is wrapped so it can never blank the profile. 41 pages, 0 broken links.

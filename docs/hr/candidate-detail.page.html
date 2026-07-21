@@ -118,6 +118,20 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
 /* ---- end workflow spine v2 ---- */
+
+/* ---- assessment (written + viva) ---- */
+.as-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:1024px){.as-grid{grid-template-columns:1fr}}
+.as-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.as-stat{display:flex;flex-direction:column;gap:2px}
+.as-stat .l{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.as-stat .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+.as-kv{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}
+.as-kv b{font-variant-numeric:tabular-nums}
+.as-mini{display:flex;align-items:center;gap:8px}
+.as-tr{width:104px;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.as-tr i{display:block;height:100%;border-radius:6px}
+.as-h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
 </style>
 <!-- page-local style — existing design tokens only, no new colours -->
 <style>
@@ -249,18 +263,18 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
       <!-- Profile header -->
       <div class="card" style="margin-bottom:20px">
         <div class="card-body" style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
-          <span class="avatar" style="width:64px;height:64px;font-size:22px">TH</span>
+          <span class="avatar" style="width:64px;height:64px;font-size:22px" id="cd-ava">TH</span>
           <div style="flex:1;min-width:240px">
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-              <h1 style="font-size:22px;font-weight:700">Tanvir Hasan</h1>
+              <h1 style="font-size:22px;font-weight:700" id="cd-name" data-testid="cd-name">Tanvir Hasan</h1><span class="badge b-mut" id="cd-roll" data-testid="cd-roll" style="display:none"></span>
               <button class="btn btn-ghost btn-sm" data-testid="bookmark-toggle" onclick="void 0" style="color:var(--primary);border-color:var(--primary-soft)">
                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Bookmarked
               </button>
             </div>
             <div style="display:flex;gap:18px;color:var(--muted);font-size:13px;margin-top:8px;flex-wrap:wrap">
-              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> tanvir.hasan@gmail.com</span>
-              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +880 1712-345678</span>
-              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Dhaka</span>
+              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> <span id="cd-email">tanvir.hasan@gmail.com</span></span>
+              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <span id="cd-phone">+880 1712-345678</span></span>
+              <span style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span id="cd-dist">Dhaka</span></span>
             </div>
             <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
               <span class="chip" data-testid="tag-1">High potential <span class="x" data-testid="remove-tag-1">×</span></span>
@@ -422,6 +436,16 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
       </section>
 
       <!-- Application History tab -->
+
+      <!-- Assessment (written exam + viva) — mirrors the Summary Report detail view -->
+      <section class="card" id="cd-assess-card" data-testid="cd-assessment" style="margin-top:16px">
+        <div class="card-head">
+          <h2>Assessment &mdash; written exam &amp; viva</h2>
+          <a href="assessment-summary-report.page.html" data-testid="cd-open-summary">Open Summary Report &rarr;</a>
+        </div>
+        <div id="cd-assess-body"></div>
+      </section>
+
       <section id="history" data-testid="panel-history" style="margin-top:24px">
         <div class="card">
           <div class="card-head">
@@ -482,6 +506,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
   </div>
 </div>
 
+<script src="../assets/js/stl-fixtures.js"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════
    Online presence — candidate master profile (Tanvir Hasan, id 1).
@@ -705,6 +730,113 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
   } else {
     init();
   }
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   Assessment section. Opened from the Summary Report as
+   candidate-detail.page.html?roll=STL-BM-0101 — the roll keys the whole
+   page so the profile header and the marks describe the same person.
+   Written = MCQ/30 + Written/50 + Case/20. Viva = mean of five 1-5
+   criteria x20. Combined = written x60% + viva x40% (same weights the
+   Summary Report uses). Pass marks: written >=50, viva >=60.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var PASS_W = 50, PASS_V = 60, W_WT = 0.6, V_WT = 0.4;
+
+  function q(name){
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search || '');
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+  }
+  function band(v){ return v >= 75 ? 'var(--success)' : v >= 50 ? 'var(--warn)' : 'var(--danger)'; }
+  function esc(t){ return String(t == null ? '' : t).replace(/[&<>"]/g,
+    function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
+  function initials(n){
+    return String(n||'').split(/\s+/).map(function(w){ return w[0]||''; }).slice(0,2).join('').toUpperCase();
+  }
+
+  function record(){
+    if (typeof STLF === 'undefined' || !STLF.assess) return null;
+    var roll = q('roll'), list;
+    try { list = STLF.assess(); } catch(e){ return null; }
+    if (!list || !list.length) return null;
+    if (!roll) return null;                       // no roll -> not opened from the merit sheet
+    for (var i = 0; i < list.length; i++) if (list[i].roll === roll) return list[i];
+    return null;
+  }
+
+  function syncHeader(c){
+    function set(id, v){ var el = document.getElementById(id); if (el && v) el.textContent = v; }
+    set('cd-name', c.n); set('cd-email', c.e); set('cd-phone', c.phone); set('cd-dist', c.d);
+    set('cd-ava', initials(c.n));
+    var r = document.getElementById('cd-roll');
+    if (r){ r.textContent = c.roll; r.style.display = ''; }
+  }
+
+  function render(){
+    var box = document.getElementById('cd-assess-body');
+    if (!box) return;
+    var c = record();
+
+    if (!c){                                       /* not assessed / opened directly */
+      box.innerHTML =
+        '<div class="card-body" data-testid="cd-assess-empty" style="display:flex;align-items:flex-start;gap:12px;color:var(--muted)">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;flex:none;opacity:.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+          '<div><div style="font-weight:600;color:var(--text)">No assessment recorded yet</div>' +
+          '<div style="font-size:12.5px;margin-top:3px">Written marks are captured at <b>Stage&nbsp;7 &middot; Written Exam</b> and viva ratings at <b>Stage&nbsp;8 &middot; Viva</b>. ' +
+          'Open this profile from the <b>Summary Report</b> to see a candidate&rsquo;s marks here.</div></div>' +
+        '</div>';
+      return;
+    }
+
+    syncHeader(c);
+    var combined = Math.round(c.w * W_WT + c.v * V_WT);
+    var qualified = (c.w >= PASS_W && c.v >= PASS_V);
+
+    var viva = '';
+    Object.keys(c.crit).forEach(function(k){
+      var pct = c.crit[k] * 20;
+      viva += '<div class="as-kv"><span>' + esc(k) + '</span><div class="as-mini">' +
+                '<div class="as-tr"><i style="width:' + pct + '%;background:' + band(pct) + '"></i></div>' +
+                '<b>' + c.crit[k] + '/5</b></div></div>';
+    });
+
+    var flags = (c.rf && c.rf.length)
+      ? c.rf.map(function(f){ return '<span class="badge b-cau" style="margin:0 4px 4px 0">' + esc(f) + '</span>'; }).join('')
+      : '<span class="badge b-mut">No red flags</span>';
+
+    var sentence = 'AI match ' + c.ai + '% at screening; written ' + c.w + '/100 (' +
+      (c.w >= 75 ? 'strong' : c.w >= PASS_W ? 'cleared' : 'below cut-off') + '); viva ' +
+      (c.v / 20).toFixed(1) + '/5' +
+      (qualified ? ' \u2014 qualified in both.' : (c.w >= PASS_W ? ' \u2014 viva below the bar.' : ' \u2014 written below the cut-off.'));
+
+    box.innerHTML =
+      '<div class="as-head" data-testid="cd-assess-head">' +
+        '<div class="as-stat"><span class="l">Written</span><span class="v" style="color:' + band(c.w) + '">' + c.w + '<span style="font-size:12px;color:var(--muted);font-weight:600">/100</span></span></div>' +
+        '<div class="as-stat"><span class="l">Viva</span><span class="v" style="color:' + band(c.v) + '">' + c.v + '<span style="font-size:12px;color:var(--muted);font-weight:600">/100</span></span></div>' +
+        '<div class="as-stat"><span class="l">Combined</span><span class="v" style="color:' + band(combined) + '">' + combined + '%</span></div>' +
+        '<span class="badge ' + (qualified ? 'b-suc' : 'b-dan') + '" data-testid="cd-assess-result">' +
+          (qualified ? 'Qualified in both' : 'Not qualified') + '</span>' +
+        '<span style="margin-left:auto;font-size:11.5px;color:var(--muted)">Pass marks: written &ge;' + PASS_W +
+          ' &middot; viva &ge;' + PASS_V + ' &middot; combined = written &times;60% + viva &times;40%</span>' +
+      '</div>' +
+      '<div class="card-body"><div class="as-grid">' +
+        '<div data-testid="cd-written-breakdown"><div class="as-h4">Written breakdown</div>' +
+          '<div class="as-kv"><span>MCQ</span><b>' + c.mcq + '/30</b></div>' +
+          '<div class="as-kv"><span>Written</span><b>' + c.wrs + '/50</b></div>' +
+          '<div class="as-kv"><span>Case study</span><b>' + c.cs + '/20</b></div>' +
+          '<div class="as-kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:7px"><span>Total</span>' +
+            '<b style="color:' + band(c.w) + '">' + c.w + '/100</b></div>' +
+        '</div>' +
+        '<div data-testid="cd-viva-breakdown"><div class="as-h4">Viva breakdown (interview rating)</div>' + viva + '</div>' +
+        '<div data-testid="cd-ai-signals"><div class="as-h4">AI evaluation &amp; signals</div>' +
+          '<p style="font-size:13px;margin-bottom:8px">' + esc(sentence) + '</p>' + flags +
+          (c.rem ? '<p style="font-size:12.5px;color:var(--muted);margin-top:8px"><b>Remarks:</b> ' + esc(c.rem) + '</p>' : '') +
+          '<p style="font-size:11.5px;color:var(--muted);margin-top:10px">Marks are recorded by the panel. AI scoring is assistive &mdash; the hiring decision stays with the Hiring Manager.</p>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  try { render(); } catch(e){ /* never let this blank the profile */ }
 })();
 </script>
 </body>

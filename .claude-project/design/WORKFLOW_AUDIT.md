@@ -111,3 +111,18 @@ Ten stages, four roles, one continuous indicator, no dead ends.
 **Final spine:** `1 Template → 2 Import → 3 Process → 4 Review → 5 Shortlist → 6 Hiring Manager → 7 Written Exam → 8 Viva → 9 Selection → 10 Onboard`
 
 **Verification:** 40/40 pages reachable from the login entry point · 0 broken links · 0 emoji-as-icons · brand blue on 40/40 · stepper on 19 workflow pages (14 HR + 5 HM) · sidebars made sticky + scrollable to accommodate the numbered spine.
+
+---
+
+## 8. Resolution log — P2 implemented (2026-06-24)
+
+| Item | Status | What changed |
+|------|--------|--------------|
+| **M5** Drill-downs claiming a stage | ✅ Fixed | `hr/application-detail` and `hiring-manager/application-detail` now carry a **"Stage N · detail"** tag under the stepper ("Candidate detail within *Shortlist* / *Hiring Manager review*") plus a link back to the owning stage — so a drill-down reads as a detail view, not as the stage itself. |
+| **G5** No re-screen entry point | ✅ Fixed | **"Re-screen with updated template"** added to Screening Results → confirmation modal (template v3→v4, 4,820 candidates re-scored, overrides preserved, no re-upload, human review still applies) → routes to Processing. Companion **"Re-screen existing candidates"** link added to the Template Builder. |
+| **M7** PRD ↔ prototype drift | ✅ Fixed | **PRD raised to v2**: new **§0.5 the 10-stage spine** (with role-ownership rules and an explicit "outside the spine" list), **Module 8 — Assessment: Written Exam & Viva**, **Module 9 — Decision Support & Analytics**, new terminology (Stage, Written Exam, Viva, Merit Sheet, CV Analysis, Online Presence, Assessment Summary), extended status enums (`WrittenExamStatus`, `AssessmentScore`, `StageNumber`, richer `ApplicationStatus`), and a rewritten, stage-annotated HR + HM page map (the stale `upload`/`batches`/`duplicates` routes are gone). Snapshot recorded as `prd/history/PRD_v2.{md,hash}`; `DESIGN_STATUS` now pins `prd_version: v2` and the new hash, keeping the design↔PRD consistency check green. |
+| **G6** Viewer/Admin unframed | ✅ Fixed | Both dashboards now carry a **"Support role"** tag: *"…— outside the 10-stage hiring workflow."* |
+
+**Verification after P2:** 40/40 reachable · 0 broken links · 0 emoji-icons · brand blue 40/40 · stepper on 19 workflow pages · 7 stage-tagged pages · re-screen action on 2 pages · support-role framing on 2 dashboards.
+
+**All audit items (M1–M7, G1–G6) are now closed.**

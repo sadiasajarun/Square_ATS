@@ -312,3 +312,14 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
 - Sidebars made sticky + internally scrollable for the longer numbered nav.
 
 **QA:** 40/40 reachable · 0 broken links · 0 emoji-icons · brand blue 40/40.
+
+---
+
+# Round 10 — P2 from the workflow audit · 2026-06-24
+
+- **Drill-down context (M5).** HR + HM candidate-detail pages now show a "Stage N · detail" tag with a link back to the owning stage, so a drill-down no longer reads as the stage itself.
+- **Re-screening (G5).** "Re-screen with updated template" on Screening Results → confirmation modal (v3→v4, 4,820 re-scored, overrides preserved, no re-upload, human review still applies) → Processing. Companion link added on the Template Builder.
+- **PRD v2 (M7).** Added §0.5 the 10-stage spine with ownership rules, Module 8 (Written Exam & Viva), Module 9 (Decision Support & Analytics), new terminology and status enums, and a stage-annotated HR/HM page map replacing the stale upload/batches/duplicates routes. Snapshot `PRD_v2`; `DESIGN_STATUS` pinned to `prd_version: v2`.
+- **Support-role framing (G6).** Viewer + Admin dashboards labelled "Support role — outside the 10-stage hiring workflow."
+
+**QA:** 40/40 reachable · 0 broken links · 0 emoji-icons · brand blue 40/40. All audit items M1–M7 / G1–G6 closed.

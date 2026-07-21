@@ -116,6 +116,11 @@ tbody tr:hover td{background:var(--primary-soft)}
 .modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
 .modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
 .modal h3{font-size:17px;font-weight:700}
+
+/* ---- stage tag (workflow context under page title) ---- */
+.stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
+.stage-tag a{color:var(--primary);font-weight:600}
 </style>
 </head>
 <body>
@@ -167,6 +172,7 @@ tbody tr:hover td{background:var(--primary-soft)}
         <div>
           <h1>System Overview</h1>
           <p>Health, activity, and access across the STL ATS platform.</p>
+          <div class="stage-tag" data-testid="role-scope"><span class="stage-pill">Support role</span><span>Platform administration &mdash; outside the 10-stage hiring workflow.</span></div>
         </div>
         <div style="display:flex;gap:10px">
           <a class="btn btn-ghost" href="audit.page.html" data-testid="action-view-audit">

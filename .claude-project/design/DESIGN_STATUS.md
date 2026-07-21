@@ -11,7 +11,7 @@ notes: "Variation A selected for Admin/HR/executive dashboard use; primary rebra
 # P3g snapshot — used by /fullstack-dev Tier 2 consistency verification
 phase_complete: true
 roles: [admin, auth, hiring-manager, hr, viewer]
-prd_hash_at_generation: "af5ab029646450bce8908c8cd44b85d7a9bc18e5692d85b41700f49e03cf9a63"
-prd_version: "v1"
-html_bundle_hash: "1370c42d29581dedb30a8f166ec444a50eb034060670dc463bdbe3e0e325b6c0"
+prd_hash_at_generation: "39cc2b1e90ddfaa2ca787a677ab90826b22d1dfbc1681f853d990501c4c791eb"
+prd_version: "v2"
+html_bundle_hash: "f9658fe2f45b27cc30ff37758a2321285fc147c7e28befc5fc0387b3aa3db3fe"
 generated_at: "2026-06-23T00:00:00Z"

@@ -1,9 +1,11 @@
 # STL AI-Powered ATS — Product Requirements Document
 
-**Version:** 1.0
-**Date:** 2026-06-23
-**Status:** Draft
+**Version:** 2.0
+**Date:** 2026-06-24
+**Status:** Draft — aligned with the approved clickable prototype
 **Client:** Square Toiletries Limited (STL)
+
+> **v2 changes:** adds STL's two-part assessment (**Written Exam** + **Viva**), the **CV Analysis**, **Online Presence** and **Assessment Summary** decision-support views, and formalises the **10-stage hiring workflow** with explicit role ownership (§0.5). Terminology, status values, modules (8–9) and the page map are updated to match the prototype.
 
 ---
 
@@ -52,7 +54,7 @@ A web-based Applicant Tracking System with intelligent CV screening for Square T
 
 ### MVP Scope
 
-**Included (all 7 modules):**
+**Included (9 modules):**
 - Module 1 — User Management & Security (RBAC, audit, encryption)
 - Module 2 — CV Upload & Parsing (bulk async, bilingual, duplicate detection, OCR-ready)
 - Module 3 — AI Screening & Matching (weighted templates, explainable scores, red flags)
@@ -60,6 +62,8 @@ A web-based Applicant Tracking System with intelligent CV screening for Square T
 - Module 5 — Export & Reporting (CV bundles, Excel, screening reports)
 - Module 6 — Integration & Workflow (email real, SMS stub, interview scheduling)
 - Module 7 — AI Governance & Accuracy (explainability, overrides, versioned templates)
+- **Module 8 — Assessment: Written Exam & Viva** *(new in v2)* — STL's two-part assessment, panel scoring, combined merit sheet
+- **Module 9 — Decision Support & Analytics** *(new in v2)* — CV Analysis dashboard, Online Presence analysis, Assessment Summary report
 
 **Build decisions (overrides / realizations):**
 - Backend stack is **NestJS (TypeScript)**, not the doc's Laravel/FastAPI.
@@ -71,6 +75,36 @@ A web-based Applicant Tracking System with intelligent CV screening for Square T
 - Candidate-facing self-service portal (candidates receive email/SMS only).
 - Full employment/fraud verification (system detects inconsistency *indicators* only).
 - Automated rejection (human review mandatory before any rejection).
+
+---
+
+## 0.5 Hiring Workflow — the 10-stage spine *(new in v2)*
+
+Every position moves through one numbered, linear spine. The stage number is shown as a persistent step indicator on every workflow screen, and both the HR and Hiring Manager sidebars are grouped and numbered to match it.
+
+`1 Template → 2 Import → 3 Process → 4 Review → 5 Shortlist → 6 Hiring Manager → 7 Written Exam → 8 Viva → 9 Selection → 10 Onboard`
+
+| # | Stage | Owner | Primary screen | Companion / decision-support view |
+|---|-------|-------|----------------|-----------------------------------|
+| 1 | **Define role & criteria** | HR | Job Positions → Screening Template | — |
+| 2 | **Import CVs** | HR | Import CVs | — |
+| 3 | **Process & triage** | HR | Processing (duplicates, failed files) | — |
+| 4 | **Review parsed CVs** | HR | Review CVs | **CV Analysis dashboard** |
+| 5 | **Shortlist** | HR | Screening Results | **Online Presence analysis** |
+| 6 | **Hiring Manager review** | **Hiring Manager** | Shortlist Review (accept / reject) | Candidate detail |
+| 7 | **Written exam** | HR | Written Exam | — |
+| 8 | **Viva** | HR schedules · **HM scores** | Schedule Viva → Viva & Interviews tracker | HM Interview Rating |
+| 9 | **Final selection** | **HM selects** → HR confirms | HM Final Selection → HR Final Selection (read-only) | **Assessment Summary report** |
+| 10 | **Onboarding** | HR | Onboarding (offer email + checklist) | — |
+
+### Ownership rules
+- **Only the Hiring Manager selects** the candidate for onboarding (stage 9). HR sees the full comparison panel read-only and then proceeds with onboarding.
+- **The Hiring Manager never schedules** interviews; scheduling is HR's (stage 8).
+- **Shortlist review (stage 6) and interview feedback (stage 8) are distinct**: stage 6 is view-profile + accept/reject only, with no scoring; scoring happens only at stage 8.
+- Decisions taken by the Hiring Manager are **sent back to HR** and surfaced as HR notifications.
+
+### Outside the spine (support functions)
+Candidates (talent pool), Exports, Settings, the **Admin** role (users, audit, system settings) and the **Viewer** role (read-only oversight) are support functions and are deliberately **not** part of the numbered workflow.
 
 ---
 
@@ -92,6 +126,13 @@ A web-based Applicant Tracking System with intelligent CV screening for Square T
 | **Red Flag** | A risk indicator (career break, frequent job changes, missing info, over/under-qualification, skill gap). |
 | **Override** | An HR decision that changes an AI outcome, requiring a mandatory logged reason. |
 | **Talent Pool** | The searchable database of all candidates for future hiring. |
+| **Stage** | One of the 10 numbered steps of the hiring spine (§0.5). Every workflow screen declares its stage. |
+| **Written Exam** *(v2)* | STL's written assessment, taken after Hiring Manager shortlist acceptance (stage 7). Produces a written score per candidate. |
+| **Viva** *(v2)* | The panel interview (stage 8). HR schedules slots/panel and sends invitations; the Hiring Manager scores the candidate against criteria. |
+| **Merit Sheet** *(v2)* | The combined written-exam + viva ranking used as decision support at final selection. |
+| **CV Analysis** *(v2)* | Stage-4 analytics over the parsed cohort (distributions, skill coverage, cohort building). Assistive and read-only. |
+| **Online Presence Analysis** *(v2)* | Stage-5 digital-footprint research from public professional sources. **Assistive only — never a screening input.** |
+| **Assessment Summary Report** *(v2)* | Stage-9 evidence pack combining AI screening score, written exam and viva ratings. |
 
 ### User Roles
 
@@ -108,8 +149,11 @@ A web-based Applicant Tracking System with intelligent CV screening for Square T
 |------|--------|-------------|
 | **CvProcessingStatus** | `PENDING`, `PROCESSING`, `PARSED`, `SCREENED`, `SHORTLISTED`, `REJECTED_PENDING_REVIEW`, `DUPLICATE`, `FAILED` | Lifecycle of a single CV file. |
 | **BatchStatus** | `PENDING`, `PROCESSING`, `COMPLETED`, `FAILED` | Aggregate batch progress. |
-| **ApplicationStatus** | `SCREENED`, `SHORTLISTED`, `REJECTED_PENDING_REVIEW`, `REJECTED`, `IN_INTERVIEW`, `ADVANCED`, `RETURNED_TO_HR` | Candidate's state in a position pipeline. |
-| **InterviewStatus** | `SCHEDULED`, `COMPLETED`, `CANCELLED`, `NO_SHOW` | Interview lifecycle. |
+| **ApplicationStatus** | `SCREENED`, `SHORTLISTED`, `REJECTED_PENDING_REVIEW`, `REJECTED`, `HM_ACCEPTED`, `HM_REJECTED`, `IN_WRITTEN_EXAM`, `IN_VIVA`, `SELECTED`, `IN_ONBOARDING`, `RETURNED_TO_HR` | Candidate's state in a position pipeline (v2 adds the HM decision, assessment and selection states). |
+| **InterviewStatus** | `SCHEDULED`, `COMPLETED`, `CANCELLED`, `NO_SHOW` | Viva lifecycle. |
+| **WrittenExamStatus** *(v2)* | `NOT_STARTED`, `SCHEDULED`, `COMPLETED`, `ABSENT`, `SCORED` | Written-exam lifecycle per candidate (stage 7). |
+| **AssessmentScore** *(v2)* | `written` (0–100), `viva` per-criterion 1–5 (Technical, Communication, Culture fit, Domain knowledge, Overall) | Inputs to the combined merit sheet. |
+| **StageNumber** *(v2)* | `1`–`10` | The hiring-spine stage a screen or application belongs to (§0.5). |
 | **NotificationStatus** | `QUEUED`, `SENT`, `DELIVERED`, `FAILED` | Outbound message delivery state. |
 | **UserRole** | `VIEWER`, `HIRING_MANAGER`, `HR`, `ADMIN` | Access level. |
 
@@ -267,6 +311,44 @@ Explainability, override capture, versioning, and validation.
 
 ---
 
+### Module 8 — Assessment: Written Exam & Viva *(new in v2)*
+
+STL's two-part assessment, run after the Hiring Manager accepts a shortlisted candidate (stages 7–8).
+
+#### Main Features
+1. **Written exam (stage 7)** — record/administer the written assessment per candidate; capture a written score and attendance (`ABSENT` supported).
+2. **Viva scheduling (stage 8, HR)** — slot + platform (Google Meet / Zoom / Gmail / in-person) + panel assignment; templated email invitations with merge tokens and a live preview.
+3. **Viva tracker (stage 8, HR)** — every scheduled/completed interview with delivery and schedule status.
+4. **Viva scoring (stage 8, Hiring Manager)** — 1–5 ratings across Technical, Communication, Culture fit, Domain knowledge, Overall, plus free-text comments.
+5. **Combined merit sheet** — written score + viva ratings + AI screening score, ranked, feeding stage 9.
+
+#### Role rules
+- The **Hiring Manager does not schedule** interviews — no scheduling UI appears in the HM role.
+- The **Hiring Manager scores** the viva; HR owns scheduling and the exam.
+
+#### Technical Flow — Viva
+1. HR schedules slots, assigns the panel and sends invitations → invites move to the tracker; the schedule form is replaced by the tracker plus a "Schedule new interview" action.
+2. After the viva, the Hiring Manager submits ratings per criterion.
+3. When all candidates are scored, the HM comparison panel unlocks (stage 9).
+4. On failure: notification marked `FAILED` and retryable; no candidate state changes silently.
+
+---
+
+### Module 9 — Decision Support & Analytics *(new in v2)*
+
+Assistive views that help HR and the Hiring Manager interpret the cohort. **All are read-only and advisory — none of them rejects, ranks or filters a candidate on their own.**
+
+#### Main Features
+1. **CV Analysis dashboard (stage 4 companion)** — distributions and skill coverage across the parsed cohort; click a segment to build a cohort. Assistive, read-only.
+2. **Online Presence & public-information analysis (stage 5 companion)** — digital-footprint research from public professional sources. **Never a screening input**; surfaced for context only and excluded from the match score.
+3. **Assessment Summary report (stage 9 companion)** — combined written-exam + viva merit sheet presented as decision support for the Hiring Manager's selection.
+
+#### Governance
+- These views inherit Module 7 rules: explainable, logged, and never a substitute for human judgement.
+- Online-presence data is **excluded from scoring** and must not be used as a screening criterion, consistent with the "no sensitive criteria beyond client-approved setup" rule.
+
+---
+
 ## 3. HR & Shared Application (Primary)
 
 ### 3.1 Page Architecture
@@ -291,32 +373,43 @@ Explainability, override capture, versioning, and validation.
 | `/auth/login` | Login |
 | `/auth/forgot-password` | Forgot Password |
 
-**HR (Protected)**
-| Route | Page |
-|-------|------|
-| `/` | HR Dashboard |
-| `/positions` | Job Positions list |
-| `/positions/new` | Create Job Position |
-| `/positions/:id` | Position detail |
-| `/positions/:id/template` | Screening Template builder |
-| `/positions/:id/upload` | CV Batch upload |
-| `/batches/:id` | Batch progress monitor |
-| `/batches/:id/duplicates` | Duplicate review |
-| `/positions/:id/results` | Screening results (ranked list) |
-| `/applications/:id` | Candidate screening detail + explanation panel |
-| `/candidates` | Candidate database / talent pool |
-| `/candidates/:id` | Candidate master profile |
-| `/interviews` | Interview scheduling |
-| `/exports` | Exports & reports |
-| `/settings` | Profile & security |
+**HR (Protected)** — sidebar is grouped *Workspace* / *Hiring Workflow (numbered 1–10)* / *Talent & System*
 
-**Hiring Manager (Protected)**
-| Route | Page |
-|-------|------|
-| `/` | Assigned positions |
-| `/positions/:id/shortlist` | Shortlisted candidates review |
-| `/applications/:id` | Candidate detail + feedback form |
-| `/interviews` | My interview panels |
+| Stage | Route | Page |
+|:-----:|-------|------|
+| — | `/` | HR Dashboard (incl. workflow notifications) |
+| — | `/positions` | Job Positions list |
+| — | `/positions/new` | Create Job Position |
+| — | `/positions/:id` | Position detail |
+| **1** | `/positions/:id/template` | Screening Template builder (weighted criteria, guidance prompt, re-screen) |
+| **2** | `/positions/:id/import` | Import CVs (bulk upload; position selector) |
+| **3** | `/batches/:id/processing` | Processing & triage (duplicates, failed files) |
+| **4** | `/positions/:id/cv-review` | Review parsed CVs (+ AI shortlist suggestion modal) |
+| **4c** | `/positions/:id/cv-analysis` | **CV Analysis dashboard** *(companion)* |
+| **5** | `/positions/:id/results` | Screening Results (shortlist segments) |
+| **5c** | `/positions/:id/online-presence` | **Online Presence analysis** *(companion)* |
+| **5** | `/applications/:id` | Candidate screening detail + explanation panel *(drill-down)* |
+| **7** | `/positions/:id/written-exam` | **Written Exam** |
+| **8** | `/positions/:id/schedule-viva` | **Schedule Viva** (slots, panel, email template) |
+| **8** | `/interviews` | **Viva & Interviews tracker** |
+| **9** | `/positions/:id/final-selection` | Final Selection (read-only for HR) |
+| **9c** | `/positions/:id/summary-report` | **Assessment Summary report** *(companion)* |
+| **10** | `/positions/:id/onboarding` | Onboarding (offer email + checklist) |
+| — | `/candidates` | Candidate database / talent pool |
+| — | `/candidates/:id` | Candidate master profile |
+| — | `/exports` | Exports & reports |
+| — | `/settings` | Profile & security |
+
+**Hiring Manager (Protected)** — sidebar shows the same spine numbers (6, 8, 9)
+
+| Stage | Route | Page |
+|:-----:|-------|------|
+| — | `/` | Assigned positions (inbox: new from HR) |
+| **6** | `/positions/:id/shortlist` | Shortlist Review — view profile + accept/reject **only** (no scoring) |
+| **6** | `/applications/:id` | Candidate detail + decision *(drill-down)* |
+| **8** | `/interviews` | Interview Feedback (candidates to score; no scheduling UI) |
+| **8** | `/applications/:id/rating` | Interview Rating (1–5 per criterion + comments) |
+| **9** | `/positions/:id/final-selection` | Final Selection — comparison + AI recommendation; **HM selects** → sends to HR |
 
 **Viewer (Protected)**
 | Route | Page |
@@ -500,9 +593,10 @@ square_ats/
 |:-:|----------|-----------------|-------|--------|
 | 1 | Which OCR provider for production (Azure vs Google vs on-prem)? | Affects scanned-CV accuracy + data residency; v1 uses stub adapter. | STL | ⏳ Open |
 | 2 | Which SMS gateway will STL provide? | SMS is stubbed until chosen; affects Module 6 delivery. | STL | ⏳ Open |
-| 3 | Exact STL predefined Excel summary format? | Module 5 final-summary export must match STL's template exactly. | STL HR | ⏳ Open |
+| 3 | Exact STL predefined Excel summary format? | Module 5 final-summary export must match STL's template exactly. **Update 16 Jul 2026:** client provided `Summary format.xlsx` — implemented in the R9 assessment-summary report. Remaining: confirm the same format governs the Module 5 Excel *export*, and confirm the Age column with Legal (see #7). | STL HR | 🟡 Partially resolved |
 | 4 | Email-inbox / job-portal import credentials & APIs? | Determines whether import is active in v1 or adapter-only. | STL IT | ⏳ Open |
 | 5 | Data-retention durations + archival/deletion policy specifics? | Drives retention workflows + audit; configurable but needs defaults. | STL | ⏳ Open |
 | 6 | Ground-truth annotated CV set for accuracy validation? | Required for Module 7 accuracy benchmark report. | STL HR | ⏳ Open |
 | 7 | Are gender/age criteria permitted under STL policy + local labour law? | Governance: sensitive criteria only within client-approved configs. | STL Legal/HR | ⏳ Open |
 | 8 | Deployment target for first release (cloud vs on-prem vs hybrid)? | Affects OCR/LLM connectivity + infra setup. | STL IT | ⏳ Open |
+| 9 | Online-presence analysis (R8): which enrichment/search provider? Approved by STL Legal? What candidate-notice/consent policy applies? | Blocks live use of the online-visibility feature; prototype ships fixture-data-only with the workflow gated on HR identity confirmation. Same class of blocker as #7. | STL Legal/HR/IT | ⏳ Open |

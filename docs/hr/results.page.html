@@ -229,6 +229,9 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <a class="btn btn-ghost" href="cv-analysis-dashboard.page.html" data-testid="results-open-analysis">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Open CV Analysis
           </a>
+          <button class="btn btn-ghost" data-testid="results-rescreen" onclick="openRescreen()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Re-screen with updated template
+          </button>
           <button class="btn btn-primary" data-testid="results-send-hm" onclick="openHmModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send shortlist to Hiring Manager
           </button>
@@ -481,6 +484,31 @@ function confirmSendHm(){
   toast.style.display='flex';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+</script>
+
+<!-- Re-screen modal (P2.8) -->
+<div class="modal-mask" id="rescreenModal" data-testid="rescreen-modal" style="display:none" onclick="if(event.target===this)closeRescreen()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rescreen-title">
+    <div class="card-head"><h3 id="rescreen-title">Re-screen with updated template?</h3>
+      <button class="icon-btn" data-testid="rescreen-close" onclick="closeRescreen()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px">Screening template <b>v3 &rarr; v4</b>. All <b>4,820</b> screened candidates will be re-scored against the updated criteria.</p>
+      <p class="hint" style="margin-top:10px">No CVs need re-uploading. Original scores and every HR override are preserved in the audit trail, and re-screening never rejects a candidate automatically &mdash; human review still applies.</p>
+    </div>
+    <div class="card-head" style="border-top:1px solid var(--border);border-bottom:0;justify-content:flex-end;gap:10px">
+      <button class="btn btn-ghost" data-testid="rescreen-cancel" onclick="closeRescreen()">Cancel</button>
+      <a class="btn btn-primary" data-testid="rescreen-start" href="processing.page.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg>Start re-screening
+      </a>
+    </div>
+  </div>
+</div>
+<script>
+  function openRescreen(){ document.getElementById('rescreenModal').style.display='grid'; }
+  function closeRescreen(){ document.getElementById('rescreenModal').style.display='none'; }
 </script>
 </body>
 </html>

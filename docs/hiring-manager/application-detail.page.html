@@ -136,6 +136,11 @@ tbody tr:hover td{background:var(--primary-soft)}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast svg{width:16px;height:16px;flex:none}
 
+/* ---- stage tag (workflow context under page title) ---- */
+.stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
+.stage-tag a{color:var(--primary);font-weight:600}
+
 /* ---- workflow spine v2 (stepper + numbered nav) ---- */
 .wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
 .wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
@@ -151,11 +156,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub{padding-left:38px !important;font-size:12.5px}
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
-
-/* ---- stage tag (workflow context under page title) ---- */
-.stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
-.stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
-.stage-tag a{color:var(--primary);font-weight:600}
+/* ---- end workflow spine v2 ---- */
 </style>
 </head>
 <body>
@@ -165,13 +166,18 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span> STL ATS
     </a>
-                <div class="nav-label">Workspace</div>
+                                    <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Assigned Positions</a>
     <div class="nav-label">Hiring Workflow</div>
     <a class="nav-item active" href="shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Shortlist Review</a>
     <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Interview Feedback</a>
     <a class="nav-item nav-sub" href="interview-rating.page.html" data-testid="nav-rating">Rate Candidate</a>
     <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
+  
+  
+  
+  
+  
   
   
   
@@ -234,10 +240,30 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <h1>Tanvir Rahman</h1>
           <p>Sr. Brand Manager · Brand Marketing &nbsp;·&nbsp; tanvir.rahman@gmail.com &nbsp;·&nbsp; +880 1711-204455 &nbsp;·&nbsp; Dhaka</p>
         </div>
-        <div style="display:flex;align-items:center;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
           <div style="text-align:right">
             <div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">AI match score</div>
             <div style="font-size:24px;font-weight:700;color:var(--success);font-variant-numeric:tabular-nums" data-testid="detail-score">92</div>
+            <div style="font-size:11px;color:var(--muted)" data-testid="detail-score-owner">Set by HR &middot; read-only</div>
+            <div class="ks-lbl">Key signals</div>
+            <div class="ks-row" data-testid="key-signals">
+              <span class="ks-chip ks-pos" data-testid="key-signal-experience" title="Positive signal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                9 yrs FMCG brand mgmt
+              </span>
+              <span class="ks-chip ks-pos" data-testid="key-signal-education" title="Positive signal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                MBA Marketing (IBA)
+              </span>
+              <span class="ks-chip ks-neu" data-testid="key-signal-location" title="Neutral signal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Dhaka-based
+              </span>
+              <span class="ks-chip ks-risk" data-testid="key-signal-certification" title="Risk signal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                No certification listed
+              </span>
+            </div>
           </div>
           <span class="badge b-inf" data-testid="detail-status">In interview</span>
         </div>
@@ -281,7 +307,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
             <div class="card-body">
               <div class="ro-note" data-testid="scoring-managed-note">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Scoring is managed by HR. As hiring manager you can add feedback and decide the next round, but cannot override this score.
+                Scoring is managed by HR. As hiring manager you can add feedback and decide the next round, but cannot override this score. The key signals above and the online presence findings below are HR-owned and read-only here — only HR can run or re-run either.
               </div>
 
               <div class="crit" data-testid="crit-education">
@@ -318,6 +344,15 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 </div>
               </div>
             </div>
+          </section>
+
+          <!-- Online presence — read-only mirror of HR findings -->
+          <section class="card" data-testid="online-presence-card">
+            <div class="card-head">
+              <h2>Online Presence</h2>
+              <span class="badge b-mut" data-testid="online-presence-readonly">Read-only</span>
+            </div>
+            <div class="card-body" id="hmPresenceBody" data-testid="online-presence-body"></div>
           </section>
         </div>
 
@@ -445,6 +480,166 @@ function changeDecision(){
   document.getElementById('hm-choice').style.display = 'block';
   setHeader('b-inf', 'In interview');
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   Online presence — HIRING MANAGER (read-only)
+   ------------------------------------------------------------------
+   Running the analysis is HR's job, so this page renders findings only
+   and offers no run/re-run control.
+   Source of truth : localStorage key 'stl_presence_results', published
+                     by HR CV Review (hr/cv-review.page.html).
+   Record shape    : {name,pos,score,confidence,confirmed,namesake,
+                      mismatches,adverse,sources}
+   The stored record carries the headline numbers; the matched /
+   unmatched claim detail and source list mirror the HR fixture for
+   this candidate. Assistive only — never a screening input and never
+   part of the AI match score.
+   ══════════════════════════════════════════════════════════════════ */
+var HM_CAND_NAMES = ['Tanvir Rahman', 'Tanvir Hasan', 'Tahmid Rahman'];
+var HM_REPORT_ID = 0; /* index into the HR online-presence report set */
+
+var HM_SRCNAME = {linkedin:'LinkedIn',facebook:'Facebook',social:'Instagram / X',site:'Portfolio',pub:'Publications',news:'News',talk:'Speaking',dir:'Directory'};
+var HM_ICON = {
+  linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
+  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+  social:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+  site:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  pub:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/>',
+  talk:'<path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/>',
+  dir:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>'
+};
+
+/* unmatched: {cv, src} — src set = contradiction, src null = simply no
+   public evidence, which is neutral and never held against anyone. */
+var HM_PRES = {
+  score: 88,
+  conf: 'High',
+  identity: 'Confirmed',
+  sources: ['linkedin','site','talk','dir'],
+  matched: [
+    ['Sr. Brand Manager, Unilever Bangladesh (2019-present)','LinkedIn shows the same employer, title and dates'],
+    ['MBA, Marketing - IBA, University of Dhaka (2014)','LinkedIn education section matches'],
+    ['Brand Manager, ACI Limited (2015-2019)','Corroborated by published portfolio case studies'],
+    ['ATL / BTL campaign ownership','Panellist, Dhaka FMCG Summit 2025 - same programme described']
+  ],
+  unmatched: [
+    {cv:'Professional marketing certification', src:null}
+  ]
+};
+
+function hmEsc(s){
+  return String(s).replace(/[&<>"]/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+  });
+}
+function hmSrcIcon(k){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    (HM_ICON[k] || HM_ICON.site) + '</svg>';
+}
+function hmPresScoreColor(v){ return v < 35 ? 'var(--muted)' : (v < 70 ? 'var(--info)' : 'var(--success)'); }
+
+/* Returns the published record for this candidate, or null when HR has
+   not run the analysis (or storage is unavailable). Never throws. */
+function hmPresRecord(){
+  try{
+    var raw = window.localStorage ? window.localStorage.getItem('stl_presence_results') : null;
+    if(!raw) return null;
+    var arr = JSON.parse(raw);
+    if(!arr || !arr.length) return null;
+    for(var i = 0; i < arr.length; i++){
+      var r = arr[i];
+      if(!r || !r.name) continue;
+      for(var j = 0; j < HM_CAND_NAMES.length; j++){
+        if(String(r.name).toLowerCase() === HM_CAND_NAMES[j].toLowerCase()) return r;
+      }
+    }
+    return null;
+  }catch(e){ return null; }
+}
+function hmIdentity(rec){
+  if(rec && rec.confirmed) return 'Confirmed';
+  if(rec && rec.namesake) return 'Pending';
+  return HM_PRES.identity;
+}
+function hmIdentBadge(identity, conf){
+  if(identity === 'Confirmed') return '<span class="rp-chip rp-ok" data-testid="online-presence-identity">Identity confirmed &middot; ' + hmEsc(conf) + ' confidence</span>';
+  if(identity === 'Pending')   return '<span class="rp-chip rp-warnc" data-testid="online-presence-identity">Identity pending review &middot; ' + hmEsc(conf) + ' confidence</span>';
+  return '<span class="rp-chip rp-mutc" data-testid="online-presence-identity">Identity not found &middot; ' + hmEsc(conf) + ' confidence</span>';
+}
+
+function hmPresenceHTML(){
+  var rec = hmPresRecord();
+
+  /* Not analysed: neutral placeholder, no run control (HR-owned action). */
+  if(!rec){
+    return '<div class="rp-empty" data-testid="online-presence-placeholder">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' +
+      '<span>Online presence not analysed for this candidate.</span>' +
+      '</div>' +
+      '<div class="rp-gov" data-testid="online-presence-placeholder-note">Running the analysis is HR\'s responsibility. Findings appear here as read-only once HR has published them.</div>';
+  }
+
+  var score = Math.max(0, Math.min(100, Math.round(Number(rec.score) || HM_PRES.score)));
+  var conf = rec.confidence || HM_PRES.conf;
+  var identity = hmIdentity(rec);
+  var col = hmPresScoreColor(score);
+  var contra = HM_PRES.unmatched.filter(function(u){ return !!u.src; }).length;
+
+  var matched = HM_PRES.matched.length
+    ? HM_PRES.matched.map(function(m){
+        return '<div class="rp-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>' +
+          '<div><b>' + hmEsc(m[0]) + '</b><span class="rp-ev">' + hmEsc(m[1]) + '</span></div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">No CV claim could be corroborated from public sources.</span></div>';
+
+  var unmatched = HM_PRES.unmatched.length
+    ? HM_PRES.unmatched.map(function(u){
+        var icon = u.src
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        var ev = u.src
+          ? '<span class="rp-ev contra">CV says ' + hmEsc(u.cv) + ' &middot; sources say ' + hmEsc(u.src) + '</span>'
+          : '<span class="rp-ev">No public evidence found - neutral, not a negative signal.</span>';
+        return '<div class="rp-item">' + icon + '<div><b>' + hmEsc(u.cv) + '</b>' + ev + '</div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">Nothing uncorroborated - every CV claim checked was matched.</span></div>';
+
+  var srcs = HM_PRES.sources.length
+    ? HM_PRES.sources.map(function(s){
+        return '<span class="rp-src" data-testid="online-presence-src-' + s + '">' + hmSrcIcon(s) + hmEsc(HM_SRCNAME[s] || s) + '</span>';
+      }).join('')
+    : '<span class="rp-none">No public professional sources located - this is neutral.</span>';
+
+  return '' +
+    '<div class="rp-sec-h">' +
+      hmIdentBadge(identity, conf) +
+      '<span class="rp-chip ' + (contra ? 'rp-bad' : (HM_PRES.unmatched.length ? 'rp-warnc' : 'rp-ok')) + '" data-testid="online-presence-score-chip">Presence score ' + score + ' / 100</span>' +
+    '</div>' +
+    '<div class="rp-scorerow"><div class="rp-bar"><i style="width:' + score + '%;background:' + col + '"></i></div><b style="color:' + col + '" data-testid="online-presence-score">' + score + '</b></div>' +
+    '<div class="rp-lists">' +
+      '<div class="rp-list ok" data-testid="online-presence-matched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Matched - corroborated by a public source (' + HM_PRES.matched.length + ')</div>' +
+        matched +
+      '</div>' +
+      '<div class="rp-list bad" data-testid="online-presence-unmatched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Unmatched / not corroborated (' + HM_PRES.unmatched.length + ')</div>' +
+        unmatched +
+      '</div>' +
+    '</div>' +
+    '<div class="rp-subh">Sources found</div>' +
+    '<div class="rp-srcs" data-testid="online-presence-sources">' + srcs + '</div>' +
+    '<a class="btn btn-ghost btn-sm" style="margin-top:14px" href="../hr/online-presence-detail.page.html?c=' + HM_REPORT_ID + '" data-testid="online-presence-view-report" aria-label="View full online presence report">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>View full report</a>' +
+    '<div class="rp-gov" data-testid="online-presence-governance">Publicly available professional information only. Assistive research - never a screening input and never part of the AI match score. Scoring and presence analysis are owned by HR and are read-only for the hiring manager; identity is confirmed once by a human and every lookup is logged to the audit trail.</div>';
+}
+
+function hmRenderPresence(){
+  var host = document.getElementById('hmPresenceBody');
+  if(!host) return;
+  host.innerHTML = hmPresenceHTML();
+}
+hmRenderPresence();
 </script>
 </body>
 </html>

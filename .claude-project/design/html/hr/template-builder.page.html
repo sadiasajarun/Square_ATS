@@ -102,17 +102,6 @@ tbody tr:hover td{background:var(--primary-soft)}
 .modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
 .modal h3{font-size:17px;font-weight:700}
 
-/* wf-stepper (round-3 fix, unique classes) */
-.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
-.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
-.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
-.wf-step .wf-dot svg{width:14px;height:14px}
-.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
-.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
-.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
-.wf-sep.done{background:var(--success)}
-a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
-
 /* ---- workflow spine v2 (stepper + numbered nav) ---- */
 .wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
 .wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
@@ -128,6 +117,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub{padding-left:38px !important;font-size:12.5px}
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
+/* ---- end workflow spine v2 ---- */
 </style>
 
 <!-- ===== Page-local styles (existing tokens only) ===== -->
@@ -213,7 +203,7 @@ input[type=range]{width:100%;accent-color:var(--primary);cursor:pointer}
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                    <div class="nav-label">Workspace</div>
+                                        <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -221,7 +211,6 @@ input[type=range]{width:100%;accent-color:var(--primary);cursor:pointer}
     <a class="nav-item" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
     <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
     <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
-    <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
     <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
     <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
@@ -233,6 +222,11 @@ input[type=range]{width:100%;accent-color:var(--primary);cursor:pointer}
     <div class="nav-label">Talent &amp; System</div>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
+  
+  
+  
+  
   
   
     <div class="side-foot">

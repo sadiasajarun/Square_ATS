@@ -117,6 +117,77 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub{padding-left:38px !important;font-size:12.5px}
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
+/* ---- end workflow spine v2 ---- */
+</style>
+<!-- page-local style — existing design tokens only, no new colours -->
+<style>
+/* ── CDC — parsing-confidence readout ───────────────────────────── */
+.cdc-conf{display:flex;gap:14px;align-items:flex-start;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.cdc-ring{width:56px;height:56px;flex:none;line-height:0}
+.cdc-ring svg{width:56px;height:56px;display:block}
+.cdc-ringtxt{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.cdc-conf-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:600}
+.cdc-bar{height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden;margin-top:7px;max-width:260px}
+.cdc-bar i{display:block;height:100%;border-radius:6px}
+.cdc-conf-x{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.45}
+.cdc-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px}
+.cdc-flabel{color:var(--muted);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.cdc-fchip{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.cdc-fchip svg{width:10px;height:10px;flex:none}
+.cdc-f-warn{background:var(--warn-s);color:var(--warn)}
+.cdc-f-dan{background:var(--danger-s);color:var(--danger)}
+.cdc-f-ok{background:var(--success-s);color:var(--success)}
+.cdc-fval{font-weight:600}
+.cdc-fval.flag-low{color:var(--danger)}
+.cdc-note{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--muted)}
+.cdc-note a{color:var(--primary);font-weight:600}
+.cdc-note svg{width:14px;height:14px;flex:none;color:var(--warn)}
+
+/* ── RP — online presence (mirrors the Review-CVs drawer block) ─── */
+.rp-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;width:fit-content}
+.rp-chip svg{width:11px;height:11px;flex:none}
+.rp-ok{background:var(--success-s);color:var(--success)}
+.rp-warnc{background:var(--warn-s);color:var(--warn)}
+.rp-bad{background:var(--danger-s);color:var(--danger)}
+.rp-mutc{background:var(--muted-s);color:var(--muted)}
+.rp-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.rp-scorerow{display:flex;align-items:center;gap:9px;max-width:300px;margin-bottom:14px}
+.rp-bar{flex:1;min-width:60px;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.rp-bar i{display:block;height:100%;border-radius:6px}
+.rp-scorerow b{font-variant-numeric:tabular-nums;font-size:12.5px;width:52px;text-align:right}
+.rp-lists{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rp-list{border-radius:10px;padding:12px 14px;border:1px solid transparent;min-width:0}
+.rp-list.ok{background:var(--success-s);border-color:#BBF7D0}
+.rp-list.bad{background:var(--danger-s);border-color:#FECACA}
+.rp-list-h{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;margin-bottom:8px}
+.rp-list-h svg{width:14px;height:14px;flex:none}
+.rp-list.ok .rp-list-h{color:var(--success)}
+.rp-list.bad .rp-list-h{color:var(--danger)}
+.rp-item{display:flex;gap:7px;font-size:12.5px;margin-bottom:8px;line-height:1.45}
+.rp-item:last-child{margin-bottom:0}
+.rp-item svg{width:13px;height:13px;flex:none;margin-top:3px}
+.rp-item .rp-ev{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+.rp-item .rp-ev.contra{color:var(--danger);font-weight:600}
+.rp-subh{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.rp-srcs{display:flex;flex-wrap:wrap;gap:6px}
+.rp-src{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text)}
+.rp-src svg{width:12px;height:12px;flex:none;color:var(--primary)}
+.rp-none{font-size:12px;color:var(--muted)}
+.rp-empty{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px dashed var(--border);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.rp-empty svg{width:18px;height:18px;flex:none}
+.rp-running{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--primary);font-weight:600}
+.rp-spin{width:15px;height:15px;flex:none;animation:rpspin 1s linear infinite}
+@keyframes rpspin{to{transform:rotate(360deg)}}
+.rp-gov{display:flex;gap:10px;align-items:flex-start;background:var(--info-s);border-top:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);padding:12px 20px;font-size:11.5px;color:var(--text)}
+.rp-gov svg{width:15px;height:15px;flex:none;color:var(--info);margin-top:1px}
+.rp-gov ul{margin:3px 0 0 15px}
+.rp-gov li{margin-bottom:1px}
+@media(max-width:1024px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .grid-detail{grid-template-columns:1fr}
+  .rp-lists{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -125,7 +196,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                    <div class="nav-label">Workspace</div>
+                                        <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -133,7 +204,6 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="nav-item" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
     <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
     <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
-    <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
     <a class="nav-item active" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
     <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
@@ -145,6 +215,11 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <div class="nav-label">Talent &amp; System</div>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
+  
+  
+  
+  
   
   
     <div class="side-foot">
@@ -197,7 +272,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
             </div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <a href="cv-analysis-dashboard.page.html" data-testid="action-pool-analysis" style="font-size:12.5px;font-weight:600;color:var(--primary);margin-right:4px">View pool analysis</a>
+            <a href="cv-review.page.html#pool-analysis" data-testid="action-pool-analysis" style="font-size:12.5px;font-weight:600;color:var(--primary);margin-right:4px">View pool analysis</a>
             <a href="online-visibility-analysis.page.html" data-testid="action-online-presence" style="font-size:12.5px;font-weight:600;color:var(--primary);margin-right:4px">Run online presence analysis</a>
             <button class="btn btn-ghost" data-testid="action-message" onclick="void 0">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message
@@ -270,16 +345,77 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <div style="display:flex;align-items:center;gap:10px"><span class="badge b-mut">Parsed</span> Nielsen Consumer Research Workshop — 2021</div>
               </div>
             </div>
-            <!-- Parsed meta -->
-            <div class="card">
-              <div class="card-head"><h2>Parsed Details</h2></div>
-              <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
-                <div><div style="color:var(--muted)">Total experience</div><div style="font-weight:600">6 yrs 11 mo</div></div>
-                <div><div style="color:var(--muted)">Home district</div><div style="font-weight:600">Dhaka</div></div>
-                <div><div style="color:var(--muted)">Expected salary</div><div style="font-weight:600">BDT 1,20,000/mo</div></div>
-                <div><div style="color:var(--muted)">Notice period</div><div style="font-weight:600">2 months</div></div>
-                <div style="grid-column:1/-1"><div style="color:var(--muted)">Extraction confidence</div><div class="pbar" style="margin-top:6px"><i style="width:94%"></i></div><small style="color:var(--muted)">94% · all key fields present</small></div>
+            <!-- Parsed meta + parsing confidence (single source, not duplicated) -->
+            <div class="card" data-testid="parsed-details-card">
+              <div class="card-head">
+                <h2>Parsed Details</h2>
+                <span class="rp-chip rp-ok" data-testid="parsing-confidence-band">High confidence</span>
               </div>
+              <div class="card-body">
+                <!-- Parsing confidence readout -->
+                <div class="cdc-conf" data-testid="parsing-confidence">
+                  <div class="cdc-ring" role="img" aria-label="Parsing confidence 94 percent" title="Parsing confidence 94%" data-testid="parsing-confidence-ring">
+                    <svg viewBox="0 0 40 40" aria-hidden="true">
+                      <circle cx="20" cy="20" r="16" fill="none" stroke="var(--surface-2)" stroke-width="4"/>
+                      <circle cx="20" cy="20" r="16" fill="none" stroke="var(--success)" stroke-width="4" stroke-linecap="round" stroke-dasharray="100.53" stroke-dashoffset="6.03" transform="rotate(-90 20 20)"/>
+                      <text class="cdc-ringtxt" x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="var(--success)">94%</text>
+                    </svg>
+                  </div>
+                  <div style="min-width:0">
+                    <div class="cdc-conf-t">Parsing confidence — <span data-testid="parsing-confidence-value" style="color:var(--success)">94%</span></div>
+                    <div class="cdc-bar"><i style="width:94%;background:var(--success)"></i></div>
+                    <p class="cdc-conf-x">How reliably the CV was extracted — a low score means the parsed fields need a human spot-check, not that the candidate is weak. Bands: 90%+ green, 70–89% amber, below 70% red. Extraction confidence is never part of the AI match score.</p>
+                  </div>
+                </div>
+
+                <!-- Parsed fields, with per-field extraction indicators -->
+                <div class="cdc-fields" data-testid="parsed-fields">
+                  <div><div class="cdc-flabel">Total experience</div><div class="cdc-fval">6 yrs 11 mo</div></div>
+                  <div><div class="cdc-flabel">Home district</div><div class="cdc-fval">Dhaka</div></div>
+                  <div data-testid="parsed-field-salary">
+                    <div class="cdc-flabel">Expected salary
+                      <span class="cdc-fchip cdc-f-dan" title="Extracted at 62% confidence — verify against the original CV">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>62% · verify
+                      </span>
+                    </div>
+                    <div class="cdc-fval flag-low">BDT 1,20,000/mo</div>
+                  </div>
+                  <div data-testid="parsed-field-notice">
+                    <div class="cdc-flabel">Notice period
+                      <span class="cdc-fchip cdc-f-warn" title="Extracted at 78% confidence — worth a quick check">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>78%
+                      </span>
+                    </div>
+                    <div class="cdc-fval">2 months</div>
+                  </div>
+                </div>
+
+                <div class="cdc-note">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>2 of 4 fields were extracted below 90% — spot-check the flagged values.</span>
+                  <a href="#documents" data-testid="parsing-confidence-open-cv">Open original CV</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Online presence (assistive research only) -->
+        <div class="card" style="margin-top:16px" id="onlinePresence" data-testid="presence-card">
+          <div class="card-head">
+            <h2>Online presence</h2>
+            <span style="font-size:12px;color:var(--muted)">Assistive research — never a screening input</span>
+          </div>
+          <div class="card-body" id="cdPresenceBody" data-testid="presence-body"></div>
+          <div class="rp-gov" data-testid="presence-governance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div>
+              <b>How online presence is used here</b>
+              <ul>
+                <li><b>Publicly available professional information only.</b> Assistive only — never a screening input and never part of the AI match score.</li>
+                <li><b>Identity is confirmed once, by a human.</b> "Not found online" is neutral — only contradictions, not absence, are meaningful.</li>
+                <li><b>Every lookup is logged to the audit trail</b> and is opt-in per position.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -345,5 +481,231 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     </main>
   </div>
 </div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   Online presence — candidate master profile (Tanvir Hasan, id 1).
+   Same data model, wording and localStorage contract as cv-review:
+     matched   — CV claim corroborated by a public professional source
+     unmatched — {cv, src}: src set = real contradiction,
+                 src null = no public evidence found (neutral)
+   Assistive only: never a screening input, never part of the AI match
+   score. Identity is confirmed once by a human; every lookup is logged.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var CID = 1;
+  var CNAME = 'Tanvir Hasan';
+  var CPOS = 'Sr. Brand Manager';
+
+  var RP_ICON = {
+    linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
+    facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+    social:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+    site:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    pub:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/>',
+    talk:'<path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/>',
+    dir:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>'
+  };
+  var RP_SRCNAME = {linkedin:'LinkedIn',facebook:'Facebook',social:'Instagram / X',site:'Portfolio',pub:'Publications',news:'News',talk:'Speaking',dir:'Directory'};
+
+  /* Fixture for this candidate (mirrors PRESENCE[1] on Review CVs) */
+  var PRES = {
+    score:88, conf:'High', identity:'Confirmed',
+    sources:['linkedin','site','talk','dir'],
+    matched:[
+      ['Asst. Brand Manager, Unilever Bangladesh (2023–present)','LinkedIn shows the same employer, title and dates'],
+      ['MBA, Marketing — IBA, University of Dhaka (2019)','LinkedIn education section matches'],
+      ['Brand Executive, ACI Limited (2020–2022)','Corroborated by portfolio case studies'],
+      ['Trade marketing / A&P budget ownership','Panellist, Dhaka FMCG Summit 2025 — same programme described']
+    ],
+    unmatched:[
+      {cv:'Nielsen Consumer Research Workshop (2021)', src:null}
+    ]
+  };
+
+  var DONE = false;
+  var BUSY = false;
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g,function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+    });
+  }
+  function scoreColor(v){ return v < 35 ? 'var(--muted)' : (v < 70 ? 'var(--info)' : 'var(--success)'); }
+  function contraCount(p){
+    var n = 0;
+    for (var i = 0; i < p.unmatched.length; i++){ if (p.unmatched[i] && p.unmatched[i].src) n++; }
+    return n;
+  }
+  function srcIcon(k){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      (RP_ICON[k] || RP_ICON.site) + '</svg>';
+  }
+  function identBadge(p){
+    if (p.identity === 'Confirmed') return '<span class="rp-chip rp-ok" data-testid="presence-identity">Identity confirmed · ' + esc(p.conf) + ' confidence</span>';
+    if (p.identity === 'Pending')   return '<span class="rp-chip rp-warnc" data-testid="presence-identity">Identity pending review · ' + esc(p.conf) + ' confidence</span>';
+    return '<span class="rp-chip rp-mutc" data-testid="presence-identity">Identity not found · ' + esc(p.conf) + ' confidence</span>';
+  }
+
+  /* ---------- localStorage contract (shared with cv-review) ---------- */
+  function readStore(){
+    try{
+      var raw = localStorage.getItem('stl_presence_results');
+      if (!raw) return null;
+      var arr = JSON.parse(raw);
+      if (Object.prototype.toString.call(arr) !== '[object Array]') return null;
+      for (var i = 0; i < arr.length; i++){
+        if (arr[i] && arr[i].name === CNAME) return arr[i];
+      }
+      return null;
+    }catch(e){ return null; }
+  }
+  function writeStore(){
+    try{
+      var arr = [];
+      var raw = localStorage.getItem('stl_presence_results');
+      if (raw){
+        try{
+          var parsed = JSON.parse(raw);
+          if (Object.prototype.toString.call(parsed) === '[object Array]') arr = parsed;
+        }catch(pe){ arr = []; /* unreadable payload — start a clean one */ }
+      }
+      var rec = {
+        name: CNAME, pos: CPOS, score: PRES.score,
+        confidence: PRES.conf,
+        confirmed: PRES.identity === 'Confirmed',
+        namesake: PRES.identity === 'Pending',
+        mismatches: contraCount(PRES),
+        adverse: 0,
+        sources: PRES.sources.length
+      };
+      var found = false;
+      for (var i = 0; i < arr.length; i++){
+        if (arr[i] && arr[i].name === CNAME){ arr[i] = rec; found = true; }
+      }
+      if (!found) arr.push(rec);
+      localStorage.setItem('stl_presence_results', JSON.stringify(arr));
+      localStorage.setItem('stl_presence_run_at', new Date().toISOString());
+    }catch(e){ /* storage unavailable — the prototype still renders */ }
+  }
+
+  /* ---------- Render ---------- */
+  function runningHTML(){
+    return '<div class="rp-empty" data-testid="presence-running">' +
+      '<span class="rp-running" role="status">' +
+        '<svg class="rp-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>' +
+        'Analysing…</span>' +
+      '<span>Checking public professional sources for ' + esc(CNAME) + '.</span>' +
+    '</div>';
+  }
+  function placeholderHTML(){
+    return '<div class="rp-empty" data-testid="presence-placeholder">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' +
+      '<span>Online presence not analysed for ' + esc(CNAME) + '.</span>' +
+      '<button class="btn btn-primary btn-sm" style="margin-left:auto" data-testid="presence-run" onclick="cdRunPresence()" title="Run online presence analysis">' +
+        '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>Run online presence</button>' +
+    '</div>';
+  }
+  function analysedHTML(){
+    var p = PRES;
+    var contra = contraCount(p);
+    var col = scoreColor(p.score);
+
+    var matched = p.matched.length
+      ? p.matched.map(function(m){
+          return '<div class="rp-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>' +
+            '<div><b>' + esc(m[0]) + '</b><span class="rp-ev">' + esc(m[1]) + '</span></div></div>';
+        }).join('')
+      : '<div class="rp-item"><span style="color:var(--muted)">No CV claim could be corroborated from public sources.</span></div>';
+
+    var unmatched = p.unmatched.length
+      ? p.unmatched.map(function(u){
+          var icon = u.src
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+          var ev = u.src
+            ? '<span class="rp-ev contra">CV says ' + esc(u.cv) + ' · sources say ' + esc(u.src) + '</span>'
+            : '<span class="rp-ev">No public evidence found — neutral, not a negative signal.</span>';
+          return '<div class="rp-item">' + icon + '<div><b>' + esc(u.cv) + '</b>' + ev + '</div></div>';
+        }).join('')
+      : '<div class="rp-item"><span style="color:var(--muted)">Nothing uncorroborated — every CV claim checked was matched.</span></div>';
+
+    var srcs = p.sources.length
+      ? p.sources.map(function(s){
+          return '<span class="rp-src" data-testid="presence-src-' + s + '">' + srcIcon(s) + esc(RP_SRCNAME[s] || s) + '</span>';
+        }).join('')
+      : '<span class="rp-none">No public professional sources located — this is neutral.</span>';
+
+    return '' +
+    '<div class="rp-head">' +
+      identBadge(p) +
+      '<span class="rp-chip ' + (contra ? 'rp-bad' : (p.unmatched.length ? 'rp-warnc' : 'rp-ok')) + '" data-testid="presence-summary-chip">' +
+        p.matched.length + ' matched · ' + p.unmatched.length + ' unmatched</span>' +
+      '<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">' +
+        '<a class="btn btn-ghost btn-sm" href="online-presence-detail.page.html?c=' + CID + '" data-testid="presence-view-report" title="View full online presence report" aria-label="View full online presence report for ' + esc(CNAME) + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>View full report</a>' +
+        '<button class="btn btn-ghost btn-sm" data-testid="presence-rerun" onclick="cdRunPresence(true)" title="Re-run online presence analysis">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Re-run</button>' +
+      '</span>' +
+    '</div>' +
+    '<div class="rp-scorerow" data-testid="presence-score">' +
+      '<div class="rp-bar"><i style="width:' + p.score + '%;background:' + col + '"></i></div>' +
+      '<b style="color:' + col + '">' + p.score + ' / 100</b>' +
+    '</div>' +
+    '<div class="rp-lists">' +
+      '<div class="rp-list ok" data-testid="presence-matched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Matched — corroborated by a public source (' + p.matched.length + ')</div>' +
+        matched +
+      '</div>' +
+      '<div class="rp-list bad" data-testid="presence-unmatched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Unmatched / not corroborated (' + p.unmatched.length + ')</div>' +
+        unmatched +
+      '</div>' +
+    '</div>' +
+    '<div class="rp-subh">Sources found</div>' +
+    '<div class="rp-srcs" data-testid="presence-sources">' + srcs + '</div>';
+  }
+
+  function render(){
+    var host = (typeof document !== 'undefined') ? document.getElementById('cdPresenceBody') : null;
+    if (!host) return;
+    host.innerHTML = BUSY ? runningHTML() : (DONE ? analysedHTML() : placeholderHTML());
+  }
+
+  function runPresence(){
+    if (BUSY) return;
+    BUSY = true;
+    render();
+    setTimeout(function(){
+      BUSY = false;
+      DONE = true;
+      writeStore();
+      render();
+    }, 900);
+  }
+  window.cdRunPresence = runPresence;
+
+  function init(){
+    var rec = readStore();
+    if (rec){
+      DONE = true;
+      if (typeof rec.score === 'number') PRES.score = rec.score;
+      if (rec.confidence) PRES.conf = rec.confidence;
+      if (rec.confirmed) PRES.identity = 'Confirmed';
+      else if (rec.namesake) PRES.identity = 'Pending';
+      else PRES.identity = 'Not found';
+    }
+    render();
+  }
+  window.cdPresenceInit = init;
+
+  if (typeof document !== 'undefined' && document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 </html>

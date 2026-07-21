@@ -116,6 +116,47 @@ tbody tr:hover td{background:var(--primary-soft)}
 .modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
 .modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
 .modal h3{font-size:17px;font-weight:700}
+/* ---- page-local: parsing confidence + read-only online presence ----
+   Visual language mirrors HR CV Review (rp-*) so the prototype reads the
+   same across roles. No new design tokens are introduced. */
+.rp-ring{width:64px;height:64px;flex:none;line-height:0;display:inline-block}
+.rp-ring svg{width:64px;height:64px;display:block}
+.rp-ringtxt{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.rp-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600;width:fit-content}
+.rp-chip svg{width:11px;height:11px;flex:none}
+.rp-ok{background:var(--success-s);color:var(--success)}
+.rp-warnc{background:var(--warn-s);color:var(--warn)}
+.rp-bad{background:var(--danger-s);color:var(--danger)}
+.rp-mutc{background:var(--muted-s);color:var(--muted)}
+.rp-sec-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.rp-scorerow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.rp-bar{flex:1;min-width:48px;height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.rp-bar i{display:block;height:100%;border-radius:6px}
+.rp-scorerow b{font-variant-numeric:tabular-nums;font-size:12.5px;width:26px;text-align:right}
+.rp-lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.rp-list{border-radius:10px;padding:12px 14px;border:1px solid transparent;min-width:0}
+.rp-list.ok{background:var(--success-s);border-color:#BBF7D0}
+.rp-list.bad{background:var(--danger-s);border-color:#FECACA}
+.rp-list-h{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;margin-bottom:8px}
+.rp-list-h svg{width:14px;height:14px;flex:none}
+.rp-list.ok .rp-list-h{color:var(--success)}
+.rp-list.bad .rp-list-h{color:var(--danger)}
+.rp-item{display:flex;gap:7px;font-size:12.5px;margin-bottom:8px;line-height:1.45;overflow-wrap:anywhere}
+.rp-item:last-child{margin-bottom:0}
+.rp-item svg{width:13px;height:13px;flex:none;margin-top:3px}
+.rp-item .rp-ev{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+.rp-item .rp-ev.contra{color:var(--danger);font-weight:600}
+.rp-srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rp-src{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text)}
+.rp-src svg{width:12px;height:12px;flex:none;color:var(--primary)}
+.rp-none{font-size:12px;color:var(--muted)}
+.rp-empty{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.rp-empty svg{width:16px;height:16px;flex:none}
+.rp-gov{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.5}
+.rp-subh{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text);margin-top:14px;margin-bottom:2px}
+.conf-row{display:flex;align-items:center;gap:14px}
+.conf-band{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.conf-band span{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
 </style>
 </head>
 <body>
@@ -288,6 +329,36 @@ tbody tr:hover td{background:var(--primary-soft)}
 
         <!-- RIGHT column: score explanation (read-only) -->
         <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Parsing confidence (read-only) -->
+          <section class="card" data-testid="section-parsing-confidence">
+            <div class="card-head">
+              <h2>Parsing Confidence</h2>
+              <span class="badge b-inf">Read-only</span>
+            </div>
+            <div class="card-body">
+              <div class="conf-row">
+                <div class="rp-ring" role="img" aria-label="Parsing confidence 94 percent" title="Parsing confidence 94 percent" data-testid="parsing-confidence-ring">
+                  <svg viewBox="0 0 40 40" aria-hidden="true">
+                    <circle cx="20" cy="20" r="16" fill="none" stroke="var(--surface-2)" stroke-width="4"/>
+                    <circle cx="20" cy="20" r="16" fill="none" stroke="var(--success)" stroke-width="4" stroke-linecap="round" stroke-dasharray="100.53" stroke-dashoffset="6.03" transform="rotate(-90 20 20)"/>
+                    <text class="rp-ringtxt" x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="var(--success)">94%</text>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-weight:600;font-size:13px" data-testid="parsing-confidence-value">94% — high extraction reliability</div>
+                  <p style="color:var(--muted);font-size:12.5px;margin-top:4px" data-testid="parsing-confidence-note">
+                    Confidence reflects how reliably the CV text was extracted and structured — it is not a measure of candidate quality and never affects the AI match score.
+                  </p>
+                </div>
+              </div>
+              <div class="conf-band" data-testid="parsing-confidence-bands">
+                <span class="rp-ok">90–100 · High</span>
+                <span class="rp-warnc">70–89 · Review recommended</span>
+                <span class="rp-bad">Below 70 · Manual check</span>
+              </div>
+            </div>
+          </section>
+
           <section class="card" data-testid="section-score-explanation">
             <div class="card-head">
               <h2>Score Explanation</h2>
@@ -354,10 +425,185 @@ tbody tr:hover td{background:var(--primary-soft)}
               </div>
             </div>
           </section>
+
+          <!-- Online presence (read-only mirror of HR findings; Viewer can never run it) -->
+          <section class="card" data-testid="section-online-presence">
+            <div class="card-head">
+              <h2>Online Presence</h2>
+              <span class="badge b-inf" data-testid="online-presence-readonly">Read-only</span>
+            </div>
+            <div class="card-body" id="vwPresenceBody" data-testid="online-presence-body"></div>
+          </section>
         </div>
       </div>
     </main>
   </div>
 </div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   Online presence — VIEWER (strictly read-only)
+   ------------------------------------------------------------------
+   The Viewer may SEE what HR found, but can never start or re-run an
+   analysis, so this file contains no mutating control of any kind.
+   Source of truth : localStorage key 'stl_presence_results', published
+                     by HR CV Review (hr/cv-review.page.html).
+   Record shape    : {name,pos,score,confidence,confirmed,namesake,
+                      mismatches,adverse,sources}
+   The stored record carries the headline numbers; the matched /
+   unmatched claim detail and the source list mirror the HR fixture for
+   this candidate. Assistive only — never a screening input and never
+   part of the AI match score.
+   ══════════════════════════════════════════════════════════════════ */
+var VW_CAND_NAMES = ['Tahmid Rahman', 'Tanvir Rahman', 'Tanvir Hasan'];
+var VW_REPORT_ID = 0; /* index into the HR online-presence report set */
+
+var VW_SRCNAME = {linkedin:'LinkedIn',facebook:'Facebook',social:'Instagram / X',site:'Portfolio',pub:'Publications',news:'News',talk:'Speaking',dir:'Directory'};
+var VW_ICON = {
+  linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
+  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+  social:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+  site:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  pub:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/>',
+  talk:'<path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/>',
+  dir:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>'
+};
+
+/* Claim-level detail for this candidate (mirrors the HR fixture).
+   unmatched: {cv, src} — src set = contradiction, src null = simply no
+   public evidence, which is neutral and never held against anyone. */
+var VW_PRES = {
+  score: 88,
+  conf: 'High',
+  identity: 'Confirmed',
+  sources: ['linkedin','site','talk','dir'],
+  matched: [
+    ['Brand Manager, Unilever Bangladesh (2019-present)','LinkedIn shows the same employer, title and dates'],
+    ['MBA, Marketing - IBA, University of Dhaka (2013)','LinkedIn education section matches'],
+    ['Assistant Brand Manager, ACI Limited (2015-2018)','Corroborated by published portfolio case studies'],
+    ['Trade marketing and A&P ownership','Panellist, Dhaka FMCG Summit 2025 - same programme described']
+  ],
+  unmatched: [
+    {cv:'Brand Management Professional - Kellogg Executive Ed. (2019)', src:null}
+  ]
+};
+
+function vwEsc(s){
+  return String(s).replace(/[&<>"]/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];
+  });
+}
+function vwSrcIcon(k){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    (VW_ICON[k] || VW_ICON.site) + '</svg>';
+}
+function vwPresScoreColor(v){ return v < 35 ? 'var(--muted)' : (v < 70 ? 'var(--info)' : 'var(--success)'); }
+
+/* Returns the published record for this candidate, or null when HR has
+   not run the analysis (or storage is unavailable). Never throws. */
+function vwPresRecord(){
+  try{
+    var raw = window.localStorage ? window.localStorage.getItem('stl_presence_results') : null;
+    if(!raw) return null;
+    var arr = JSON.parse(raw);
+    if(!arr || !arr.length) return null;
+    for(var i = 0; i < arr.length; i++){
+      var r = arr[i];
+      if(!r || !r.name) continue;
+      for(var j = 0; j < VW_CAND_NAMES.length; j++){
+        if(String(r.name).toLowerCase() === VW_CAND_NAMES[j].toLowerCase()) return r;
+      }
+    }
+    return null;
+  }catch(e){ return null; }
+}
+function vwIdentity(rec){
+  if(rec && rec.confirmed) return 'Confirmed';
+  if(rec && rec.namesake) return 'Pending';
+  return VW_PRES.identity;
+}
+function vwIdentBadge(identity, conf){
+  if(identity === 'Confirmed') return '<span class="rp-chip rp-ok" data-testid="online-presence-identity">Identity confirmed &middot; ' + vwEsc(conf) + ' confidence</span>';
+  if(identity === 'Pending')   return '<span class="rp-chip rp-warnc" data-testid="online-presence-identity">Identity pending review &middot; ' + vwEsc(conf) + ' confidence</span>';
+  return '<span class="rp-chip rp-mutc" data-testid="online-presence-identity">Identity not found &middot; ' + vwEsc(conf) + ' confidence</span>';
+}
+function vwGovHTML(){
+  return '<div class="rp-gov" data-testid="online-presence-governance">Publicly available professional information only. Assistive research - never a screening input and never part of the AI match score. Identity is confirmed once by a human; every lookup is logged to the audit trail.</div>';
+}
+
+function vwPresenceHTML(){
+  var rec = vwPresRecord();
+
+  /* Not analysed: neutral placeholder, no run control (HR-owned action). */
+  if(!rec){
+    return '<div class="rp-empty" data-testid="online-presence-placeholder">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' +
+      '<span>Online presence not analysed for this candidate.</span>' +
+      '</div>' +
+      '<div class="rp-gov" data-testid="online-presence-placeholder-note">The analysis is run by HR. As a viewer you have read-only access, so no action is available here.</div>';
+  }
+
+  var score = Math.max(0, Math.min(100, Math.round(Number(rec.score) || VW_PRES.score)));
+  var conf = rec.confidence || VW_PRES.conf;
+  var identity = vwIdentity(rec);
+  var col = vwPresScoreColor(score);
+  var contra = VW_PRES.unmatched.filter(function(u){ return !!u.src; }).length;
+
+  var matched = VW_PRES.matched.length
+    ? VW_PRES.matched.map(function(m){
+        return '<div class="rp-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>' +
+          '<div><b>' + vwEsc(m[0]) + '</b><span class="rp-ev">' + vwEsc(m[1]) + '</span></div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">No CV claim could be corroborated from public sources.</span></div>';
+
+  var unmatched = VW_PRES.unmatched.length
+    ? VW_PRES.unmatched.map(function(u){
+        var icon = u.src
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        var ev = u.src
+          ? '<span class="rp-ev contra">CV says ' + vwEsc(u.cv) + ' &middot; sources say ' + vwEsc(u.src) + '</span>'
+          : '<span class="rp-ev">No public evidence found - neutral, not a negative signal.</span>';
+        return '<div class="rp-item">' + icon + '<div><b>' + vwEsc(u.cv) + '</b>' + ev + '</div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">Nothing uncorroborated - every CV claim checked was matched.</span></div>';
+
+  var srcs = VW_PRES.sources.length
+    ? VW_PRES.sources.map(function(s){
+        return '<span class="rp-src" data-testid="online-presence-src-' + s + '">' + vwSrcIcon(s) + vwEsc(VW_SRCNAME[s] || s) + '</span>';
+      }).join('')
+    : '<span class="rp-none">No public professional sources located - this is neutral.</span>';
+
+  return '' +
+    '<div class="rp-sec-h">' +
+      vwIdentBadge(identity, conf) +
+      '<span class="rp-chip ' + (contra ? 'rp-bad' : (VW_PRES.unmatched.length ? 'rp-warnc' : 'rp-ok')) + '" data-testid="online-presence-score-chip">Presence score ' + score + ' / 100</span>' +
+    '</div>' +
+    '<div class="rp-scorerow"><div class="rp-bar"><i style="width:' + score + '%;background:' + col + '"></i></div><b style="color:' + col + '" data-testid="online-presence-score">' + score + '</b></div>' +
+    '<div class="rp-lists">' +
+      '<div class="rp-list ok" data-testid="online-presence-matched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Matched - corroborated by a public source (' + VW_PRES.matched.length + ')</div>' +
+        matched +
+      '</div>' +
+      '<div class="rp-list bad" data-testid="online-presence-unmatched">' +
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Unmatched / not corroborated (' + VW_PRES.unmatched.length + ')</div>' +
+        unmatched +
+      '</div>' +
+    '</div>' +
+    '<div class="rp-subh">Sources found</div>' +
+    '<div class="rp-srcs" data-testid="online-presence-sources">' + srcs + '</div>' +
+    '<a class="btn btn-ghost btn-sm" style="margin-top:14px" href="../hr/online-presence-detail.page.html?c=' + VW_REPORT_ID + '" data-testid="online-presence-view-report" aria-label="View full online presence report">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>View full report</a>' +
+    vwGovHTML();
+}
+
+function vwRenderPresence(){
+  var host = document.getElementById('vwPresenceBody');
+  if(!host) return;
+  host.innerHTML = vwPresenceHTML();
+}
+vwRenderPresence();
+</script>
 </body>
 </html>

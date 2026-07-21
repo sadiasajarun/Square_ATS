@@ -102,17 +102,6 @@ tbody tr:hover td{background:var(--primary-soft)}
 .modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
 .modal h3{font-size:17px;font-weight:700}
 
-/* wf-stepper (round-3 fix, unique classes) */
-.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
-.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
-.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
-.wf-step .wf-dot svg{width:14px;height:14px}
-.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
-.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
-.wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
-.wf-sep.done{background:var(--success)}
-a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
-
 /* ---- workflow spine v2 (stepper + numbered nav) ---- */
 .wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
 .wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
@@ -128,6 +117,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub{padding-left:38px !important;font-size:12.5px}
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
+/* ---- end workflow spine v2 ---- */
 </style>
 <!-- page-local style (existing tokens only) -->
 <style>
@@ -315,6 +305,93 @@ table[data-testid="review-table"] td{padding:9px 12px}
 .cvf-emptybox svg{width:34px;height:34px;opacity:.5;margin-bottom:10px}
 .cvf-emptybox p{font-size:13px;margin-bottom:12px}
 
+/* ── Table density guard ───────────────────────────────────────────
+   The table now carries 11 columns. It is given a min-width and its own
+   horizontal scroller so the PAGE never scrolls sideways at 1280px —
+   only the table does. Every text cell truncates with a title tooltip. */
+.cvf-tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table[data-testid="review-table"]{min-width:1180px}
+.cvf-rank{font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);text-align:center;font-size:13px}
+.cvf-candcell{max-width:172px}
+.cvf-candcell .nm,.cvf-candcell small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:130px}
+.cvf-candcell .nm{font-weight:600}
+.cvf-file{max-width:150px}
+.cvf-fname{max-width:96px}
+.parsed-cell{max-width:168px}
+
+/* AI evaluation summary — clamped to 2 lines, full text lives in the drawer */
+.cvf-sum{font-size:12px;line-height:1.4;color:var(--text);max-width:224px;
+  display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cvf-sumfull{font-size:13px;line-height:1.55;color:var(--text);background:var(--surface);
+  border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+
+/* Key signals — 2 chips + overflow counter */
+.cvf-sigs{display:flex;flex-wrap:wrap;gap:4px;max-width:148px}
+.cvf-sig{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:11px;
+  font-weight:600;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.cvf-sig-pos{background:var(--success-s);color:var(--success)}
+.cvf-sig-neu{background:var(--muted-s);color:var(--muted)}
+.cvf-sig-risk{background:var(--danger-s);color:var(--danger)}
+.cvf-sig-more{background:var(--primary-soft);color:var(--primary)}
+
+/* View action — neutral/primary, sits above the decision buttons */
+.cvf-act-view{background:var(--primary-soft);color:var(--primary)}
+
+/* ══════════════════════════════════════════════════════════════════
+   CVA — Pool analysis, merged in from cv-analysis-dashboard.
+   Assistive, read-only: cohorts drill / preview / export / navigate;
+   nothing here changes a candidate's status. No age/gender facets.
+   Charts are pure inline SVG — in the React build these become recharts.
+   ══════════════════════════════════════════════════════════════════ */
+.cva-wrap{margin-bottom:20px}
+.cva-toggle{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:12.5px;font-weight:600}
+.cva-toggle:hover{background:var(--surface-2)}
+.cva-toggle svg{width:14px;height:14px;transition:transform .18s}
+.cva-wrap.collapsed .cva-toggle svg{transform:rotate(-90deg)}
+.cva-wrap.collapsed .cva-toggle{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-soft)}
+.cva-body[hidden]{display:none}
+.cva-scope{display:grid;grid-template-columns:2fr 1.4fr auto;gap:12px;align-items:end}
+.cva-sum{font-size:13px;color:var(--muted);margin-top:12px}
+.cva-sum b{color:var(--text);font-variant-numeric:tabular-nums}
+.cva-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.cva-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;min-width:0;display:flex;flex-direction:column}
+.cva-card h3{font-size:13.5px;font-weight:600;margin-bottom:12px}
+.cva-take{font-size:12px;color:var(--muted);margin-top:auto;padding-top:9px;border-top:1px solid var(--border)}
+.cva-take b{color:var(--text)}
+.cva-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.cva-chart text{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif}
+.cva-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.cva-legend span{display:inline-flex;align-items:center;gap:5px}
+.cva-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.cva-hit{cursor:pointer}
+.cva-hit:hover{opacity:.78}
+.cva-hit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cva-act{background:none;border:0;padding:0;margin-top:6px;color:var(--primary);font-size:12px;font-weight:600;text-align:left;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.cva-act:hover{color:var(--primary-hover);text-decoration:underline;opacity:1}
+.cva-act:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.cva-act svg{width:12px;height:12px;flex:none}
+.cva-dchip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:500;color:var(--muted)}
+.cva-dchip:hover{border-color:var(--primary);color:var(--primary)}
+.cva-dchip.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:600}
+.cva-dchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cva-co{background:var(--primary-soft);border:1px solid var(--primary);border-radius:var(--radius);padding:14px 18px;margin-top:16px}
+.cva-co-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cva-co-lbl{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em}
+.cva-cochip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--primary);border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:600;color:var(--primary)}
+.cva-cochip .f{color:var(--muted);font-weight:500}
+.cva-cochip button{background:none;border:0;padding:0;color:var(--primary);font-size:14px;line-height:1;display:grid;place-items:center}
+.cva-cochip button:hover{color:var(--danger);opacity:1}
+.cva-cochip button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.cva-co-stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid rgba(11,97,194,.2)}
+.cva-st{font-size:12px;color:var(--muted)}
+.cva-st b{display:block;font-size:16px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;margin-top:1px}
+.cva-st .sm{display:block;font-size:12px;font-weight:600;color:var(--text);margin-top:1px}
+.cva-co-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid rgba(11,97,194,.2)}
+.cva-note{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:var(--muted);margin-top:14px}
+.cva-note svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--info)}
+
+@media(max-width:1280px){.cva-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:1024px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
@@ -322,6 +399,12 @@ table[data-testid="review-table"] td{padding:9px 12px}
   .parsed-cell{max-width:200px}
   .rp-lists{grid-template-columns:1fr}
   .cvf-search{max-width:none}
+  .cva-scope{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .cva-grid{grid-template-columns:1fr}
+  .cva-scope{grid-template-columns:1fr}
+  .cva-co-stats{gap:14px}
 }
 </style>
 </head>
@@ -331,7 +414,7 @@ table[data-testid="review-table"] td{padding:9px 12px}
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                    <div class="nav-label">Workspace</div>
+                                        <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -339,7 +422,6 @@ table[data-testid="review-table"] td{padding:9px 12px}
     <a class="nav-item" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
     <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
     <a class="nav-item active" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
-    <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
     <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
     <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
@@ -351,6 +433,11 @@ table[data-testid="review-table"] td{padding:9px 12px}
     <div class="nav-label">Talent &amp; System</div>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
+  
+  
+  
+  
   
   
     <div class="side-foot">
@@ -427,6 +514,127 @@ table[data-testid="review-table"] td{padding:9px 12px}
           Get shortlist suggestions
         </button>
       </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           Pool analysis (merged in from the former CV Analysis page).
+           Collapsible so the candidate list stays the focus of Stage 4.
+           Assistive, read-only — decisions stay with HR.
+           ═══════════════════════════════════════════════════════════════ -->
+      <section class="card cva-wrap" id="poolWrap" data-testid="pool-analysis">
+        <div class="card-head" style="flex-wrap:wrap;gap:12px">
+          <div>
+            <h2 id="poolTitle">Pool analysis</h2>
+            <p style="font-size:12.5px;color:var(--muted);margin-top:2px">Click any chart segment to build a cohort · AI-assistive, read-only — decisions stay with HR</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-left:auto">
+            <a class="btn btn-ghost btn-sm" href="exports.page.html" data-testid="cva-export-excel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export to Excel
+            </a>
+            <button class="cva-toggle" id="poolToggle" data-testid="pool-analysis-toggle" aria-expanded="true" aria-controls="poolBody" onclick="togglePool()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              <span id="poolToggleLbl">Hide pool analysis</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body cva-body" id="poolBody">
+          <!-- Scope selector -->
+          <div class="cva-scope">
+            <div class="field" style="margin:0">
+              <label for="cva-position">Position</label>
+              <select id="cva-position" class="cvf-sel" style="max-width:none;width:100%;padding:9px 12px" data-testid="cva-scope-position" onchange="cvaScope()">
+                <option value="sbm" selected>Sr. Brand Manager — Marketing</option>
+                <option value="tmo">Trade Marketing Officer — Marketing</option>
+                <option value="qac">QA Chemist — QA/QC</option>
+              </select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="cva-batch">Batch</label>
+              <select id="cva-batch" class="cvf-sel" style="max-width:none;width:100%;padding:9px 12px" data-testid="cva-scope-batch" onchange="cvaScope()">
+                <option value="" selected>All batches</option>
+                <option value="Jun-2026 Trade Mktg Drive">Jun-2026 Trade Mktg Drive</option>
+                <option value="May-2026 Sales Expansion">May-2026 Sales Expansion</option>
+              </select>
+            </div>
+            <a class="btn btn-ghost" href="results.page.html" data-testid="cva-open-results" style="height:38px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Open screening results
+            </a>
+          </div>
+          <div class="cva-sum" id="cva-summary" data-testid="cva-summary-line"></div>
+
+          <!-- Active-cohort strip — appears only when a chart selection is live -->
+          <div class="cva-co" id="cva-co" style="display:none" data-testid="cva-cohort">
+            <div class="cva-co-top">
+              <span class="cva-co-lbl">Cohort</span>
+              <span id="cva-co-chips" style="display:contents"></span>
+              <button class="btn btn-ghost btn-sm" data-testid="cva-clear-cohort" onclick="cvaClear()" style="margin-left:auto">Clear cohort</button>
+            </div>
+            <div class="cva-co-stats" id="cva-co-stats"></div>
+            <!-- Hand-offs are navigational/suggestive only — no bulk shortlist or reject from here. -->
+            <div class="cva-co-acts">
+              <a class="btn btn-ghost btn-sm" href="exports.page.html" data-testid="cva-co-export">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export this cohort to Excel
+              </a>
+              <a class="btn btn-ghost btn-sm" id="cva-co-cand" href="candidates.page.html" data-testid="cva-co-candidates">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Open in Candidates with these filters
+              </a>
+              <button class="btn btn-ghost btn-sm" data-testid="cva-co-shortlist" onclick="openModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Get shortlist suggestions for this cohort
+              </button>
+            </div>
+          </div>
+
+          <!-- Insight cards — every segment is clickable and cross-filters the rest -->
+          <div class="cva-grid" data-testid="cva-insight-grid">
+            <div class="cva-card" data-testid="cva-card-score">
+              <h3>Match-score distribution</h3>
+              <div class="cva-chart" id="cva-ch-score"></div>
+              <div class="cva-legend">
+                <span><i style="background:var(--danger)"></i>&lt;50 low</span>
+                <span><i style="background:var(--warn)"></i>50–74 mid</span>
+                <span><i style="background:var(--success)"></i>&ge;75 strong</span>
+              </div>
+              <div class="cva-take" id="cva-tk-score"></div>
+            </div>
+            <div class="cva-card" data-testid="cva-card-skills">
+              <h3>Required-skill coverage</h3>
+              <div class="cva-chart" id="cva-ch-skills"></div>
+              <div class="cva-take" id="cva-tk-skills"></div>
+            </div>
+            <div class="cva-card" data-testid="cva-card-flags">
+              <h3>Red-flag frequency</h3>
+              <div class="cva-chart" id="cva-ch-flags"></div>
+              <div class="cva-take" id="cva-tk-flags"></div>
+            </div>
+            <div class="cva-card" data-testid="cva-card-conf">
+              <h3>Parsing-confidence bands</h3>
+              <div class="cva-chart" id="cva-ch-conf"></div>
+              <div class="cva-legend">
+                <span><i style="background:var(--success)"></i>&ge;90 high</span>
+                <span><i style="background:var(--warn)"></i>70–89 medium</span>
+                <span><i style="background:var(--danger)"></i>&lt;70 low</span>
+              </div>
+              <div class="cva-take" id="cva-tk-conf"></div>
+            </div>
+            <div class="cva-card" data-testid="cva-card-exp">
+              <h3>Experience &amp; education mix</h3>
+              <div class="cva-chart" id="cva-ch-exp"></div>
+              <div class="cva-take" id="cva-tk-exp"></div>
+            </div>
+            <div class="cva-card" data-testid="cva-card-src">
+              <h3>Source &amp; district spread</h3>
+              <div class="cva-chart" id="cva-ch-src"></div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px" id="cva-ch-dist" data-testid="cva-districts"></div>
+              <div class="cva-take" id="cva-tk-src"></div>
+            </div>
+          </div>
+
+          <div class="cva-note" data-testid="cva-governance-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Pool analysis is AI-assistive and read-only — no candidate is rejected or advanced from this view. Cohort filtering, exports and hand-offs never change a candidate's status. Open a candidate below to review evidence and act. Demographic (age/gender) analytics are intentionally not shown, pending STL policy &amp; local labour-law approval.</span>
+          </div>
+        </div>
+      </section>
 
       <!-- CV review table -->
       <div class="card">
@@ -523,20 +731,22 @@ table[data-testid="review-table"] td{padding:9px 12px}
         <!-- Publish confirmation -->
         <div class="rp-published" id="rpPublished" data-testid="review-presence-published">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Findings published to <b>CV Analysis</b> — <span id="rpPublishedCount">0</span> candidate(s) analysed.</span>
-          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="cv-analysis-dashboard.page.html" data-testid="review-presence-open-cva">Open CV Analysis</a>
+          <span>Findings published — <span id="rpPublishedCount">0</span> candidate(s) analysed.</span>
+          <button class="btn btn-ghost btn-sm" style="margin-left:auto" data-testid="review-presence-open-cva" onclick="openPool()">Open pool analysis</button>
         </div>
 
-        <div style="overflow:auto">
+        <div class="cvf-tw">
         <table data-testid="review-table">
           <thead>
             <tr>
-              <th style="width:42px"><input type="checkbox" data-testid="review-select-all" onclick="toggleAll(this)" aria-label="Select all candidates"></th>
+              <th style="width:38px"><input type="checkbox" data-testid="review-select-all" onclick="toggleAll(this)" aria-label="Select all candidates"></th>
+              <th style="width:44px;text-align:center" title="Rank by AI match score — 1 is the highest">Rank</th>
               <th>Candidate</th>
               <th>CV file</th>
               <th>Parsed profile</th>
-              <th style="text-align:center">Confidence</th>
               <th style="text-align:center">AI match score</th>
+              <th>AI evaluation summary</th>
+              <th>Key signals</th>
               <th style="text-align:center">Online presence</th>
               <th style="text-align:center">Status</th>
               <th>Actions</th>
@@ -674,6 +884,9 @@ table[data-testid="review-table"] td{padding:9px 12px}
   </div>
 </div>
 
+<!-- Single source-of-truth fixture, shared with exports.page.html so the numbers
+     in an export can never drift from the numbers in Pool analysis. -->
+<script src="../assets/js/stl-fixtures.js"></script>
 <script>
 /* ---------- Download a mock CV file (prototype) ---------- */
 function downloadCv(id){
@@ -772,6 +985,48 @@ var CANDS = [
     certs:[], phone:'+880 1400-998877',
     flags:[{t:'Missing info',d:'No email verified in CV; phone parsed with low confidence.'},{t:'Insufficient experience',d:'3 yrs vs 7+ required for the role.'}]}
 ];
+
+/* ══════════════════════════════════════════════════════════════════
+   AI evaluation summaries + key signals (merged in from the former
+   CV Analysis "Evaluation Summaries" table).
+   `s` — one assistive sentence, clamped to two lines in the table and
+         shown in full inside the row's details drawer.
+   `k` — key signals; `p` positive, `n` neutral, `r` risk. Signals are
+         review prompts, never disqualifiers, and never scored.
+   ══════════════════════════════════════════════════════════════════ */
+var AI_EVAL={
+  1:{s:'Strong FMCG brand fit — 11 yrs across Unilever Bangladesh and Pran-RFL with full P&L and trade-marketing ownership; covers every required skill and the CV carries no red flags.',
+     k:[['Strong FMCG fit','p'],['Budget ownership','p'],['ATL/BTL depth','p'],['No red flags','p']]},
+  2:{s:'Solid brand fit — 9 yrs at ACI Consumer and Square Toiletries with NPD and consumer-insight ownership; media planning is well covered but no explicit P&L accountability is evidenced.',
+     k:[['NPD ownership','p'],['Ex-Square Toiletries','p'],['No P&L evidence','n']]},
+  3:{s:'Solid trade-marketing fit — 8 yrs at Akij Group and Marico covering route-to-market, SKU planning and distributor management; brand-strategy exposure is thinner than this role asks for.',
+     k:[['Route-to-market','p'],['Distributor network','p'],['Light brand strategy','n']]},
+  4:{s:'Partial fit — 6 yrs of digital and content leadership at Bata Bangladesh and Daraz with strong performance-ads coverage; an unexplained 14-month gap between 2018 and 2020 needs a conversation.',
+     k:[['Digital depth','p'],['Career break','r'],['Low P&L exposure','n']]},
+  5:{s:'Partial fit — 7 yrs of Sylhet-region sales and distribution at Pran-RFL and Nestlé Bangladesh; strong field execution and forecasting, but no brand-management ownership on record.',
+     k:[['Field sales strength','p'],['Regional coverage','n'],['No brand ownership','n']]},
+  6:{s:'Partial fit — 5 yrs of brand activation, events and PR at Abul Khair Group; no P&L or brand-strategy experience for a managerial brand role, and below the experience bar.',
+     k:[['Activation experience','p'],['Skill gap','r'],['Below experience bar','n']]},
+  7:{s:'Weak fit on paper — 9 yrs of retail execution and merchandising at Square Consumer, but HSC-only education against a Bachelor minimum and a scanned CV parsed at 61% confidence.',
+     k:[['Long FMCG tenure','p'],['Under-qualified','r'],['Low OCR confidence','r']]},
+  8:{s:'Weak fit — 6 yrs of HR operations and recruitment at Square Pharmaceuticals; strong internal-process exposure but a clear domain mismatch against a brand-management remit.',
+     k:[['Internal candidate','n'],['Domain mismatch','r'],['Limited brand exposure','n']]},
+  9:{s:'Weak fit — 10 yrs of supply-chain and demand planning at Akij Food & Beverage and Coca-Cola Bangladesh; a strong operations profile outside the brand-marketing remit, with frequent early job changes.',
+     k:[['Supply-chain depth','p'],['Domain mismatch','r'],['Frequent job changes','r']]},
+  10:{s:'Weak fit — 3 yrs in customer service and telesales at Robi Axiata against a 7+ yr requirement; contact details parsed at low confidence and key CV fields are missing.',
+     k:[['Below experience bar','r'],['Missing information','r'],['Service background','n']]}
+};
+var AI_SIGCLS={p:'cvf-sig-pos',n:'cvf-sig-neu',r:'cvf-sig-risk'};
+function aiEval(id){return AI_EVAL[id]||{s:'No AI evaluation summary available for this candidate yet.',k:[]};}
+
+/* Rank by AI match score across the CURRENTLY VISIBLE set — ties broken by
+   id so the order is stable, and ranks are always contiguous from 1. */
+function cvfRankMap(list){
+  var m={};
+  list.slice().sort(function(a,b){return (b.score-a.score)||(a.id-b.id);})
+      .forEach(function(c,i){m[c.id]=i+1;});
+  return m;
+}
 
 /* ══════════════════════════════════════════════════════════════════
    Online presence fixtures (merged in from online-visibility-analysis).
@@ -926,16 +1181,28 @@ function ringHTML(v,color,label,tid,small,unit){
 /* ---------- Build table rows ---------- */
 function buildRows(){
   var tb=document.getElementById('cvBody'); var html='';
+  var rank0=cvfRankMap(CANDS);
   CANDS.forEach(function(c){
     var sk=c.skills||[];
-    var shownSk=sk.slice(0,3);
+    var shownSk=sk.slice(0,2);
     var extraSk=sk.length-shownSk.length;
     var chips=shownSk.map(function(s){return '<span class="chip" title="'+esc(s)+'">'+esc(s)+'</span>';}).join('')+
       (extraSk>0?'<span class="chip cvf-morechip" title="'+esc(sk.join(', '))+'">+'+extraSk+'</span>':'');
+    var ev=aiEval(c.id);
+    var sigsAll=ev.k||[];
+    var sigShown=sigsAll.slice(0,2);
+    var sigExtra=sigsAll.length-sigShown.length;
+    var sigTitle=sigsAll.map(function(x){return x[0];}).join(' · ');
+    var sigs=sigShown.map(function(x){
+        return '<span class="cvf-sig '+(AI_SIGCLS[x[1]]||'cvf-sig-neu')+'" title="'+esc(x[0])+'">'+esc(x[0])+'</span>';
+      }).join('')+
+      (sigExtra>0?'<span class="cvf-sig cvf-sig-more" title="'+esc(sigTitle)+'">+'+sigExtra+'</span>':'');
+    if(!sigsAll.length) sigs='<span class="rp-none">No signals</span>';
     html+=''+
     '<tr id="row-'+c.id+'" data-testid="review-row-'+c.id+'">'+
       '<td><input type="checkbox" class="rowcb" data-cid="'+c.id+'" data-testid="review-row-'+c.id+'-check" onchange="updateCount()" aria-label="Select '+esc(c.name)+'"></td>'+
-      '<td><div class="cand"><span class="ava">'+initials(c.name)+'</span><div><div style="font-weight:600">'+esc(c.name)+'</div><small>'+esc(c.email)+'</small></div></div></td>'+
+      '<td class="cvf-rank"><span id="rank-'+c.id+'" data-testid="review-row-'+c.id+'-rank" title="Rank by AI match score">'+rank0[c.id]+'</span></td>'+
+      '<td><div class="cand cvf-candcell"><span class="ava">'+initials(c.name)+'</span><div style="min-width:0"><div class="nm" title="'+esc(c.name)+'">'+esc(c.name)+'</div><small title="'+esc(c.email)+'">'+esc(c.email)+'</small></div></div></td>'+
       '<td><div class="cvf-file">'+
         '<a class="cvf-iconbtn" href="#" download data-testid="review-row-'+c.id+'-download" onclick="downloadCv('+c.id+');return false;" title="Download '+esc(c.file)+'" aria-label="Download CV of '+esc(c.name)+'">'+cvfIcon('download')+'</a>'+
         '<button class="cvf-iconbtn" data-testid="review-row-'+c.id+'-viewcv" onclick="openCvDrawer('+c.id+')" title="View original CV" aria-label="View original CV of '+esc(c.name)+'">'+cvfIcon('eye')+'</button>'+
@@ -946,19 +1213,21 @@ function buildRows(){
           '<span class="chip" style="background:var(--info-s);color:var(--info)">'+esc(c.exp)+'</span>'+
           '<span class="more">details<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>'+
         '</div></td>'+
-      '<td style="text-align:center">'+ringHTML(c.conf,confColor(c.conf),'Parsing confidence '+c.conf+' percent','review-row-'+c.id+'-confidence')+'</td>'+
       '<td style="text-align:center">'+ringHTML(c.score,scoreColor(c.score),'AI match score '+c.score+' percent','review-row-'+c.id+'-score')+'</td>'+
+      '<td><div class="cvf-sum" data-testid="review-row-'+c.id+'-aisummary" title="'+esc(ev.s)+'">'+esc(ev.s)+'</div></td>'+
+      '<td><div class="cvf-sigs" data-testid="review-row-'+c.id+'-signals" title="'+esc(sigTitle)+'">'+sigs+'</div></td>'+
       '<td style="text-align:center"><div class="cvf-prescell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
       '<td style="text-align:center"><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
       '<td><div class="cvf-acts">'+
+        '<a class="cvf-act cvf-act-view" href="candidate-detail.page.html" data-testid="review-row-'+c.id+'-view" title="Open the full candidate detail page for '+esc(c.name)+'">'+cvfIcon('eye')+'View</a>'+
         '<button class="cvf-act cvf-act-suc" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')" title="Shortlist '+esc(c.name)+'">'+cvfIcon('check')+'Shortlist</button>'+
         '<button class="cvf-act cvf-act-dan" data-testid="review-row-'+c.id+'-reject" onclick="setStatus('+c.id+',\'dan\')" title="Reject '+esc(c.name)+' (human review required)">'+cvfIcon('x')+'Reject</button>'+
         '<button class="cvf-act cvf-act-warn" data-testid="review-row-'+c.id+'-pending" onclick="setStatus('+c.id+',\'warn\')" title="Mark '+esc(c.name)+' pending">'+cvfIcon('clock')+'Mark pending</button>'+
       '</div></td>'+
     '</tr>'+
-    '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="9"><div class="drawer-inner" id="profile-'+c.id+'" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
+    '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="11"><div class="drawer-inner" id="profile-'+c.id+'" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
   });
-  html+='<tr id="cvfEmpty" data-testid="cvf-empty" style="display:none"><td colspan="9">'+
+  html+='<tr id="cvfEmpty" data-testid="cvf-empty" style="display:none"><td colspan="11">'+
     '<div class="cvf-emptybox">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'+
       '<p>No candidates match the current filters.</p>'+
@@ -1051,11 +1320,35 @@ function presenceBlockHTML(c){
 }
 
 function profileHTML(c){
+  var ev=aiEval(c.id);
+  var allSigs=(ev.k||[]).length
+    ? (ev.k||[]).map(function(x){return '<span class="cvf-sig '+(AI_SIGCLS[x[1]]||'cvf-sig-neu')+'">'+esc(x[0])+'</span>';}).join('')
+    : '<span class="rp-none">No key signals extracted.</span>';
   var flags = c.flags.length
     ? c.flags.map(function(f){return '<div class="flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>'+esc(f.t)+'</b> — '+esc(f.d)+'</div></div>';}).join('')
     : '<div class="badge b-suc" style="margin-top:2px">No red flags detected</div>';
   return ''+
   '<div class="drawer-grid">'+
+    '<div style="grid-column:1/-1">'+
+      '<h4>AI evaluation summary</h4>'+
+      '<div class="cvf-sumfull" data-testid="review-row-'+c.id+'-aisummary-full">'+esc(ev.s)+'</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center">'+
+        '<span style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">Key signals</span>'+
+        allSigs+
+      '</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:12px">'+
+        '<div style="display:flex;align-items:center;gap:9px" data-testid="review-row-'+c.id+'-confidence">'+
+          ringHTML(c.conf,confColor(c.conf),'Parsing confidence '+c.conf+' percent')+
+          '<div><div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">Parsing confidence</div>'+
+          '<div style="font-size:12.5px;color:var(--muted)">'+(c.conf>=90?'High — extraction is reliable':(c.conf>=70?'Medium — spot-check key fields':'Low — verify against the original CV'))+'</div></div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:9px">'+
+          ringHTML(c.score,scoreColor(c.score),'AI match score '+c.score+' percent')+
+          '<div><div style="font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">AI match score</div>'+
+          '<div style="font-size:12.5px;color:var(--muted)">Assistive ranking only — the decision stays with HR</div></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
     '<div>'+
       '<h4>Education history</h4><ul>'+c.edus.map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul>'+
       '<h4 style="margin-top:14px">Work history</h4><ul>'+c.work.map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+'</ul>'+
@@ -1185,7 +1478,7 @@ function toast(msg,withLink){
   var t=document.getElementById('rpToast');
   if(!t)return;
   t.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>'+esc(msg)+
-    (withLink?' <a href="cv-analysis-dashboard.page.html" data-testid="review-toast-cva-link">Open CV Analysis</a>':'')+'</span>';
+    (withLink?' <a href="#poolWrap" data-testid="review-toast-cva-link" onclick="openPool();">View pool analysis</a>':'')+'</span>';
   t.classList.add('on');
   if(RP_TOAST_T) clearTimeout(RP_TOAST_T);
   RP_TOAST_T=setTimeout(function(){ t.classList.remove('on'); },4200);
@@ -1266,7 +1559,9 @@ function cvfState(){
 }
 function cvfYears(c){var m=/(\d+)/.exec(String(c.exp||''));return m?parseInt(m[1],10):0;}
 function cvfHaystack(c){
+  var ev=aiEval(c.id);
   return [c.name,c.email,c.district,c.edu,c.exp,c.file,
+    ev.s,(ev.k||[]).map(function(x){return x[0];}).join(' '),
     (c.skills||[]).join(' '),(c.skillsFull||[]).join(' '),(c.edus||[]).join(' '),
     (c.work||[]).join(' '),(c.certs||[]).join(' '),
     (c.flags||[]).map(function(x){return x.t+' '+x.d;}).join(' ')].join(' ').toLowerCase();
@@ -1351,8 +1646,14 @@ function cvfPopulate(){
 }
 function applyCvFilters(){
   var f=cvfState(), shown=0;
+  /* Rank is recomputed over the VISIBLE set on every filter change, so it is
+     always contiguous from 1 and always ordered by AI match score. */
+  var visible=CANDS.filter(function(c){return cvfMatch(c,f);});
+  var rank=cvfRankMap(visible);
   CANDS.forEach(function(c){
-    var ok=cvfMatch(c,f);
+    var ok=rank[c.id]!==undefined;
+    var rk=document.getElementById('rank-'+c.id);
+    if(rk) rk.textContent = ok ? String(rank[c.id]) : '—';
     var row=document.getElementById('row-'+c.id);
     var dr=document.getElementById('drawer-'+c.id);
     if(row){
@@ -1461,12 +1762,360 @@ function applySuggestion(){
   window.location.href='results.page.html';
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   POOL ANALYSIS — collapsible container.
+   Expanded by default; the toggle state is shown on the control itself
+   (chevron direction + label + tint) and remembered for this browser.
+   ══════════════════════════════════════════════════════════════════ */
+var POOL_KEY='stl_pool_analysis_open';
+function setPool(open){
+  var wrap=document.getElementById('poolWrap');
+  var body=document.getElementById('poolBody');
+  var btn=document.getElementById('poolToggle');
+  var lbl=document.getElementById('poolToggleLbl');
+  if(!wrap||!body||!btn) return;
+  wrap.classList.toggle('collapsed',!open);
+  body.hidden=!open;
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  if(lbl) lbl.textContent = open ? 'Hide pool analysis' : 'Show pool analysis';
+  try{ localStorage.setItem(POOL_KEY, open?'1':'0'); }catch(e){ /* storage unavailable — default stays expanded */ }
+}
+function togglePool(){
+  var body=document.getElementById('poolBody');
+  setPool(!!(body&&body.hidden));
+}
+function openPool(){
+  setPool(true);
+  var wrap=document.getElementById('poolWrap');
+  if(wrap&&wrap.scrollIntoView) wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function initPool(){
+  var open=true;
+  try{ if(localStorage.getItem(POOL_KEY)==='0') open=false; }catch(e){}
+  setPool(open);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CVA — pool analytics with cross-filtering (merged in from the former
+   cv-analysis-dashboard page).
+   SINGLE SOURCE OF TRUTH: CVA_POOL, read from the shared STLF fixture —
+   the same module exports.page.html reads, so chart counts and export
+   rows always agree. Every chart and the cohort stats derive from it, so
+   any selection produces a cohort whose recomputed numbers add up.
+   Charts are hand-built inline SVG (no libraries); in the React build
+   these become recharts. All globals are `cva`/`CVA`-prefixed.
+   Governance: read-only. Cohorts drill / preview / export / navigate;
+   nothing here changes a candidate's status. No age/gender facets.
+   ══════════════════════════════════════════════════════════════════ */
+var CVA_SKILLS=STLF.SKILLS;
+/* Skills that also exist in candidates.page.html's FLT_SKILLS vocabulary — only
+   these survive the "Open in Candidates" hand-off. */
+var CVA_R5_SKILLS=['Brand Management','Trade Marketing','Market Research'];
+var CVA_FLAGS=STLF.FLAGS,CVA_SRCS=STLF.SRCS,CVA_DISTS=STLF.DISTS,CVA_EDU=STLF.EDU;
+var CVA_SCB=STLF.SCB,CVA_CFB=STLF.CFB,CVA_EXB=STLF.EXB,CVA_POS=STLF.POS;
+function cvaScK(v){return STLF.scK(v)}
+function cvaCfK(v){return STLF.cfK(v)}
+function cvaExK(v){return STLF.exK(v)}
+function cvaBandL(b,k){return STLF.bandL(b,k)}
+function cvaBandOf(b,k){return STLF.bandOf(b,k)}
+function cvaBuildPool(cfg){return STLF.pool(cfg)}
+
+var CVA_POOL=[];
+
+/* ── Cohort selection ─────────────────────────────────────────────────
+   AND across facet types, OR within one facet's segments.
+   Deliberately NO age/gender facet — the sensitive-criteria line. */
+function cvaBlank(){return{score:[],conf:[],skillHas:[],skillMissing:[],flag:[],exp:[],edu:[],src:[],dist:[]}}
+var CVA_SEL=cvaBlank();
+var CVA_FLBL={score:'Score',conf:'Confidence',skillHas:'Has skill',skillMissing:'Missing skill',flag:'Flag',exp:'Experience',edu:'Education',src:'Source',dist:'District'};
+
+/* `except` omits one facet so a chart never filters itself — every segment
+   stays visible and clickable while the OTHER charts recompute. */
+function cvaMatch(c,except){
+  var S=CVA_SEL;
+  if(except!=='score'&&S.score.length&&S.score.indexOf(cvaScK(c.sc))<0)return false;
+  if(except!=='conf'&&S.conf.length&&S.conf.indexOf(cvaCfK(c.cf))<0)return false;
+  if(except!=='skill'){
+    if(S.skillHas.length&&!S.skillHas.some(function(k){return c.sk.indexOf(k)>-1}))return false;
+    if(S.skillMissing.length&&!S.skillMissing.some(function(k){return c.sk.indexOf(k)<0}))return false;
+  }
+  if(except!=='flag'&&S.flag.length&&!S.flag.some(function(f){return c.rf.indexOf(f)>-1}))return false;
+  if(except!=='exp'&&S.exp.length&&S.exp.indexOf(cvaExK(c.yr))<0)return false;
+  if(except!=='edu'&&S.edu.length&&S.edu.indexOf(c.ed)<0)return false;
+  if(except!=='src'&&S.src.length&&S.src.indexOf(c.so)<0)return false;
+  if(except!=='dist'&&S.dist.length&&S.dist.indexOf(c.d)<0)return false;
+  return true;
+}
+function cvaCohort(except){return CVA_POOL.filter(function(c){return cvaMatch(c,except)})}
+function cvaAny(){return Object.keys(CVA_SEL).some(function(k){return CVA_SEL[k].length})}
+
+function cvaPick(k,v){
+  if(!CVA_SEL[k])return;
+  var a=CVA_SEL[k],i=a.indexOf(v);
+  if(i>-1)a.splice(i,1);else a.push(v);
+  cvaRenderAll();
+}
+function cvaClear(){CVA_SEL=cvaBlank();cvaRenderAll()}
+
+/* Event delegation — keeps SVG segments free of inline handlers and avoids
+   quoting hazards with values like "A&P Budgeting". */
+document.addEventListener('click',function(e){
+  var t=e.target&&e.target.closest?e.target.closest('.cva-hit[data-k]'):null;
+  if(t)cvaPick(t.getAttribute('data-k'),t.getAttribute('data-v'));
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var t=e.target&&e.target.closest?e.target.closest('.cva-hit[data-k]'):null;
+  if(t){e.preventDefault();cvaPick(t.getAttribute('data-k'),t.getAttribute('data-v'))}
+});
+function cvaEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function cvaScope(){
+  var posEl=document.getElementById('cva-position');
+  var batEl=document.getElementById('cva-batch');
+  var cfg=CVA_POS[(posEl&&posEl.value)||'sbm']||CVA_POS.sbm;
+  var batch=(batEl&&batEl.value)||'';
+  CVA_POOL=cvaBuildPool(cfg).filter(function(c){return !batch||c.ba===batch});
+  CVA_SEL=cvaBlank();
+  cvaRenderAll();
+}
+
+/* ── SVG helpers ─────────────────────────────────────────────────── */
+function cvaSet(id,html){var el=document.getElementById(id);if(el)el.innerHTML=html;}
+
+/* Vertical histogram — each bar is a selectable segment */
+function cvaHisto(el,bk,key){
+  var W=300,H=120,pad=18,max=Math.max.apply(null,bk.map(function(b){return b.v}))||1;
+  var bw=(W-8)/bk.length,any=CVA_SEL[key].length>0;
+  var s='<svg viewBox="0 0 '+W+' '+(H+pad)+'" role="group" aria-label="'+cvaEsc(CVA_FLBL[key])+' distribution — select a band to filter">';
+  bk.forEach(function(b,i){
+    var h=Math.round(b.v/max*(H-24)),x=4+i*bw,y=H-Math.max(h,2);
+    var sel=CVA_SEL[key].indexOf(b.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(b.k)+'" data-testid="cva-seg-'+key+'-'+cvaEsc(b.k)+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(b.l)+': '+b.v+' candidates'+(sel?' — selected':'')+'">';
+    s+='<rect x="'+(x+1)+'" y="0" width="'+(bw-2)+'" height="'+(H+pad)+'" fill="transparent"/>';
+    s+='<rect x="'+(x+4)+'" y="'+y+'" width="'+(bw-8)+'" height="'+Math.max(h,2)+'" rx="4" fill="'+b.c+'" fill-opacity="'+(any&&!sel?'.32':'1')+'"'+(sel?' stroke="var(--text)" stroke-width="2"':'')+'/>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(y-5)+'" font-size="10.5" font-weight="600" fill="#0F172A" text-anchor="middle">'+b.v+'</text>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(H+13)+'" font-size="9.5" fill="'+(sel?'#0B61C2':'#64748B')+'" font-weight="'+(sel?'700':'400')+'" text-anchor="middle">'+cvaEsc(b.l)+'</text>';
+    s+='</g>';
+  });
+  cvaSet(el,s+'</svg>');
+}
+
+/* Horizontal labelled bars — each row selectable; rows carry their own facet key */
+function cvaHBars(el,rows,unit){
+  var W=300,rh=25,LW=118,max=Math.max.apply(null,rows.map(function(r){return r.v}))||1;
+  var s='<svg viewBox="0 0 '+W+' '+(rows.length*rh)+'" role="group" aria-label="Select a row to filter">';
+  rows.forEach(function(r,i){
+    var y=i*rh,w=Math.max(2,Math.round(r.v/max*(W-LW-42)));
+    var any=CVA_SEL[r.key].length>0,sel=CVA_SEL[r.key].indexOf(r.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+r.key+'" data-v="'+cvaEsc(r.k)+'" data-testid="cva-seg-'+r.key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(r.l)+': '+r.v+cvaEsc(unit)+(sel?' — selected':'')+'">';
+    s+='<rect x="0" y="'+y+'" width="'+W+'" height="'+rh+'" fill="transparent"/>';
+    s+='<text x="0" y="'+(y+15)+'" font-size="10.5" fill="'+(sel?'#0B61C2':'#0F172A')+'" font-weight="'+(sel?'700':'400')+'">'+cvaEsc(r.l)+'</text>';
+    s+='<rect x="'+LW+'" y="'+(y+6)+'" width="'+(W-LW-42)+'" height="11" rx="5" fill="#F1F5F9"/>';
+    s+='<rect x="'+LW+'" y="'+(y+6)+'" width="'+w+'" height="11" rx="5" fill="'+r.c+'" fill-opacity="'+(any&&!sel?'.32':'1')+'"'+(sel?' stroke="var(--text)" stroke-width="1.5"':'')+'/>';
+    s+='<text x="'+W+'" y="'+(y+15)+'" font-size="10.5" font-weight="600" fill="#0F172A" text-anchor="end">'+r.v+cvaEsc(unit)+'</text>';
+    s+='</g>';
+  });
+  cvaSet(el,s+'</svg>');
+}
+
+/* Donut — each slice + its legend row selectable */
+function cvaDonut(el,slices,colors,key){
+  var total=slices.reduce(function(a,b){return a+b.v},0)||1,C=52,R=40,SW=16,circ=2*Math.PI*R,off=0;
+  var any=CVA_SEL[key].length>0;
+  var s='<svg viewBox="0 0 240 110" role="group" aria-label="Source spread — select a source to filter"><g transform="translate('+C+',55)">';
+  slices.forEach(function(sl,i){
+    var frac=sl.v/total,len=frac*circ,sel=CVA_SEL[key].indexOf(sl.k)>-1;
+    s+='<circle class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(sl.k)+'" data-testid="cva-seg-'+key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(sl.l)+': '+sl.v+' candidates'+(sel?' — selected':'')+'" r="'+R+'" fill="none" stroke="'+colors[i%colors.length]+'" stroke-opacity="'+(any&&!sel?'.3':'1')+'" stroke-width="'+(sel?SW+4:SW)+'" stroke-dasharray="'+len+' '+(circ-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90)"/>';
+    off+=len;
+  });
+  s+='<text font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle" dy="1">'+total+'</text><text font-size="8.5" fill="#64748B" text-anchor="middle" dy="13">CVs</text></g>';
+  slices.forEach(function(sl,i){
+    var y=14+i*19,sel=CVA_SEL[key].indexOf(sl.k)>-1;
+    s+='<g class="cva-hit" role="button" tabindex="0" data-k="'+key+'" data-v="'+cvaEsc(sl.k)+'" data-testid="cva-leg-'+key+'-'+i+'" aria-pressed="'+sel+'" aria-label="'+cvaEsc(sl.l)+(sel?' — selected':'')+'">';
+    s+='<rect x="112" y="'+(y-11)+'" width="128" height="17" fill="transparent"/>';
+    s+='<rect x="118" y="'+(y-8)+'" width="9" height="9" rx="3" fill="'+colors[i%colors.length]+'" fill-opacity="'+(any&&!sel?'.3':'1')+'"/>';
+    s+='<text x="132" y="'+y+'" font-size="10" fill="'+(sel?'#0B61C2':'#0F172A')+'" font-weight="'+(sel?'700':'400')+'">'+cvaEsc(sl.l)+'</text>';
+    s+='<text x="236" y="'+y+'" font-size="10" font-weight="600" fill="#0F172A" text-anchor="end">'+Math.round(sl.v/total*100)+'%</text>';
+    s+='</g>';
+  });
+  cvaSet(el,s+'</svg>');
+}
+
+/* ── Render ──────────────────────────────────────────────────────── */
+function cvaRenderAll(){
+  var posEl=document.getElementById('cva-position');
+  var cfg=CVA_POS[(posEl&&posEl.value)||'sbm']||CVA_POS.sbm;
+  var P=CVA_POOL,N=P.length||1;
+  var strong=P.filter(function(c){return c.sc>=75}).length;
+  var avgSc=Math.round(P.reduce(function(a,c){return a+c.sc},0)/N);
+  var avgCf=Math.round(P.reduce(function(a,c){return a+c.cf},0)/N);
+  cvaSet('cva-summary',
+    '<b>'+P.length+'</b> CVs analyzed · <b>'+strong+'</b> scoring ≥75% (auto-shortlist band) · avg match <b>'+avgSc+'%</b> · avg parsing confidence <b>'+avgCf+'%</b> — '+cvaEsc(cfg.name)+' · '+cvaEsc(cfg.dept));
+
+  /* 1 — match-score histogram */
+  var Ps=cvaCohort('score'),Ns=Ps.length||1;
+  cvaHisto('cva-ch-score',CVA_SCB.map(function(b){
+    return {k:b.k,l:b.l,c:b.c,v:Ps.filter(function(c){return c.sc>=b.lo&&c.sc<b.hi}).length};
+  }),'score');
+  var p80=Math.round(Ps.filter(function(c){return c.sc>=80}).length/Ns*100);
+  var n70=Ps.filter(function(c){return c.sc>=70}).length;
+  cvaSet('cva-tk-score',
+    '<b>'+p80+'%</b> scored ≥80% — the standout band is '+(p80>=25?'deep':'thin')+'.'+
+    '<button class="cva-act" data-testid="cva-drill-shortlist" onclick="openModal()">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'+
+    'Preview a wider shortlist (lower to 70% → '+n70+' candidates)</button>');
+
+  /* 2 — required-skill coverage */
+  var Pk=cvaCohort('skill'),Nk=Pk.length||1;
+  var skRows=CVA_SKILLS.map(function(k){
+    return {key:'skillHas',k:k,l:k,c:'var(--primary)',v:Math.round(Pk.filter(function(c){return c.sk.indexOf(k)>-1}).length/Nk*100)};
+  }).sort(function(a,b){return b.v-a.v});
+  cvaHBars('cva-ch-skills',skRows,'%');
+  var worst=skRows[skRows.length-1],nMiss=Pk.filter(function(c){return c.sk.indexOf(worst.k)<0}).length;
+  cvaSet('cva-tk-skills',
+    'Biggest gap: <b>'+cvaEsc(worst.l)+'</b> — only '+worst.v+'% of the pool has it.'+
+    '<button class="cva-act cva-hit" data-k="skillMissing" data-v="'+cvaEsc(worst.k)+'" data-testid="cva-drill-skillgap">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'View the '+nMiss+' candidates missing it</button>');
+
+  /* 3 — red flags */
+  var Pf=cvaCohort('flag'),Nf=Pf.length||1;
+  var rfRows=CVA_FLAGS.map(function(f){
+    return {key:'flag',k:f,l:f,c:'var(--caution)',v:Pf.filter(function(c){return c.rf.indexOf(f)>-1}).length};
+  }).sort(function(a,b){return b.v-a.v});
+  cvaHBars('cva-ch-flags',rfRows,'');
+  var anyRf=Pf.filter(function(c){return c.rf.length}).length;
+  cvaSet('cva-tk-flags',
+    '<b>'+Math.round(anyRf/Nf*100)+'%</b> of CVs carry at least one flag. Flags are review signals, not disqualifiers.'+
+    '<button class="cva-act cva-hit" data-k="flag" data-v="'+cvaEsc(rfRows[0].k)+'" data-testid="cva-drill-flag">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'Review the '+rfRows[0].v+' with '+cvaEsc(rfRows[0].l.toLowerCase())+'</button>');
+
+  /* 4 — parsing-confidence bands */
+  var Pc=cvaCohort('conf');
+  cvaHisto('cva-ch-conf',CVA_CFB.map(function(b){
+    return {k:b.k,l:b.l,c:b.c,v:Pc.filter(function(c){return c.cf>=b.lo&&c.cf<b.hi}).length};
+  }),'conf');
+  var nLow=Pc.filter(function(c){return c.cf<70}).length;
+  cvaSet('cva-tk-conf',
+    '<b>'+nLow+'</b> CVs parsed below 70% confidence — their scores rest on shaky extraction.'+
+    '<button class="cva-act cva-hit" data-k="conf" data-v="low" data-testid="cva-drill-conf">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'Review those '+nLow+' (spot-check before relying on them)</button>');
+
+  /* 5 — experience + education (two facets, one card) */
+  var Pe=cvaCohort('exp'),Pd=cvaCohort('edu');
+  var exRows=CVA_EXB.map(function(b){
+    return {key:'exp',k:b.k,l:b.l,c:'var(--primary)',v:Pe.filter(function(c){return cvaExK(c.yr)===b.k}).length};
+  });
+  var edRows=CVA_EDU.map(function(e){
+    return {key:'edu',k:e,l:e,c:'var(--info)',v:Pd.filter(function(c){return c.ed===e}).length};
+  });
+  cvaHBars('cva-ch-exp',exRows.concat(edRows),'');
+  var Nx=Pe.length||1,sweet=exRows[1].v+exRows[2].v;
+  cvaSet('cva-tk-exp',
+    '<b>'+Math.round(sweet/Nx*100)+'%</b> sit in the 3–10 yr band this role targets; '+edRows[1].v+' hold a Master’s / MBA.'+
+    '<button class="cva-act cva-hit" data-k="exp" data-v="6-10" data-testid="cva-drill-exp">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'+
+    'View the '+exRows[2].v+' with 6–10 yrs</button>');
+
+  /* 6 — source donut + clickable district chips */
+  var Pso=cvaCohort('src');
+  var srcS=CVA_SRCS.map(function(s){return {k:s,l:s,v:Pso.filter(function(c){return c.so===s}).length}});
+  cvaDonut('cva-ch-src',srcS,['var(--primary)','var(--accent)','var(--info)','var(--caution)'],'src');
+  var Pdi=cvaCohort('dist');
+  var dTop=CVA_DISTS.map(function(d){return {k:d,v:Pdi.filter(function(c){return c.d===d}).length}}).sort(function(a,b){return b.v-a.v}).slice(0,5);
+  cvaSet('cva-ch-dist','<span style="font-size:11.5px;color:var(--muted);align-self:center;margin-right:2px">Top districts:</span>'+
+    dTop.map(function(d){
+      var sel=CVA_SEL.dist.indexOf(d.k)>-1;
+      return '<button class="cva-dchip cva-hit'+(sel?' on':'')+'" data-k="dist" data-v="'+cvaEsc(d.k)+'" data-testid="cva-seg-dist-'+cvaEsc(d.k)+'" aria-pressed="'+sel+'">'+cvaEsc(d.k)+' ('+d.v+')</button>';
+    }).join(''));
+  var topSrc=srcS.slice().sort(function(a,b){return b.v-a.v})[0];
+  cvaSet('cva-tk-src','<b>'+cvaEsc(topSrc.l)+'</b> is the dominant intake channel. Click a slice or district to compare cohorts.');
+
+  cvaCohortStrip();
+}
+
+/* ── Cohort strip: chips + live stats + hand-offs ────────────────── */
+function cvaCohortStrip(){
+  var box=document.getElementById('cva-co');
+  if(!box)return;
+  if(!cvaAny()){box.style.display='none';return}
+  box.style.display='';
+
+  var ch='';
+  Object.keys(CVA_SEL).forEach(function(k){
+    CVA_SEL[k].forEach(function(v){
+      var lbl=k==='score'?cvaBandL(CVA_SCB,v):k==='conf'?cvaBandL(CVA_CFB,v):k==='exp'?cvaBandL(CVA_EXB,v):v;
+      ch+='<span class="cva-cochip" data-testid="cva-chip-'+k+'"><span class="f">'+CVA_FLBL[k]+':</span>'+cvaEsc(lbl)+
+        '<button class="cva-hit" data-k="'+k+'" data-v="'+cvaEsc(v)+'" aria-label="Remove filter '+cvaEsc(lbl)+'" data-testid="cva-chip-remove-'+k+'">×</button></span>';
+    });
+  });
+  cvaSet('cva-co-chips',ch);
+
+  var C=cvaCohort(),n=C.length,d=n||1;
+  var avg=Math.round(C.reduce(function(a,c){return a+c.sc},0)/d);
+  var top=Math.round(C.filter(function(c){return c.sc>=75}).length/d*100);
+  var cf=Math.round(C.reduce(function(a,c){return a+c.cf},0)/d);
+  var fl=Math.round(C.filter(function(c){return c.rf.length}).length/d*100);
+  var cov=CVA_SKILLS.map(function(k){return {l:k,v:C.filter(function(c){return c.sk.indexOf(k)>-1}).length}}).sort(function(a,b){return b.v-a.v});
+  var t3=cov.slice(0,3).map(function(x){return x.l}).join(', ')||'—';
+  var g3=cov.slice(-3).reverse().map(function(x){return x.l}).join(', ')||'—';
+  cvaSet('cva-co-stats',
+    '<div class="cva-st" data-testid="cva-stat-size">Candidates<b>'+n+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-avg">Avg match<b>'+(n?avg+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-strong">In ≥75 band<b>'+(n?top+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-conf">Avg confidence<b>'+(n?cf+'%':'—')+'</b></div>'+
+    '<div class="cva-st" data-testid="cva-stat-flags">Red-flag rate<b>'+(n?fl+'%':'—')+'</b></div>'+
+    '<div class="cva-st" style="max-width:190px">Top skills<span class="sm">'+cvaEsc(n?t3:'—')+'</span></div>'+
+    '<div class="cva-st" style="max-width:190px">Top gaps<span class="sm">'+cvaEsc(n?g3:'—')+'</span></div>');
+
+  var cand=document.getElementById('cva-co-cand');
+  if(cand) cand.href=cvaCandUrl();
+}
+
+/* Hand-off deep link — pre-applies the Round-5 `flt-` facets on candidates.page.html.
+   Only facets present in that page's vocabulary carry over. */
+function cvaCandUrl(){
+  var p=[],S=CVA_SEL;
+  function add(k,v){p.push(encodeURIComponent(k)+'='+encodeURIComponent(v));}
+  var sk=S.skillHas.filter(function(k){return CVA_R5_SKILLS.indexOf(k)>-1});
+  if(sk.length)add('skills',sk.join('|'));
+  if(S.flag.length)add('flags',S.flag.join('|'));
+  if(S.src.length)add('srcs',S.src.join('|'));
+  if(S.dist.length)add('district',S.dist[0]);   /* R5 District is single-select */
+  if(S.edu.length)add('education',S.edu[0]);
+  if(S.score.length){
+    var b=S.score.map(function(k){return cvaBandOf(CVA_SCB,k)});
+    add('scMin',Math.min.apply(null,b.map(function(x){return x.lo})));
+    add('scMax',Math.max.apply(null,b.map(function(x){return x.hi-1})));
+  }
+  if(S.conf.length){
+    var b2=S.conf.map(function(k){return cvaBandOf(CVA_CFB,k)});
+    add('cfMin',Math.min.apply(null,b2.map(function(x){return x.lo})));
+    add('cfMax',Math.max.apply(null,b2.map(function(x){return x.hi-1})));
+  }
+  if(S.exp.length){
+    var b3=S.exp.map(function(k){return cvaBandOf(CVA_EXB,k)});
+    add('yrMin',Math.min.apply(null,b3.map(function(x){return x.lo})));
+    add('yrMax',Math.max.apply(null,b3.map(function(x){return x.hi})));
+  }
+  add('adv','1');
+  return 'candidates.page.html?'+p.join('&');
+}
+
+/* Cohort compare (R9 §6 stretch) intentionally skipped: pinning two cohorts
+   side by side needs a second stats rail and doubles the layout at 1024px. */
+
 /* init */
 buildRows();
 cvfPopulate();
 applyCvFilters();
 onTopN(30);
 updateCount();
+initPool();
+cvaScope();
 </script>
 </body>
 </html>

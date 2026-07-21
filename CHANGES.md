@@ -426,3 +426,31 @@ Visible symptom on the Online Presence report: the stage tag rendered as raw tex
 **Bulk bar layout.** The decision group moved to the **right** (`margin-left:auto`), with the governance note now sitting to its **left**, between the run button and the actions.
 
 **Verified:** all four suites green — bulk decisions, cv-review render + structure, filter logic, and the online-presence-detail render (all 6 candidates + the full not-a-match cycle). 41/41 pages, 0 broken links, 0 pages missing CSS.
+
+---
+
+# Round 13 — CV Analysis merged into Review CVs; confidence + presence on detail pages · 2026-06-24
+
+**1. Review CVs (Stage 4) is now one screen: pool analysis + individual review.**
+- The **full CV Analysis dashboard** moved in as a collapsible **Pool analysis** section above the list — scope selector, summary line, cohort strip, and all six insight cards (match-score histogram, skill coverage, red-flag frequency, confidence bands, experience & education, source donut + districts) with click-to-build-cohort, cross-filtering and drill-downs intact. Collapse state persists.
+- **Columns restructured:** `Rank · Candidate · CV file · Parsed profile · AI match score · AI evaluation summary · Key signals · Online presence · Status · Actions`.
+  - **Confidence column removed** (it moved to candidate detail) — but the data stays, so the **Confidence filter still works** and confidence renders in the row drawer.
+  - **Rank** recomputes over the *visible* set on every filter change — verified contiguous 1..N, rank 1 = top scorer, monotonic, and correct on an empty result set.
+  - **AI evaluation summary** clamped to 2 lines with a tooltip (full text in the drawer); **Key signals** 2 chips + `+N`, colour-coded positive / neutral / risk.
+  - **View** added as the first action, linking to candidate detail.
+- Anti-congestion: 2 skill chips, truncation with tooltips, and the table now scrolls inside its own container (`min-width:1180px`) so **the page never scrolls horizontally at 1280px**.
+
+**2. Candidate detail carries what the list gave up.**
+- **Parsing confidence** as a colour-banded donut, integrated into Parsed Details rather than duplicated, with per-field low-confidence indicators and the explicit framing that it measures *extraction reliability, not candidate quality*.
+- **Online presence** card reading `stl_presence_results`, so a run on Review CVs shows here: identity + confidence, score, Matched vs Unmatched, source chips, eye-icon link to the full report, and a Run/Re-run control. A **corrupt-payload bug was found and fixed** during verification — a malformed localStorage value previously poisoned the write path permanently.
+
+**3. Role alignment (knock-on effects handled).**
+- **Viewer** candidate detail: same confidence + presence, **strictly read-only — 0 run controls, 0 mutating handlers** (verified).
+- **Hiring Manager** application detail: read-only presence summary + **Key signals**, with scoring/presence explicitly marked HR-owned. Decision flow (`accept` / `reject` / `changeDecision`) provably untouched.
+- **Admin** genuinely unaffected — it owns users/audit/settings, no candidate views.
+
+**4. Navigation & legacy URLs.** The **CV Analysis** sidebar entry is gone (spine is a clean 1–10). `cv-analysis-dashboard` became a "has moved" redirect; the remaining body links (`View pool analysis`, `Open CV Analysis`) were repointed to `cv-review#pool-analysis`, and the presence report's breadcrumb/back-links and stage tag were corrected to **Stage 4 · Review CVs**.
+
+**5. Tooling fix (root cause of the earlier CSS loss).** The nav script's *legacy* cleanup regex was still unbounded (marker → `</style>`) and destroyed CSS injected after it. Migration is complete, so it has been retired; the remaining removal is bounded by a marker pair. Proven idempotent: **3 consecutive runs, 0 pages missing CSS, 0 duplicated blocks**.
+
+**Verification (executed, not self-reported):** cv-review render + structure · filter discrimination (confidence bands 2/5/3 partition exactly despite the column removal) · **rank correctness across 9 filter states** · bulk decisions · all 3 detail pages across 6 localStorage states incl. corrupt JSON · presence report render (6 candidates + not-a-match cycle). **38/38 live pages reachable · 3/3 redirect stubs resolve · 0 broken links · 0 emoji · brand blue 41/41.**

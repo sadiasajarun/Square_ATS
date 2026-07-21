@@ -401,3 +401,11 @@ Client feedback: the parsed-candidates table was too congested.
 - **Confidence, AI match score, Online presence and Status columns are centre-aligned** — headers and cells. `.cvf-ring` is now `inline-block` and `.cvf-prescell` uses `justify-content:center` so the gauges, presence icon/chip and status badge actually sit centred rather than just their text.
 
 Re-verified after the change: structural checks pass, all 10 candidates render in un-analysed and analysed states, and the filter logic still partitions the set exactly. 41/41 reachable, 0 broken links.
+
+## Round 12c — bulk decisions on Review CVs · 2026-06-24
+
+- **Shortlist / Reject / Mark pending are now available at the top** for a multi-row selection, not just per row. The bulk bar gains a decision group that **appears only when at least one row is selected** and labels itself with the live count ("Apply to 3 selected:"). Buttons reuse the same soft colour coding as the row actions (green / red / amber).
+- `setStatusBulk(kind)` applies the decision to every selected row via the existing `setStatus()`, fires a toast ("3 candidates set to \"Shortlisted\""), and re-runs the filters so the list stays consistent. Selection is already scoped to *visible* rows, so a bulk decision can never silently hit a filtered-out candidate.
+- Governance unchanged: bulk **Reject** is still a deliberate human action — the AI never rejects on its own.
+
+**Verified by execution:** structural (all three bulk buttons present, hidden by default, colour-coded) plus runtime — group shows/hides with selection, 3 selected → all three set to Shortlisted, **unselected row provably untouched**, Reject and Mark pending both apply, empty selection is a no-op. Prior render and filter suites re-run green (no regression). 41/41 pages, 0 broken links.

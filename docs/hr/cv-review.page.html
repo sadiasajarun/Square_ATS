@@ -201,6 +201,10 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
 .rp-prog.on{display:inline-flex}
 .rp-progtrack{width:130px;height:6px;border-radius:6px;background:var(--border);overflow:hidden}
 .rp-progtrack i{display:block;height:100%;background:var(--primary);border-radius:6px;transition:width .2s}
+.rp-bulkdec{display:none;align-items:center;gap:6px;flex-wrap:wrap}
+.rp-bulkdec.on{display:inline-flex}
+.rp-bulkdec-lbl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-right:2px}
+.rp-bulkdec .cvf-act{padding:6px 11px}
 .rp-published{display:none;align-items:center;gap:8px;padding:10px 20px;background:var(--success-s);color:var(--success);font-size:12.5px;font-weight:600;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .rp-published.on{display:flex}
 .rp-published svg{width:15px;height:15px;flex:none}
@@ -498,6 +502,21 @@ table[data-testid="review-table"] td{padding:9px 12px}
             <span class="rp-progtrack"><i id="rpBulkProgBar" style="width:0%"></i></span>
             <span id="rpBulkProgLbl">Analysing…</span>
           </span>
+
+          <!-- Bulk decisions — appear once rows are selected -->
+          <span class="rp-bulkdec" id="rpBulkDec" data-testid="review-bulk-decisions">
+            <span class="rp-bulkdec-lbl" id="rpBulkDecLbl">Apply to selection:</span>
+            <button class="cvf-act cvf-act-suc" id="rpBulkSuc" data-testid="review-bulk-shortlist" onclick="setStatusBulk('suc')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Shortlist
+            </button>
+            <button class="cvf-act cvf-act-dan" id="rpBulkDan" data-testid="review-bulk-reject" onclick="setStatusBulk('dan')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Reject
+            </button>
+            <button class="cvf-act cvf-act-warn" id="rpBulkWarn" data-testid="review-bulk-pending" onclick="setStatusBulk('warn')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Mark pending
+            </button>
+          </span>
+
           <span class="rp-note">Public professional sources only. Assistive research — never a screening input and never part of the AI match score. Every lookup is logged to the audit trail.</span>
         </div>
 
@@ -1086,6 +1105,17 @@ function runPresence(id,isRerun,done){
 }
 
 /* ---------- Online presence: run (bulk, checked rows) ---------- */
+/* Apply a decision to every SELECTED (and therefore visible) row at once.
+   Mirrors the per-row buttons; rejection here is still a human action, which
+   is what the governance rule requires - the AI never rejects on its own. */
+function setStatusBulk(kind){
+  var ids=selectedIds();
+  if(!ids.length) return;
+  ids.forEach(function(id){ setStatus(id,kind); });
+  var m=STMAP[kind]||STMAP.warn;
+  toast(ids.length+' candidate'+(ids.length>1?'s':'')+' set to "'+m[1]+'"');
+  updateCount();
+}
 function selectedIds(){
   var out=[];
   document.querySelectorAll('.rowcb:checked').forEach(function(cb){
@@ -1358,6 +1388,13 @@ function updateCount(){
   document.querySelector('[data-testid="review-selected-count"]').textContent=n;
   var btn=document.getElementById('rpBulkBtn');
   if(btn && !document.getElementById('rpBulkProg').classList.contains('on')) btn.disabled = n===0;
+  /* bulk decisions only make sense with a selection */
+  var dec=document.getElementById('rpBulkDec');
+  if(dec){
+    if(n>0) dec.classList.add('on'); else dec.classList.remove('on');
+    var lbl=document.getElementById('rpBulkDecLbl');
+    if(lbl) lbl.textContent='Apply to '+n+' selected:';
+  }
 }
 
 /* ---------- Modal ---------- */

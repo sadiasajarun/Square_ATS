@@ -254,6 +254,29 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .nav-sub{padding-left:38px !important;font-size:12.5px}
 .nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
 .nav-sub{position:relative}
+
+/* ---- stage tag (workflow context under page title) ---- */
+.stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
+.stage-tag a{color:var(--primary);font-weight:600}
+
+/* ---- at-a-glance verdict strip (quick scan) ---- */
+.opd-glance{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.opd-g{background:var(--surface);padding:12px 14px;min-width:0}
+.opd-g .k{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.opd-g .k svg{width:13px;height:13px;flex:none}
+.opd-g .v{font-size:19px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums;line-height:1.2}
+.opd-g .s{font-size:11px;color:var(--muted);margin-top:1px;overflow-wrap:anywhere}
+@media(max-width:1280px){.opd-glance{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1024px){.opd-glance{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- overflow guards: long URLs/strings must never widen the page ---- */
+.opd-wrap,.opd-hero,.opd-hero>div,.opd-sec,.opd-card,.opd-x-row,.opd-sig,.opd-src{min-width:0}
+.opd-hero-sub,.opd-hero-meta,.opd-src,.opd-x-row,.opd-sig,.opd-kv,.opd-card{overflow-wrap:anywhere;word-break:break-word}
+.opd-src a,.opd-sig a,.opd-x-row a,.opd-kv a{overflow-wrap:anywhere}
+.content{max-width:100%;overflow-x:hidden}
+/* every inline SVG must stay icon-sized even if a scoped rule goes missing */
+.opd-g svg,.opd-sec svg,.opd-hero svg{max-width:100%}
 </style>
 
 <!-- ═══ page-local components for the full-page report (`opd-` ns) ═══

@@ -409,3 +409,20 @@ Re-verified after the change: structural checks pass, all 10 candidates render i
 - Governance unchanged: bulk **Reject** is still a deliberate human action — the AI never rejects on its own.
 
 **Verified by execution:** structural (all three bulk buttons present, hidden by default, colour-coded) plus runtime — group shows/hides with selection, 3 selected → all three set to Shortlisted, **unselected row provably untouched**, Reject and Mark pending both apply, empty selection is a no-op. Prior render and filter suites re-run green (no regression). 41/41 pages, 0 broken links.
+
+## Round 12d — fix: CSS wiped by the nav script + bulk bar layout · 2026-06-24
+
+**Bug (self-inflicted, tooling).** The nav/stepper script's cleanup regex removed everything from its own marker **to the closing `</style>`**. Because later CSS blocks were appended just before that same `</style>`, re-running the script in round 12 silently deleted them from **7 pages**:
+- `.stage-tag` / `.stage-pill` — `hr/application-detail`, `hr/assessment-summary-report`, `hr/cv-analysis-dashboard`, `hr/interview-schedule`, `hr/interviews`, `hr/online-presence-detail`, `hiring-manager/application-detail`
+- `.opd-glance` + overflow guards — `hr/online-presence-detail`
+
+Visible symptom on the Online Presence report: the stage tag rendered as raw text, and because `.opd-g .k svg{width:13px;height:13px}` was gone the inline SVGs fell back to full container width — the giant black circle.
+
+**Fixes**
+- The script's CSS block now carries an explicit **end marker** and the removal regex is **bounded to the marker pair**, so it can only ever delete its own block. A separate pattern still clears pre-marker legacy blocks.
+- All 7 pages repaired; a verification pass asserts **0 pages** have stage-tag or glance markup without its CSS.
+- Added a belt-and-braces rule (`.opd-g svg,.opd-sec svg,.opd-hero svg{max-width:100%}`) so a missing scoped rule can never blow an icon up to full width again.
+
+**Bulk bar layout.** The decision group moved to the **right** (`margin-left:auto`), with the governance note now sitting to its **left**, between the run button and the actions.
+
+**Verified:** all four suites green — bulk decisions, cv-review render + structure, filter logic, and the online-presence-detail render (all 6 candidates + the full not-a-match cycle). 41/41 pages, 0 broken links, 0 pages missing CSS.

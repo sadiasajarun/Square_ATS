@@ -195,13 +195,13 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
    confirmed once by a human; every lookup is logged to the audit trail.
    ══════════════════════════════════════════════════════════════════ */
 .rp-bulkbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface-2)}
-.rp-bulkbar .rp-note{font-size:11.5px;color:var(--muted);max-width:430px}
+.rp-bulkbar .rp-note{font-size:11.5px;color:var(--muted);max-width:430px;flex:0 1 auto}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .rp-prog{display:none;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);font-weight:600}
 .rp-prog.on{display:inline-flex}
 .rp-progtrack{width:130px;height:6px;border-radius:6px;background:var(--border);overflow:hidden}
 .rp-progtrack i{display:block;height:100%;background:var(--primary);border-radius:6px;transition:width .2s}
-.rp-bulkdec{display:none;align-items:center;gap:6px;flex-wrap:wrap}
+.rp-bulkdec{display:none;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto}
 .rp-bulkdec.on{display:inline-flex}
 .rp-bulkdec-lbl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-right:2px}
 .rp-bulkdec .cvf-act{padding:6px 11px}
@@ -503,6 +503,7 @@ table[data-testid="review-table"] td{padding:9px 12px}
             <span id="rpBulkProgLbl">Analysing…</span>
           </span>
 
+          <span class="rp-note">Public professional sources only. Assistive research — never a screening input and never part of the AI match score. Every lookup is logged to the audit trail.</span>
           <!-- Bulk decisions — appear once rows are selected -->
           <span class="rp-bulkdec" id="rpBulkDec" data-testid="review-bulk-decisions">
             <span class="rp-bulkdec-lbl" id="rpBulkDecLbl">Apply to selection:</span>
@@ -517,7 +518,6 @@ table[data-testid="review-table"] td{padding:9px 12px}
             </button>
           </span>
 
-          <span class="rp-note">Public professional sources only. Assistive research — never a screening input and never part of the AI match score. Every lookup is logged to the audit trail.</span>
         </div>
 
         <!-- Publish confirmation -->

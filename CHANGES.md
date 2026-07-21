@@ -323,3 +323,23 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
 - **Support-role framing (G6).** Viewer + Admin dashboards labelled "Support role — outside the 10-stage hiring workflow."
 
 **QA:** 40/40 reachable · 0 broken links · 0 emoji-icons · brand blue 40/40. All audit items M1–M7 / G1–G6 closed.
+
+---
+
+# Round 11 — Online Presence: full page + CV Analysis feedback loop · 2026-06-24
+
+**New page — `hr/online-presence-detail.page.html`** (replaces the cramped right-side drawer with a direct-target full page, opened via `?c=<id>`):
+- **Identity verification with "next best match".** Each candidate carries an ordered list of possible matches. **"Not a match"** discards the current profile and shows the next one ("Showing match 2 of 3", with progress dots and a "← Previous match"). When the list is exhausted: "No further matches found" → **Mark as Not found publicly**, with an explicit note that absence of a footprint is not a negative signal.
+- **Gated report.** Sources/info/cross-check/signals stay locked until a human confirms identity — one decision, made by a person, never by the AI.
+- **Expanded sources:** LinkedIn, Facebook, Instagram/X, personal website & portfolio, publications & research, news & press, conference/speaking, professional directory — each with a "posts / activity" note and a "looks wrong? dismiss" control.
+- **Information gathered:** name, photo (placeholder), current role, work history with dates, education, research/publications, portfolio, **From (hometown)**, **Lives in**, skills, certifications, public-post summary, news mentions — each showing its source, "—" when not found.
+- **CV cross-check visualisation:** four colour-coded groups with count badges and a summary strip (`6 matches · 1 mismatch · 2 not found · 3 extra`) — **Matches** (green), **Mismatches** with side-by-side "CV says · Sources say" (red), **Not found** (muted), **Additional findings** (blue).
+- **Reputation signals:** *Positive / achievements* vs *Risks / adverse findings*, with an explicit **"None found"** empty state.
+- 6 instructive fixtures: clean/strong · 3-way namesake (demonstrates the cycling) · real mismatch + adverse trade-press finding · sparse/low-confidence · research-heavy · socially-active but thin. Print rules produce a clean document.
+
+**CV Analysis feedback loop (Stage 5 → Stage 4).** Running the analysis now publishes results (`oviPublishToAnalysis`) and the dashboard consumes them:
+- List page shows a green **"Added to CV Analysis"** confirmation + *Open CV Analysis*.
+- CV Analysis gains an **"Online presence"** card: strong/moderate/sparse distribution bars plus *analysed · identity confirmed · with mismatches · adverse findings* badges, and a takeaway that flags candidates needing a closer look. Empty state with a **Run Online Presence analysis** CTA before the analysis is run.
+- Governance preserved throughout: presence is **assistive only and never part of the ATS match score**.
+
+**QA:** 41/41 reachable · 0 broken links · 0 emoji-icons · brand blue 41/41 · stepper on 20 pages.

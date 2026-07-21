@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<!-- FULL-PAGE online-presence report — the expanded version of the drawer on
+     online-visibility-analysis.page.html. Opened per candidate via ?c=<id>.
+     TODO: enrichment provider + STL Legal/HR approval + candidate-notice policy required before live use.
+     Everything on this page is fixture data — nothing is retrieved from any real source, and the
+     avatars are initials placeholders, never a real person's photograph.
+     Identity model: ONE decision about the PERSON. Each candidate carries an ORDERED list of
+     possible identity matches; "Not a match" discards the current one and surfaces the next best.
+     Sections 3–6 are gated in code on a human confirmation. Nothing here feeds the match score. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Presence Report · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.crumb a:hover{color:var(--primary)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.card-head h2{font-size:15px;font-weight:600}
+.card-body{padding:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 16px;position:sticky;top:0}
+td{padding:12px 16px;border-top:1px solid var(--border);font-size:13.5px;vertical-align:middle}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:110px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge.b-ic::before{display:none}
+.badge.b-ic svg{width:12px;height:12px;flex:none}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:var(--surface-2);font-size:12px;font-weight:500}
+
+/* ══════════════════════════════════════════════════════════════════
+   OVI — Online-presence / public-information analysis (`ovi-` ns).
+   Highest-governance surface in the prototype.
+
+   IDENTITY MODEL (R11 correction): identity is ONE decision about the
+   PERSON, anchored on the profile photo + name — not one decision per
+   source. LinkedIn/GitHub/portfolio/publications are SOURCE TYPES; they
+   are findings attached to a confirmed person, never identity votes.
+   A namesake picker appears only when two real people share the name.
+
+   Flow: 1 Identity → 2 Sources & info → 3 CV match & score.
+   Steps 2–3 are gated in code on that single confirmation.
+   The visibility score never feeds the match score and cannot change a
+   candidate's status. The photo is a recognition aid — never analyzed.
+   ══════════════════════════════════════════════════════════════════ */
+.ovi-gov{display:flex;gap:12px;align-items:flex-start;background:var(--info-s);border:1px solid var(--info);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:12.5px;color:var(--text)}
+.ovi-gov svg{width:18px;height:18px;flex:none;color:var(--info);margin-top:1px}
+.ovi-gov ul{margin:4px 0 0 16px}
+.ovi-gov li{margin-bottom:2px}
+
+/* Selection table */
+.ovi-selbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.ovi-cb{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+.ovi-cb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ovi-optin{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin-top:10px}
+.ovi-optin svg{width:13px;height:13px;flex:none;margin-top:2px;color:var(--info)}
+.ovi-prog{display:none;padding:18px 20px;border-top:1px solid var(--border)}
+.ovi-prog.on{display:block}
+.ovi-src{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;color:var(--muted)}
+.ovi-src svg{width:15px;height:15px;flex:none}
+.ovi-src.done{color:var(--text)}
+.ovi-src.done .ovi-tick{color:var(--success)}
+.ovi-src .ovi-spin{animation:ovispin 1s linear infinite;color:var(--primary)}
+@keyframes ovispin{to{transform:rotate(360deg)}}
+.ovi-tip{position:relative;display:inline-flex;align-items:center}
+.ovi-tip .ovi-tipbox{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:240px;background:var(--text);color:#fff;font-size:11.5px;line-height:1.45;padding:8px 10px;border-radius:8px;z-index:40;font-weight:400;text-transform:none;letter-spacing:0}
+.ovi-tip:hover .ovi-tipbox,.ovi-tip:focus-within .ovi-tipbox{display:block}
+.ovi-tip button{background:none;border:0;padding:0;display:grid;place-items:center;color:var(--muted)}
+.ovi-tip button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.ovi-tip svg{width:13px;height:13px}
+
+/* Report drawer */
+.ovi-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:50;display:none}
+.ovi-mask.on{display:block}
+.ovi-drawer{position:fixed;top:0;right:0;bottom:0;width:min(820px,100%);background:var(--bg);z-index:51;box-shadow:var(--shadow-lg);display:none;flex-direction:column}
+.ovi-drawer.on{display:flex}
+.ovi-dhead{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 22px;display:flex;align-items:flex-start;gap:14px}
+.ovi-dbody{overflow:auto;padding:18px 22px;flex:1}
+
+/* Numbered step rhythm */
+.ovi-step{margin-bottom:22px}
+.ovi-step-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ovi-step-n{width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.ovi-step-n.lock{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.ovi-step-t{font-size:14px;font-weight:700}
+.ovi-step-s{font-size:12px;color:var(--muted);margin-left:auto}
+.ovi-sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.ovi-sec-b{padding:16px 18px}
+
+/* STEP 1 — photo-anchored identity card */
+.ovi-idc{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.ovi-idc+.ovi-idc{margin-top:12px}
+.ovi-idc.on{border-color:var(--success);background:var(--success-s)}
+.ovi-idc.off{opacity:.5}
+.ovi-photo{width:104px;height:104px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-size:34px;font-weight:700;flex:none;border:3px solid var(--surface);box-shadow:0 0 0 1px var(--border)}
+.ovi-photo-w{text-align:center}
+.ovi-photo-cap{font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.03em;text-transform:uppercase;font-weight:600}
+.ovi-idc-n{font-size:19px;font-weight:700;line-height:1.25}
+.ovi-idc-h{font-size:13px;color:var(--text);margin-top:2px}
+.ovi-idc-f{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:12.5px;color:var(--muted)}
+.ovi-idc-f span{display:inline-flex;align-items:center;gap:5px}
+.ovi-idc-f svg{width:13px;height:13px;flex:none}
+.ovi-li{display:inline-flex;align-items:center;gap:5px;background:#0A66C2;color:#fff;border-radius:5px;padding:2px 7px;font-size:11px;font-weight:700}
+.ovi-li svg{width:11px;height:11px}
+.ovi-idc-a{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.ovi-photo-note{display:flex;align-items:flex-start;gap:7px;font-size:11.5px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.ovi-photo-note svg{width:13px;height:13px;flex:none;margin-top:2px}
+.ovi-name-warn{display:flex;gap:8px;align-items:flex-start;background:var(--warn-s);border-radius:8px;padding:9px 12px;font-size:12.5px;margin-bottom:12px}
+.ovi-name-warn svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--warn)}
+
+/* Gate */
+.ovi-gate{display:flex;gap:10px;align-items:center;background:var(--surface-2);border:1px dashed var(--border);border-radius:10px;padding:16px 18px;font-size:12.5px;color:var(--muted)}
+.ovi-gate svg{width:16px;height:16px;flex:none}
+
+/* STEP 2 — sources + facts */
+.ovi-srcs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ovi-srow{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--border);border-radius:10px;padding:11px 12px}
+.ovi-srow.gone{opacity:.4}
+.ovi-sic{width:30px;height:30px;border-radius:8px;background:var(--surface-2);color:var(--primary);display:grid;place-items:center;flex:none}
+.ovi-sic svg{width:15px;height:15px}
+.ovi-srow b{font-size:12.5px;display:block}
+.ovi-srow .sn{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.ovi-srow a{font-size:11.5px;color:var(--primary);font-weight:600}
+.ovi-dismiss{background:none;border:0;color:var(--muted);font-size:11px;font-weight:600;padding:0;margin-left:auto;flex:none}
+.ovi-dismiss:hover{color:var(--danger)}
+.ovi-dismiss:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.ovi-facts{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}
+.ovi-fact{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--surface-2);font-size:12.5px}
+.ovi-fact span{color:var(--muted);flex:none}
+.ovi-fact b{text-align:right;font-weight:600}
+
+/* STEP 3 — result buckets + score ring */
+.ovi-buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ovi-bk{border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--surface)}
+.ovi-bk.suc{border-color:var(--success);background:var(--success-s)}
+.ovi-bk.warn{border-color:var(--warn);background:var(--warn-s)}
+.ovi-bk.info{border-color:var(--info);background:var(--info-s)}
+.ovi-bk-h{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700}
+.ovi-bk-h svg{width:15px;height:15px;flex:none}
+.ovi-bk-n{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15;margin:4px 0 2px}
+.ovi-bk-s{font-size:11.5px;color:var(--muted)}
+.ovi-pair{background:var(--surface);border-radius:8px;padding:9px 11px;margin-top:8px;font-size:11.5px}
+.ovi-pair b{display:block;color:var(--text);font-weight:600;margin-bottom:3px}
+.ovi-pair span{color:var(--muted);display:flex;gap:5px;align-items:flex-start}
+.ovi-pair span svg{width:11px;height:11px;flex:none;margin-top:3px}
+.ovi-sub{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:10px 0 2px}
+.ovi-ring-w{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.ovi-ring{position:relative;width:132px;height:132px;flex:none}
+.ovi-ring svg{transform:rotate(-90deg)}
+.ovi-ring-v{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ovi-ring-v b{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.ovi-ring-v span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600;display:block;margin-top:2px}
+.ovi-subbar{margin-bottom:11px}
+.ovi-subbar-h{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.ovi-subbar-h b{font-variant-numeric:tabular-nums}
+.ovi-subbar .tr{height:7px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.ovi-subbar .tr i{display:block;height:100%;border-radius:5px;background:var(--primary)}
+.ovi-score-cap{display:flex;gap:8px;align-items:flex-start;background:var(--surface-2);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--muted);margin-top:14px}
+.ovi-score-cap svg{width:13px;height:13px;flex:none;margin-top:2px;color:var(--info)}
+.ovi-excl{background:var(--surface-2);border-radius:10px;padding:12px 16px;font-size:12.5px;color:var(--muted)}
+.ovi-excl b{color:var(--text)}
+@media (max-width:1024px){.app{grid-template-columns:1fr}.sidebar{display:none}}
+@media (max-width:768px){
+  .content{padding:16px}.topbar{padding:0 16px}.search{width:auto;flex:1}
+  .ovi-idc{grid-template-columns:1fr}
+  .ovi-srcs,.ovi-facts,.ovi-buckets{grid-template-columns:1fr}
+  .ovi-ring-w{grid-template-columns:1fr;justify-items:center}
+}
+/* Print — the open report as a clean document: identity card, buckets and score kept */
+@media print{
+  body>.app{display:none}
+  .ovi-mask{display:none!important}
+  .ovi-drawer{position:static;width:100%;box-shadow:none;display:flex!important}
+  .ovi-drawer:not(.on){display:none!important}
+  .ovi-dbody{overflow:visible}
+  .ovi-idc-a,.ovi-dact,.ovi-dismiss{display:none!important}
+  .ovi-step,.ovi-idc,.ovi-buckets{page-break-inside:avoid}
+  body{background:#fff}
+}
+
+/* ---- workflow spine v2 (stepper + numbered nav) ---- */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--primary)}
+.wf-sep{flex:1;min-width:14px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+.nav-num{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:5px;background:var(--surface-2);color:var(--muted);font-size:10.5px;font-weight:700;flex:none}
+.nav-item.active .nav-num{background:var(--primary);color:#fff}
+.nav-sub{padding-left:38px !important;font-size:12.5px}
+.nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
+.nav-sub{position:relative}
+
+/* ---- stage tag (workflow context under page title) ---- */
+.stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
+.stage-tag a{color:var(--primary);font-weight:600}
+</style>
+
+<!-- ═══ page-local components for the full-page report (`opd-` ns) ═══
+     Tokens only — no new colours are introduced anywhere below. -->
+<style>
+.opd-hero{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding:20px 22px;margin-bottom:20px}
+.opd-hero-ava{width:64px;height:64px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-size:22px;font-weight:700;flex:none}
+.opd-hero h2{font-size:20px;font-weight:700;line-height:1.25}
+.opd-hero-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.opd-hero-meta{font-size:11.5px;color:var(--muted);margin-top:8px}
+.opd-hero-score{min-width:230px}
+.opd-hero-score .lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px}
+.opd-hero-score .lbl b{font-size:22px;font-variant-numeric:tabular-nums;text-transform:none;letter-spacing:0}
+.opd-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;justify-content:flex-end}
+.opd-switch{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap}
+.opd-switch select{font:inherit;font-size:12.5px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer}
+.opd-switch select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* section frame */
+.opd-sec{margin-bottom:22px}
+.opd-sec-h{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.opd-sec-n{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:none}
+.opd-sec-n.lock{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.opd-sec-t{font-size:15px;font-weight:700}
+.opd-sec-s{font-size:12px;color:var(--muted);margin-left:auto}
+.opd-gated{opacity:.42;filter:grayscale(.75);pointer-events:none;user-select:none}
+.opd-locknote{display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px dashed var(--border);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.opd-locknote svg{width:15px;height:15px;flex:none}
+
+/* identity match cycling */
+.opd-idmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.opd-idcount{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.opd-dots{display:flex;gap:5px}
+.opd-dots i{width:7px;height:7px;border-radius:50%;background:var(--border);display:block}
+.opd-dots i.on{background:var(--primary)}
+.opd-dots i.past{background:var(--danger-s)}
+.opd-empty{display:grid;place-items:center;text-align:center;gap:9px;padding:34px 20px;border:1px dashed var(--border);border-radius:12px;background:var(--surface-2);color:var(--muted);font-size:13px}
+.opd-empty svg{width:30px;height:30px;color:var(--muted)}
+.opd-empty b{color:var(--text);font-size:14px}
+
+/* sources grid */
+.opd-srcgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.opd-srccard{border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.opd-srccard.gone{opacity:.42}
+.opd-srccard-h{display:flex;align-items:center;gap:9px}
+.opd-srccard-h .ic{width:32px;height:32px;border-radius:9px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
+.opd-srccard-h .ic svg{width:16px;height:16px}
+.opd-srccard-h b{font-size:13px}
+.opd-srccard p{font-size:12px;color:var(--muted);line-height:1.5}
+.opd-actnote{display:flex;gap:7px;align-items:flex-start;background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:11.5px;color:var(--muted)}
+.opd-actnote svg{width:13px;height:13px;flex:none;margin-top:2px;color:var(--info)}
+.opd-srccard-f{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:4px}
+.opd-srccard-f a{font-size:11.5px;color:var(--primary);font-weight:600}
+
+/* information gathered */
+.opd-infogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.opd-info{border:1px solid var(--border);border-radius:10px;padding:11px 13px;background:var(--surface)}
+.opd-info .k{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.opd-info .v{font-size:13px;font-weight:600;margin-top:3px;word-break:break-word}
+.opd-info .s{font-size:11px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}
+.opd-info .s svg{width:11px;height:11px;flex:none}
+.opd-info.none{background:var(--surface-2)}
+.opd-info.none .v{color:var(--muted);font-weight:500}
+
+/* CV cross-check */
+.opd-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;font-weight:600}
+.opd-strip .sep{color:var(--border)}
+.opd-xgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opd-x{border:1px solid var(--border);border-left-width:4px;border-radius:12px;background:var(--surface);padding:14px 16px}
+.opd-x-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;margin-bottom:3px}
+.opd-x-h svg{width:16px;height:16px;flex:none}
+.opd-x-c{margin-left:auto;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;padding:2px 9px;border-radius:999px}
+.opd-x-s{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.opd-x.suc{border-left-color:var(--success)}.opd-x.suc .opd-x-h{color:var(--success)}.opd-x.suc .opd-x-c{background:var(--success-s);color:var(--success)}
+.opd-x.dan{border-left-color:var(--danger)}.opd-x.dan .opd-x-h{color:var(--danger)}.opd-x.dan .opd-x-c{background:var(--danger-s);color:var(--danger)}
+.opd-x.mut{border-left-color:var(--muted)}.opd-x.mut .opd-x-h{color:var(--muted)}.opd-x.mut .opd-x-c{background:var(--muted-s);color:var(--muted)}
+.opd-x.inf{border-left-color:var(--info)}.opd-x.inf .opd-x-h{color:var(--info)}.opd-x.inf .opd-x-c{background:var(--info-s);color:var(--info)}
+.opd-row{border-radius:9px;padding:10px 12px;margin-bottom:8px;font-size:12px;background:var(--surface-2)}
+.opd-row:last-child{margin-bottom:0}
+.opd-row .side{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;padding:3px 0}
+.opd-row .side em{font-style:normal;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding-top:2px}
+.opd-row .side span{color:var(--text)}
+.opd-row .side.pub span{color:var(--muted)}
+.opd-row .cite{font-size:11px;color:var(--muted);margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.opd-row .cite a{color:var(--primary);font-weight:600}
+.opd-x.dan .opd-row{background:var(--danger-s)}
+.opd-x.suc .opd-row{background:var(--success-s)}
+.opd-x.inf .opd-row{background:var(--info-s)}
+.opd-note{font-size:11.5px;color:var(--muted);margin-top:9px;padding-top:9px;border-top:1px solid var(--border)}
+.opd-note b{color:var(--text)}
+
+/* signals */
+.opd-siggrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opd-sig{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:14px 16px}
+.opd-sig-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;margin-bottom:10px}
+.opd-sig-h svg{width:16px;height:16px;flex:none}
+.opd-sig.pos .opd-sig-h{color:var(--success)}
+.opd-sig.neg .opd-sig-h{color:var(--danger)}
+.opd-sigitem{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--border);font-size:12.5px}
+.opd-sigitem:first-of-type{border-top:0;padding-top:0}
+.opd-sigitem .dot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px}
+.opd-sig.pos .dot{background:var(--success)}
+.opd-sig.neg .dot{background:var(--danger)}
+.opd-sigitem b{display:block;font-weight:600}
+.opd-sigitem p{font-size:11.5px;color:var(--muted);margin-top:2px}
+.opd-sigitem a{font-size:11.5px;color:var(--primary);font-weight:600;display:inline-block;margin-top:3px}
+.opd-none{display:flex;align-items:center;gap:9px;background:var(--success-s);border-radius:10px;padding:14px;font-size:12.5px;color:var(--success);font-weight:600}
+.opd-none svg{width:16px;height:16px;flex:none}
+.opd-none span{color:var(--muted);font-weight:400}
+.opd-none.neutral{background:var(--surface-2);color:var(--muted)}
+
+@media (max-width:1280px){.opd-srcgrid{grid-template-columns:1fr 1fr}.opd-infogrid{grid-template-columns:1fr 1fr}}
+@media (max-width:1024px){
+  .opd-hero{grid-template-columns:auto 1fr}
+  .opd-hero-score{grid-column:1/-1;min-width:0}
+  .opd-srcgrid,.opd-infogrid,.opd-xgrid,.opd-siggrid{grid-template-columns:1fr}
+  .opd-actions{justify-content:flex-start}
+}
+@media print{
+  .app{display:grid!important;grid-template-columns:1fr}
+  .sidebar,.topbar,.wf-stepper,.opd-actions,.opd-switch,.opd-idc-a,.ovi-dismiss,.opd-srccard.gone{display:none!important}
+  .content{padding:0;overflow:visible}
+  .opd-gated{opacity:1;filter:none}
+  .opd-sec,.opd-x,.opd-sig,.opd-srccard,.ovi-idc{page-break-inside:avoid}
+  .opd-srcgrid,.opd-infogrid{grid-template-columns:1fr 1fr}
+  body{background:#fff}
+  .card,.opd-x,.opd-sig,.opd-srccard,.opd-info{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+                <div class="nav-label">Workspace</div>
+    <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+    <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
+    <div class="nav-label">Hiring Workflow</div>
+    <a class="nav-item" href="template-builder.page.html" data-testid="nav-s1"><span class="nav-num">1</span>Screening Template</a>
+    <a class="nav-item" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
+    <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
+    <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
+    <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
+    <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
+    <a class="nav-item nav-sub active" href="online-visibility-analysis.page.html" data-testid="nav-online">Online Presence</a>
+    <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
+    <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
+    <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
+    <a class="nav-item nav-sub" href="interview-schedule.page.html" data-testid="nav-schedule">Schedule Viva</a>
+    <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
+    <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
+    <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
+    <div class="nav-label">Talent &amp; System</div>
+    <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates</a>
+    <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
+    <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb"><a href="cv-analysis-dashboard.page.html">CV Analysis</a> / <a href="online-visibility-analysis.page.html">Online Presence</a> / <b>Report</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+  <nav class="wf-stepper" aria-label="Hiring workflow" data-testid="workflow-stepper">
+    <a class="wf-step done" href="template-builder.page.html" data-testid="step-1"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Template</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="import-cvs.page.html" data-testid="step-2"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Import</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="processing.page.html" data-testid="step-3"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Process</a>
+    <span class="wf-sep done"></span>
+    <a class="wf-step done" href="cv-review.page.html" data-testid="step-4"><span class="wf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Review</a>
+    <span class="wf-sep done"></span>
+    <span class="wf-step current" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="../hiring-manager/shortlist.page.html" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</a>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="written-exam.page.html" data-testid="step-7"><span class="wf-dot">7</span>Written Exam</a>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="interviews.page.html" data-testid="step-8"><span class="wf-dot">8</span>Viva</a>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="final-selection.page.html" data-testid="step-9"><span class="wf-dot">9</span>Selection</a>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="onboarding.page.html" data-testid="step-10"><span class="wf-dot">10</span>Onboard</a>
+  </nav>
+
+      <!-- ═══ 1 · page head ═══ -->
+      <div class="page-head">
+        <div>
+          <h1>Online Presence Report</h1>
+          <p>One candidate&rsquo;s public professional footprint · assistive research only, never a screening input</p>
+          <div class="stage-tag" data-testid="stage-tag">
+            <span class="stage-pill">Stage 5 · detail</span>
+            <span>Online presence report within <b>Shortlist</b></span>
+            <a href="online-visibility-analysis.page.html" data-testid="stage-tag-link">Back to Online Presence &rarr;</a>
+          </div>
+        </div>
+        <div class="opd-actions" data-testid="opd-actions">
+          <a class="btn btn-ghost" href="exports.page.html" data-testid="opd-export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export
+          </a>
+          <button class="btn btn-ghost" data-testid="opd-print" onclick="opdPrint()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print
+          </button>
+          <button class="btn btn-ghost" id="opd-record" data-testid="opd-add-record" onclick="opdAddRecord(this)" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Add to record
+          </button>
+          <a class="btn btn-primary" href="online-visibility-analysis.page.html" data-testid="opd-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back
+          </a>
+        </div>
+      </div>
+
+      <div class="opd-switch" data-testid="opd-switch">
+        <label for="opd-cand" style="font-weight:600;color:var(--text)">Candidate</label>
+        <select id="opd-cand" data-testid="opd-candidate-select" onchange="opdGo(this.value)"></select>
+        <span>Opened from the Online Presence list via <code>?c=&lt;id&gt;</code>. Each report is a separate audited record.</span>
+      </div>
+
+      <!-- candidate hero + score -->
+      <section class="card opd-hero" id="opd-hero" data-testid="opd-hero"></section>
+
+      <!-- ═══ 2 · identity verification ═══ -->
+      <section class="opd-sec" data-testid="opd-sec-identity">
+        <div class="opd-sec-h">
+          <span class="opd-sec-n">1</span>
+          <span class="opd-sec-t">Identity verification</span>
+          <span class="opd-sec-s" id="opd-idstatus"></span>
+        </div>
+        <div class="ovi-sec"><div class="ovi-sec-b" id="opd-identity"></div></div>
+      </section>
+
+      <!-- ═══ 3 · sources found ═══ -->
+      <section class="opd-sec" data-testid="opd-sec-sources">
+        <div class="opd-sec-h">
+          <span class="opd-sec-n" id="opd-n-sources">2</span>
+          <span class="opd-sec-t">Sources found</span>
+          <span class="opd-sec-s" id="opd-srcstatus"></span>
+        </div>
+        <div id="opd-sources-lock"></div>
+        <div id="opd-sources"></div>
+      </section>
+
+      <!-- ═══ 4 · information gathered ═══ -->
+      <section class="opd-sec" data-testid="opd-sec-info">
+        <div class="opd-sec-h">
+          <span class="opd-sec-n" id="opd-n-info">3</span>
+          <span class="opd-sec-t">Information gathered</span>
+          <span class="opd-sec-s">Every field carries the source it came from</span>
+        </div>
+        <div id="opd-info-lock"></div>
+        <div id="opd-info"></div>
+      </section>
+
+      <!-- ═══ 5 · CV cross-check ═══ -->
+      <section class="opd-sec" data-testid="opd-sec-cross">
+        <div class="opd-sec-h">
+          <span class="opd-sec-n" id="opd-n-cross">4</span>
+          <span class="opd-sec-t">CV cross-check</span>
+          <span class="opd-sec-s">CV claims against public evidence</span>
+        </div>
+        <div id="opd-cross-lock"></div>
+        <div id="opd-cross"></div>
+      </section>
+
+      <!-- ═══ 6 · signals ═══ -->
+      <section class="opd-sec" data-testid="opd-sec-signals">
+        <div class="opd-sec-h">
+          <span class="opd-sec-n" id="opd-n-signals">5</span>
+          <span class="opd-sec-t">Signals &mdash; reputation</span>
+          <span class="opd-sec-s">Public professional reputation only</span>
+        </div>
+        <div id="opd-signals-lock"></div>
+        <div id="opd-signals"></div>
+      </section>
+
+      <!-- ═══ 7 · governance footer ═══ -->
+      <footer class="ovi-gov" data-testid="opd-governance-footer" style="margin-bottom:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <b>How this report works &mdash; and what it will never do</b>
+          <ul>
+            <li><b>Publicly available professional information only.</b> Assistive research to support HR verification &mdash; <b>never a screening input</b>, never part of the AI match score, never an automated decision.</li>
+            <li><b>Identity is confirmed once, by a human</b>, on the profile photo and name. AI only proposes matches; nothing below the identity step is used until a person confirms it.</li>
+            <li><b>Personal, social, and protected-characteristic information is excluded by design.</b> The photo is a recognition aid only &mdash; never analysed, never scored.</li>
+            <li>Every lookup is logged to the audit trail. Requires STL Legal/HR approval and is opt-in per position.</li>
+            <li><b>Absence of evidence is not evidence.</b> A low online-presence score usually just means a private person and is never a reason to reject.</li>
+          </ul>
+        </div>
+      </footer>
+      <div class="ovi-excl" data-testid="opd-excluded-notice" style="margin-bottom:20px">
+        <b>Excluded by design.</b> This report deliberately does not retrieve or score: personal social media content, photos as data, religion, political views, marital or family status, health, or any protected characteristic. Where a public social account appears below, only professional public activity is summarised.
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   OPD — full-page online-presence report fixtures. 6 clearly-fictional
+   Bangladesh FMCG candidates, each instructive:
+   0 Tanvir Hasan    — CLEAN/STRONG: high confidence, all matched, no risks
+   1 Mahmudul Hasan  — THREE identity candidates → "Not a match" cycling
+   2 Rumana Parvin   — MISMATCH (8 yrs claimed vs 5 yrs public) + ADVERSE finding
+   3 Farhana Karim   — SPARSE / low confidence, mostly "not found" (neutral)
+   4 Sabrina Yeasmin — RESEARCH & PORTFOLIO heavy (publications, talks)
+   5 Imran Chowdhury — ACTIVE PUBLIC SOCIAL presence, thin professional data
+   The presence score is DERIVED from source breadth, corroboration and
+   activity — never hard-coded, so it stays consistent with the fixture.
+   ══════════════════════════════════════════════════════════════════ */
+var OPD_ICON={
+  linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
+  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+  social:'<path d="M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M18 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><line x1="8.6" y1="13.5" x2="15.4" y2="17"/><line x1="15.4" y1="7" x2="8.6" y2="10.5"/>',
+  site:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  pub:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/>',
+  talk:'<path d="M12 1a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',
+  dir:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>'
+};
+var OPD_SRCNAME={
+  linkedin:'LinkedIn',facebook:'Facebook (public page)',social:'Instagram / X (public)',
+  site:'Personal website / Portfolio',pub:'Publications &amp; research',news:'News &amp; press / articles',
+  talk:'Conference / speaking',dir:'Professional directory'
+};
+
+var OPD_DATA=[
+/* ── 0 · CLEAN / STRONG ────────────────────────────────────────── */
+{n:'Tanvir Hasan',pos:'Sr. Brand Manager',dist:'Dhaka',gen:'17 Jul 2026',
+ sum:'Well-documented professional presence. Every material CV claim is corroborated on at least one independent public source, and no adverse findings were located.',
+ ident:{cands:[
+   {name:'Tanvir Hasan',head:'Assistant Brand Manager at Unilever Bangladesh | FMCG | IBA-DU',role:'Assistant Brand Manager',emp:'Unilever Bangladesh',loc:'Dhaka, Bangladesh',conns:'500+',edu:'MBA (Marketing), IBA — University of Dhaka',url:'https://example.com/in/tanvir-hasan',conf:'High'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/tanvir-hasan',f:'Assistant Brand Manager at Unilever Bangladesh · 500+ connections · profile last updated Jun 2026.',a:'Posts roughly twice a month on rural trade marketing and A&amp;P planning; no personal content indexed.'},
+  {k:'site',url:'https://example.com/tanvir-portfolio',f:'Personal portfolio: personal-care campaign case studies 2023–2026 and an A&amp;P planning toolkit.',a:''},
+  {k:'pub',url:'https://example.com/marketing-review-bd/rtm',f:'Author, &ldquo;Route-to-market economics for rural Bangladesh&rdquo;, Marketing Review BD, 2025.',a:''},
+  {k:'talk',url:'https://example.com/fmcg-summit-2025',f:'Panellist, &ldquo;Trade Marketing in Bangladesh FMCG&rdquo;, Dhaka FMCG Summit 2025.',a:''},
+  {k:'news',url:'https://example.com/tbs/personal-care-growth',f:'Quoted on personal-care category growth, The Business Standard, March 2026.',a:''},
+  {k:'dir',url:'https://example.com/mab-directory/tanvir',f:'Member listing, Marketing Association of Bangladesh (MAB), since 2021.',a:''}],
+ info:[
+  ['Name','Tanvir Hasan','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','Assistant Brand Manager — Unilever Bangladesh','LinkedIn'],
+  ['Work experience','Unilever Bangladesh 2023–present · ACI Limited, Brand Executive 2020–2022 · Square Toiletries, Management Trainee 2019–2020','LinkedIn'],
+  ['Education','MBA (Marketing), IBA — University of Dhaka, 2019 · BBA, University of Dhaka, 2016','LinkedIn'],
+  ['Research / publications','1 industry article (Marketing Review BD, 2025)','Publications'],
+  ['Portfolio','Public campaign portfolio, 12 case studies','Personal website'],
+  ['From (hometown)','Cumilla','Personal website'],
+  ['Lives in','Dhaka','LinkedIn'],
+  ['Skills','Brand strategy, trade marketing, A&amp;P budgeting, consumer insight','LinkedIn'],
+  ['Certifications','Google Digital Marketing (2022) · Nielsen Retail Audit (2024)','LinkedIn'],
+  ['Public posts summary','~2 professional posts a month on rural distribution and category growth','LinkedIn'],
+  ['Mentions in news/articles','1 press quote (The Business Standard, 2026) · 1 summit panel','News &amp; press']],
+ matched:[
+  ['Assistant Brand Manager, Unilever Bangladesh, 2023–present','Profile shows the identical role and start date','LinkedIn','https://example.com/in/tanvir-hasan'],
+  ['Brand Executive, ACI Limited, 2020–2022','Profile history matches the CV dates exactly','LinkedIn','https://example.com/in/tanvir-hasan'],
+  ['MBA (Marketing), IBA — University of Dhaka, 2019','Education section matches','LinkedIn','https://example.com/in/tanvir-hasan'],
+  ['Led a BDT 4 crore A&amp;P budget','Portfolio case study describes the same programme and budget band','Personal website','https://example.com/tanvir-portfolio'],
+  ['Published on rural route-to-market economics','Article located and authorship confirmed','Publications','https://example.com/marketing-review-bd/rtm'],
+  ['Member, Marketing Association of Bangladesh','Directory listing confirms membership since 2021','Professional directory','https://example.com/mab-directory/tanvir']],
+ contra:[],notfound:[],
+ extra:[
+  ['Panellist, Dhaka FMCG Summit 2025','Speaking engagement not mentioned anywhere on the CV','Conference','https://example.com/fmcg-summit-2025'],
+  ['Press quote on category growth, The Business Standard 2026','Media presence not on the CV','News &amp; press','https://example.com/tbs/personal-care-growth'],
+  ['Nielsen Retail Audit certification (2024)','Certification not listed on the CV','LinkedIn','https://example.com/in/tanvir-hasan']],
+ pos:[
+  ['Summit panellist, Dhaka FMCG Summit 2025','Invited to a national industry panel on trade marketing.','Conference','https://example.com/fmcg-summit-2025'],
+  ['Published industry article, 2025','Peer-reviewed trade publication on rural route-to-market economics.','Publications','https://example.com/marketing-review-bd/rtm'],
+  ['Quoted as a category expert, 2026','National business daily sought comment on personal-care growth.','News &amp; press','https://example.com/tbs/personal-care-growth'],
+  ['Notable campaign — rural personal-care relaunch','Portfolio documents a 12-district relaunch with measurable uplift.','Personal website','https://example.com/tanvir-portfolio'],
+  ['Skill endorsements from senior peers','Trade marketing and A&amp;P budgeting endorsed by 40+ connections.','LinkedIn','https://example.com/in/tanvir-hasan']],
+ risks:[]},
+
+/* ── 1 · MULTIPLE IDENTITY CANDIDATES (3) ──────────────────────── */
+{n:'Mahmudul Hasan',pos:'Area Sales Manager',dist:'Khulna',gen:'17 Jul 2026',
+ sum:'A very common name — three different people plausibly match. Nothing below the identity step may be used until a human picks the right person, or confirms that none of them is the candidate.',
+ ident:{cands:[
+   {name:'Mahmudul Hasan',head:'Software Engineer at a Dhaka fintech | Backend | BUET CSE',role:'Software Engineer',emp:'a Dhaka fintech',loc:'Dhaka, Bangladesh',conns:'900+',edu:'BSc CSE — BUET',url:'https://example.com/in/mahmudul-hasan-1',conf:'Low'},
+   {name:'Md. Mahmudul Hasan',head:'Territory Officer at British American Tobacco Bangladesh | Sales',role:'Territory Officer',emp:'British American Tobacco Bangladesh',loc:'Khulna, Bangladesh',conns:'340',edu:'BBA — Khulna University',url:'https://example.com/in/mahmudul-hasan-2',conf:'Medium'},
+   {name:'Mahmudul Hasan',head:'Area Sales Manager at Akij Group | FMCG distribution | Khulna region',role:'Area Sales Manager',emp:'Akij Group',loc:'Khulna, Bangladesh',conns:'480',edu:'MBA — Khulna University',url:'https://example.com/in/mahmudul-hasan-3',conf:'High'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/mahmudul-hasan-3',f:'Area Sales Manager at Akij Group · Khulna region · 480 connections.',a:'Occasional posts on distributor training; no personal content indexed.'},
+  {k:'dir',url:'https://example.com/sales-directory-bd/mahmudul',f:'Listed: Area Sales Manager, Akij Group — Khulna region, national sales directory.',a:''},
+  {k:'facebook',url:'https://example.com/fb/akij-khulna-sales',f:'Tagged in a public employer page post about a 2025 distributor conference in Khulna.',a:'Only the employer&rsquo;s public page was read; no personal profile content was retrieved.'}],
+ info:[
+  ['Name','Mahmudul Hasan','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','Area Sales Manager — Akij Group','LinkedIn'],
+  ['Work experience','Akij Group 2021–present · Meghna Group, Sales Officer 2018–2021','LinkedIn'],
+  ['Education','MBA — Khulna University, 2018','LinkedIn'],
+  ['Research / publications','—',''],
+  ['Portfolio','—',''],
+  ['From (hometown)','Bagerhat','Professional directory'],
+  ['Lives in','Khulna','LinkedIn'],
+  ['Skills','Distribution management, territory planning, distributor negotiation','LinkedIn'],
+  ['Certifications','—',''],
+  ['Public posts summary','Occasional posts on distributor training (last 6 months: 3)','LinkedIn'],
+  ['Mentions in news/articles','1 employer-page mention (distributor conference 2025)','Facebook']],
+ matched:[
+  ['Area Sales Manager, Akij Group, 2021–present','Profile and the national sales directory both show the same role and region','LinkedIn','https://example.com/in/mahmudul-hasan-3'],
+  ['Khulna region responsibility','Directory listing confirms the Khulna territory','Professional directory','https://example.com/sales-directory-bd/mahmudul']],
+ contra:[],
+ notfound:[
+  ['MBA, Khulna University, 2018','No independent public record beyond the profile&rsquo;s own education section'],
+  ['Sales Officer, Meghna Group, 2018–2021','No public record of the earlier employment located']],
+ extra:[
+  ['Distributor conference 2025 (employer page)','Participation not mentioned on the CV','Facebook','https://example.com/fb/akij-khulna-sales']],
+ pos:[
+  ['Recognised in employer distributor conference, 2025','Named on the employer&rsquo;s public page among regional sales leads.','Facebook','https://example.com/fb/akij-khulna-sales']],
+ risks:[]},
+
+/* ── 2 · MISMATCH + ADVERSE FINDING ────────────────────────────── */
+{n:'Rumana Parvin',pos:'Sr. Brand Manager',dist:'Chattogram',gen:'17 Jul 2026',
+ sum:'Identity is confident, but the CV and the public record disagree on length of experience, and one adverse trade-press item was located. Both need to be raised with the candidate before any decision is taken.',
+ ident:{cands:[
+   {name:'Rumana Parvin',head:'Brand Manager at Pran-RFL Group | Home &amp; personal care | NSU MBA',role:'Brand Manager',emp:'Pran-RFL Group',loc:'Chattogram, Bangladesh',conns:'500+',edu:'MBA — North South University',url:'https://example.com/in/rumana-parvin',conf:'High'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/rumana-parvin',f:'Brand Manager at Pran-RFL Group · Chattogram · career history begins Jan 2021 (5 yrs 6 mo total).',a:'Posts weekly on category management; comments are professional in tone.'},
+  {k:'news',url:'https://example.com/fmcg-weekly/supplier-dispute',f:'Named in a trade-press report on a 2024 supplier-payment dispute involving a former employer&rsquo;s marketing unit.',a:''},
+  {k:'dir',url:'https://example.com/mab-directory/rumana',f:'Member listing, Marketing Association of Bangladesh, since 2022.',a:''},
+  {k:'talk',url:'https://example.com/brandcon-2024',f:'Speaker, BrandCon Dhaka 2024 — consumer-insight-led portfolio strategy.',a:''}],
+ info:[
+  ['Name','Rumana Parvin','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','Brand Manager — Pran-RFL Group','LinkedIn'],
+  ['Work experience','Pran-RFL Group 2023–present · ACI Limited, Asst. Brand Manager 2021–2023 (public history starts 2021)','LinkedIn'],
+  ['Education','MBA — North South University, 2020','LinkedIn'],
+  ['Research / publications','—',''],
+  ['Portfolio','—',''],
+  ['From (hometown)','Chattogram','Professional directory'],
+  ['Lives in','Chattogram','LinkedIn'],
+  ['Skills','Portfolio strategy, market research, P&amp;L ownership','LinkedIn'],
+  ['Certifications','—',''],
+  ['Public posts summary','Weekly professional posts on category management','LinkedIn'],
+  ['Mentions in news/articles','1 trade-press report (supplier-payment dispute, 2024) · 1 conference listing','News &amp; press']],
+ matched:[
+  ['Brand Manager, Pran-RFL Group, 2023–present','Profile shows the identical role and start date','LinkedIn','https://example.com/in/rumana-parvin'],
+  ['MBA, North South University','Education section matches the CV','LinkedIn','https://example.com/in/rumana-parvin'],
+  ['Member, Marketing Association of Bangladesh','Directory listing confirms membership since 2022','Professional directory','https://example.com/mab-directory/rumana']],
+ contra:[
+  ['CV states 8 years of FMCG experience (from 2018)','Public career history begins January 2021 — approximately 5 years 6 months','LinkedIn','https://example.com/in/rumana-parvin'],
+  ['CV lists &ldquo;Senior Brand Manager&rdquo; as the current title','Public profile and directory both show &ldquo;Brand Manager&rdquo;','Professional directory','https://example.com/mab-directory/rumana']],
+ notfound:[
+  ['Marketing Executive, Unilever Bangladesh, 2018–2021','No public record of this employment located — verify via references']],
+ extra:[
+  ['Speaker, BrandCon Dhaka 2024','Speaking engagement not mentioned on the CV','Conference','https://example.com/brandcon-2024'],
+  ['MAB association membership','Membership not on the CV','Professional directory','https://example.com/mab-directory/rumana']],
+ pos:[
+  ['Conference speaker, BrandCon Dhaka 2024','Invited talk on consumer-insight-led portfolio strategy.','Conference','https://example.com/brandcon-2024'],
+  ['Active professional association member','MAB member in good standing since 2022.','Professional directory','https://example.com/mab-directory/rumana']],
+ risks:[
+  ['Named in a 2024 supplier-payment dispute','Trade-press report names the candidate&rsquo;s former marketing unit; individual responsibility is not established. Raise with the candidate — do not treat as fact.','News &amp; press','https://example.com/fmcg-weekly/supplier-dispute'],
+  ['Experience claim inconsistent with public record','CV claims 8 years; the public career history supports about 5 years 6 months. Ask the candidate to reconcile.','LinkedIn','https://example.com/in/rumana-parvin']]},
+
+/* ── 3 · SPARSE / LOW CONFIDENCE ───────────────────────────────── */
+{n:'Farhana Karim',pos:'Supply Chain Executive',dist:'Cumilla',gen:'17 Jul 2026',
+ sum:'Minimal public professional presence. This is common in Bangladesh FMCG and entirely neutral — nothing here counts for or against the candidate. Verify through references and the written exam instead.',
+ ident:{cands:[
+   {name:'F. Karim',head:'Supply chain professional — sparse profile, no employer listed',role:'Supply Chain Executive',emp:'—',loc:'Cumilla, Bangladesh',conns:'42',edu:'—',url:'https://example.com/in/f-karim',conf:'Low'},
+   {name:'Farhana Karim',head:'Directory entry only — no headline available',role:'Executive',emp:'—',loc:'Cumilla, Bangladesh',conns:'—',edu:'—',url:'https://example.com/scm-directory/f-karim',conf:'Low'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/f-karim',f:'Sparse profile: name, district and a one-line headline only. 42 connections, no employment history.',a:'No public posts in the last 24 months.'},
+  {k:'dir',url:'https://example.com/scm-directory/f-karim',f:'An F. Karim appears in a supply-chain practitioners directory, Cumilla region, without further detail.',a:''}],
+ info:[
+  ['Name','F. Karim (initial only — not a full match)','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','—',''],
+  ['Work experience','—',''],
+  ['Education','—',''],
+  ['Research / publications','—',''],
+  ['Portfolio','—',''],
+  ['From (hometown)','—',''],
+  ['Lives in','Cumilla','LinkedIn'],
+  ['Skills','—',''],
+  ['Certifications','—',''],
+  ['Public posts summary','No public posts in the last 24 months','LinkedIn'],
+  ['Mentions in news/articles','—','']],
+ matched:[
+  ['Based in Cumilla','Both the profile and the directory place an F. Karim in the Cumilla region','Professional directory','https://example.com/scm-directory/f-karim']],
+ contra:[],
+ notfound:[
+  ['Supply Chain Executive, Pran-RFL Group, 2021–present','No public profile or listing located — verify via references'],
+  ['BBA, Comilla University, 2019','No public record located'],
+  ['Warehouse digitisation project lead','No public record located'],
+  ['Certified Supply Chain Analyst (2023)','No public certification record located']],
+ extra:[],
+ pos:[],
+ risks:[]},
+
+/* ── 4 · RESEARCH / PORTFOLIO HEAVY ────────────────────────────── */
+{n:'Sabrina Yeasmin',pos:'Consumer Insights Manager',dist:'Rajshahi',gen:'17 Jul 2026',
+ sum:'Unusually strong research and portfolio footprint for the role: peer-reviewed publications, conference talks and a public methods portfolio, all consistent with the CV.',
+ ident:{cands:[
+   {name:'Sabrina Yeasmin',head:'Consumer Insights Manager at Square Toiletries Ltd. | Market research | KU',role:'Consumer Insights Manager',emp:'Square Toiletries Ltd.',loc:'Rajshahi, Bangladesh',conns:'500+',edu:'MBA — University of Rajshahi · MSc Statistics — Khulna University',url:'https://example.com/in/sabrina-yeasmin',conf:'High'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/sabrina-yeasmin',f:'Consumer Insights Manager at Square Toiletries Ltd. · Rajshahi · 500+ connections.',a:'Posts monthly summarising published research; strictly professional content.'},
+  {k:'pub',url:'https://example.com/journal/consumer-panel-bd',f:'Three peer-reviewed papers on consumer panel methodology in emerging markets (2022, 2024, 2026).',a:''},
+  {k:'talk',url:'https://example.com/insights-forum-2025',f:'Keynote, &ldquo;Panel design for low-literacy rural samples&rdquo;, Bangladesh Insights Forum 2025.',a:''},
+  {k:'site',url:'https://example.com/sabrina-methods',f:'Public methods portfolio: questionnaire libraries, sampling notes, anonymised study write-ups.',a:''},
+  {k:'dir',url:'https://example.com/esomar-bd/sabrina',f:'Listed member, market-research practitioners association (Bangladesh chapter).',a:''},
+  {k:'news',url:'https://example.com/tbs/rural-insight',f:'Research cited in a business-daily feature on rural consumer behaviour, 2025.',a:''}],
+ info:[
+  ['Name','Sabrina Yeasmin','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','Consumer Insights Manager — Square Toiletries Ltd.','LinkedIn'],
+  ['Work experience','Square Toiletries 2022–present · Nielsen Bangladesh, Research Executive 2018–2022','LinkedIn'],
+  ['Education','MBA — University of Rajshahi, 2018 · MSc Statistics — Khulna University, 2016','LinkedIn'],
+  ['Research / publications','3 peer-reviewed papers (2022, 2024, 2026) on panel methodology','Publications'],
+  ['Portfolio','Public methods portfolio: questionnaire libraries and sampling notes','Personal website'],
+  ['From (hometown)','Khulna','Personal website'],
+  ['Lives in','Rajshahi','LinkedIn'],
+  ['Skills','Quantitative research, panel design, SPSS/R, sampling theory','LinkedIn'],
+  ['Certifications','Market Research Society of Bangladesh — Practitioner (2023)','Professional directory'],
+  ['Public posts summary','Monthly posts summarising published research','LinkedIn'],
+  ['Mentions in news/articles','1 business-daily citation (2025) · 1 forum keynote','News &amp; press']],
+ matched:[
+  ['Consumer Insights Manager, Square Toiletries, 2022–present','Profile shows the identical role and start date','LinkedIn','https://example.com/in/sabrina-yeasmin'],
+  ['Research Executive, Nielsen Bangladesh, 2018–2022','Profile history matches the CV dates','LinkedIn','https://example.com/in/sabrina-yeasmin'],
+  ['Three published papers on consumer panel methodology','All three papers located and authorship confirmed','Publications','https://example.com/journal/consumer-panel-bd'],
+  ['MSc Statistics, Khulna University','Education section and association listing both match','Professional directory','https://example.com/esomar-bd/sabrina'],
+  ['Designed rural panel methodology adopted company-wide','Keynote and portfolio both describe the same methodology','Conference','https://example.com/insights-forum-2025']],
+ contra:[],
+ notfound:[
+  ['Internal award for research excellence, 2024','Internal recognition — no public record expected or located']],
+ extra:[
+  ['Keynote speaker, Bangladesh Insights Forum 2025','Keynote not mentioned on the CV','Conference','https://example.com/insights-forum-2025'],
+  ['Public methods portfolio','Open methods library not mentioned on the CV','Personal website','https://example.com/sabrina-methods'],
+  ['Research cited in national business daily, 2025','Media citation not on the CV','News &amp; press','https://example.com/tbs/rural-insight']],
+ pos:[
+  ['Keynote speaker, Bangladesh Insights Forum 2025','Invited keynote on panel design for low-literacy rural samples.','Conference','https://example.com/insights-forum-2025'],
+  ['Three peer-reviewed publications','Sustained methodological contribution across 2022–2026.','Publications','https://example.com/journal/consumer-panel-bd'],
+  ['Research cited by national press','Business-daily feature on rural consumer behaviour cites her work.','News &amp; press','https://example.com/tbs/rural-insight'],
+  ['Open methods portfolio','Publicly shares questionnaire libraries and sampling notes.','Personal website','https://example.com/sabrina-methods'],
+  ['Association practitioner listing','Recognised practitioner member, Bangladesh chapter.','Professional directory','https://example.com/esomar-bd/sabrina']],
+ risks:[]},
+
+/* ── 5 · ACTIVE SOCIAL, THIN PROFESSIONAL ──────────────────────── */
+{n:'Imran Chowdhury',pos:'Territory Sales Officer',dist:'Sylhet',gen:'17 Jul 2026',
+ sum:'Highly visible on public social accounts but thin on verifiable professional data. Social visibility is not a professional signal — only the professional findings below are usable, and none of it may influence screening.',
+ ident:{cands:[
+   {name:'Imran Chowdhury',head:'Territory Sales Officer at Meghna Group — sparse profile',role:'Territory Sales Officer',emp:'Meghna Group',loc:'Sylhet, Bangladesh',conns:'96',edu:'—',url:'https://example.com/in/imran-chowdhury',conf:'Medium'},
+   {name:'Imran Chowdhury',head:'Retail entrepreneur, Sylhet — public business page',role:'Retail entrepreneur',emp:'—',loc:'Sylhet, Bangladesh',conns:'—',edu:'—',url:'https://example.com/fb/imran-retail-sylhet',conf:'Low'}]},
+ sources:[
+  {k:'linkedin',url:'https://example.com/in/imran-chowdhury',f:'Territory Sales Officer at Meghna Group · Sylhet · 96 connections · no employment dates published.',a:'No posts in the last 12 months.'},
+  {k:'facebook',url:'https://example.com/fb/imran-sales-tips',f:'Public page &ldquo;Sylhet Retail Talk&rdquo; with ~4,000 followers, run under the candidate&rsquo;s name.',a:'Roughly weekly public posts on retail shelf placement and distributor pricing. Only professional-topic posts were summarised; personal content was excluded by design.'},
+  {k:'social',url:'https://example.com/x/imran-retail',f:'Public account posting retail-execution photos and short market notes for the Sylhet region.',a:'Recent public posts discuss trade promotions and shelf compliance in local retail.'}],
+ info:[
+  ['Name','Imran Chowdhury','LinkedIn'],
+  ['Photo','Initials placeholder — recognition aid only','LinkedIn'],
+  ['Current role','Territory Sales Officer — Meghna Group','LinkedIn'],
+  ['Work experience','Meghna Group — dates not published','LinkedIn'],
+  ['Education','—',''],
+  ['Research / publications','—',''],
+  ['Portfolio','—',''],
+  ['From (hometown)','Sylhet','Facebook'],
+  ['Lives in','Sylhet','LinkedIn'],
+  ['Skills','Retail execution, trade promotion (self-described)','Instagram / X'],
+  ['Certifications','—',''],
+  ['Public posts summary','~4 professional posts a week across two public accounts on shelf placement and distributor pricing','Facebook'],
+  ['Mentions in news/articles','—','']],
+ matched:[
+  ['Territory Sales Officer, Meghna Group','Profile shows the same employer and role title','LinkedIn','https://example.com/in/imran-chowdhury']],
+ contra:[],
+ notfound:[
+  ['Territory Sales Officer since 2023','No employment dates are published anywhere public — cannot corroborate'],
+  ['BBA, Sylhet International University, 2022','No public record located'],
+  ['Achieved 118% of annual target, 2025','No public record located — internal performance data is not public by nature']],
+ extra:[
+  ['Public retail page with ~4,000 followers','A substantial professional-topic audience not mentioned on the CV','Facebook','https://example.com/fb/imran-sales-tips'],
+  ['Regular public commentary on shelf compliance','Ongoing trade-execution commentary not on the CV','Instagram / X','https://example.com/x/imran-retail']],
+ pos:[
+  ['Builds a professional retail audience','Runs a ~4,000-follower public page on retail execution in Sylhet.','Facebook','https://example.com/fb/imran-sales-tips']],
+ risks:[]}
+];
+
+/* Derived — never hard-coded, so the score always tracks the fixture. */
+OPD_DATA.forEach(function(c,i){
+  c.id=i;
+  c.ini=c.n.replace(/^(Md\.|Mst\.|Kazi)\s+/,'').split(' ').map(function(w){return w.charAt(0)}).slice(0,2).join('').toUpperCase();
+  var claims=c.matched.length+c.contra.length+c.notfound.length;
+  c.sub={
+    breadth:Math.round(Math.min(1,c.sources.length/8)*100),
+    corrob:claims?Math.round(c.matched.length/claims*100):0,
+    activity:Math.min(100,c.extra.length*14+c.pos.length*12+(c.sources.length>2?10:0))
+  };
+  c.score=Math.round(c.sub.breadth*0.4+c.sub.corrob*0.4+c.sub.activity*0.2);
+});
+
+/* ── page state ───────────────────────────────────────────────────
+   idx        index of the identity match currently on screen
+   confirmed  a human said "this is the candidate"
+   exhausted  every proposed match was rejected
+   nofind     marked "not found publicly" after exhaustion
+   drop       dismissed source cards, keyed by index                */
+var OPD_C=null;
+var OPD_S={idx:0,confirmed:false,exhausted:false,nofind:false,drop:{}};
+
+function opdQueryId(){
+  var m=/[?&]c=([^&]+)/.exec(window.location.search);
+  if(!m)return 0;
+  var v=parseInt(decodeURIComponent(m[1]),10);
+  return (isNaN(v)||v<0||v>=OPD_DATA.length)?0:v;
+}
+function opdGo(id){window.location.search='?c='+id}
+function opdPrint(){window.print()}
+function opdAddRecord(btn){btn.textContent='Added — audited';btn.disabled=true}
+function opdScoreColor(v){return v<35?'var(--muted)':v<70?'var(--info)':'var(--success)'}
+function opdConfBadge(m){
+  if(m==='High')return '<span class="badge b-ic b-suc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>High confidence</span>';
+  if(m==='Medium')return '<span class="badge b-ic b-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Medium confidence — verify</span>';
+  return '<span class="badge b-ic b-dan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Low confidence — verify</span>';
+}
+function opdIcon(k,w){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'+(w?' style="width:'+w+'px;height:'+w+'px"':'')+'>'+(OPD_ICON[k]||OPD_ICON.site)+'</svg>';
+}
+function opdSrcIconFor(label){
+  var map={'LinkedIn':'linkedin','Facebook':'facebook','Instagram / X':'social','Personal website':'site','Publications':'pub','News &amp; press':'news','Conference':'talk','Professional directory':'dir'};
+  return map[label]||'site';
+}
+
+/* ── identity: the ONE decision, over an ordered list of matches ── */
+function opdConfirm(){OPD_S.confirmed=true;opdRender()}
+function opdReject(){
+  if(OPD_S.idx<OPD_C.ident.cands.length-1){OPD_S.idx++;}
+  else{OPD_S.exhausted=true;}
+  opdRender();
+}
+function opdBackMatch(){
+  if(OPD_S.exhausted){OPD_S.exhausted=false;}
+  else if(OPD_S.idx>0){OPD_S.idx--;}
+  opdRender();
+}
+function opdMarkNotFound(){OPD_S.nofind=true;opdRender()}
+function opdReopen(){OPD_S.confirmed=false;OPD_S.nofind=false;opdRender()}
+function opdDrop(i){OPD_S.drop[i]=!OPD_S.drop[i];opdRender()}
+
+/* ── renderers ───────────────────────────────────────────────────── */
+function opdHero(){
+  var c=OPD_C;
+  document.getElementById('opd-hero').innerHTML=
+    '<span class="opd-hero-ava" aria-hidden="true">'+c.ini+'</span>'+
+    '<div style="min-width:0">'+
+      '<h2>'+c.n+'</h2>'+
+      '<div class="opd-hero-sub">'+c.pos+' · '+c.dist+'</div>'+
+      '<div class="opd-hero-meta">Report generated '+c.gen+' · fixture data (demo) · candidate id '+c.id+'</div>'+
+      '<div style="font-size:12.5px;margin-top:8px;max-width:70ch">'+c.sum+'</div>'+
+    '</div>'+
+    '<div class="opd-hero-score" data-testid="opd-score">'+
+      '<div class="lbl"><span>Online presence score</span><b style="color:'+opdScoreColor(c.score)+'">'+c.score+'<span style="font-size:12px;color:var(--muted);font-weight:600"> / 100</span></b></div>'+
+      '<div class="bar"><i style="width:'+c.score+'%;background:'+opdScoreColor(c.score)+'"></i></div>'+
+      '<div style="font-size:11px;color:var(--muted);margin-top:7px">Breadth '+c.sub.breadth+' · corroboration '+c.sub.corrob+' · activity '+c.sub.activity+'. Measures footprint strength, <b>not candidate quality</b> — and never feeds the AI match score.</div>'+
+    '</div>';
+}
+
+function opdIdentity(){
+  var c=OPD_C,cands=c.ident.cands,n=cands.length,box=document.getElementById('opd-identity');
+  var status=document.getElementById('opd-idstatus');
+  var h='';
+
+  /* progress dots + counter */
+  var dots='';
+  for(var d=0;d<n;d++){
+    dots+='<i class="'+(OPD_S.exhausted?'past':(d<OPD_S.idx?'past':(d===OPD_S.idx?'on':'')))+'"></i>';
+  }
+
+  if(OPD_S.nofind){
+    status.textContent='Marked not found publicly';
+    box.innerHTML='<div class="opd-empty" data-testid="opd-identity-notfound">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>'+
+      '<b>Marked &ldquo;not found publicly&rdquo;</b>'+
+      '<div style="max-width:56ch">No public profile for this candidate could be confirmed. This is <b>neutral</b> — many strong candidates have no professional online footprint. Verify through references, the written exam and the interview instead.</div>'+
+      '<button class="btn btn-ghost btn-sm" data-testid="opd-identity-reopen" onclick="opdReopen()">Review the proposed matches again</button>'+
+    '</div>';
+    return;
+  }
+
+  if(OPD_S.exhausted){
+    status.textContent='All '+n+' proposed matches rejected';
+    box.innerHTML='<div class="opd-idmeta"><span class="opd-idcount" data-testid="opd-match-counter">'+n+' of '+n+' matches reviewed</span><span class="opd-dots" aria-hidden="true">'+dots+'</span></div>'+
+      '<div class="opd-empty" data-testid="opd-identity-empty">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>'+
+      '<b>No further matches found</b>'+
+      '<div style="max-width:56ch">Every proposed profile was rejected, and no other public profile plausibly matches this candidate. Mark the candidate as not found publicly &mdash; a neutral outcome that is recorded in the audit trail.</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">'+
+        '<button class="btn btn-primary btn-sm" data-testid="opd-mark-notfound" onclick="opdMarkNotFound()">Mark as Not found publicly</button>'+
+        '<button class="btn btn-ghost btn-sm" data-testid="opd-match-back" onclick="opdBackMatch()">&larr; Back to match '+n+'</button>'+
+      '</div></div>';
+    return;
+  }
+
+  var p=cands[OPD_S.idx];
+  status.textContent=OPD_S.confirmed?'Confirmed by you — findings unlocked':'Awaiting your confirmation';
+
+  if(n>1&&!OPD_S.confirmed){
+    h+='<div class="ovi-name-warn" data-testid="opd-namesake-caution">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<span><b>'+n+' different people plausibly match this name.</b> They are shown one at a time, best match first. Reject a profile and the next best one appears &mdash; nothing is used until you confirm one of them.</span></div>';
+  }
+
+  h+='<div class="opd-idmeta">'+
+    '<span class="opd-idcount" data-testid="opd-match-counter">Showing match '+(OPD_S.idx+1)+' of '+n+'</span>'+
+    '<span class="opd-dots" aria-hidden="true">'+dots+'</span>'+
+    (OPD_S.idx>0&&!OPD_S.confirmed?'<button class="btn btn-ghost btn-sm" data-testid="opd-match-back" onclick="opdBackMatch()">&larr; Previous match</button>':'')+
+  '</div>';
+
+  h+='<div class="ovi-idc'+(OPD_S.confirmed?' on':'')+'" data-testid="opd-identity-card">'+
+    '<div class="ovi-photo-w">'+
+      '<div class="ovi-photo" aria-hidden="true">'+c.ini+'</div>'+
+      '<div class="ovi-photo-cap">Placeholder · demo</div>'+
+    '</div>'+
+    '<div style="min-width:0">'+
+      '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">'+
+        '<span class="ovi-idc-n">'+p.name+'</span>'+opdConfBadge(p.conf)+
+        (OPD_S.confirmed?'<span class="badge b-suc">Confirmed by Farzana Akter</span>':'')+
+      '</div>'+
+      '<div class="ovi-idc-h">'+p.head+'</div>'+
+      '<div class="ovi-idc-f">'+
+        '<span>'+opdIcon('dir')+p.role+(p.emp!=='—'?' @ '+p.emp:'')+'</span>'+
+        '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+p.loc+'</span>'+
+        '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>'+p.conns+' connections</span>'+
+        (p.edu!=='—'?'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>'+p.edu+'</span>':'')+
+      '</div>'+
+      '<div class="ovi-idc-a opd-idc-a">'+
+        (OPD_S.confirmed
+          ? '<span class="btn btn-primary btn-sm" style="cursor:default"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>Confirmed — this is the candidate</span>'+
+            '<button class="btn btn-ghost btn-sm" data-testid="opd-change-decision" onclick="opdReopen()">Change decision</button>'
+          : '<button class="btn btn-primary btn-sm" data-testid="opd-confirm-identity" onclick="opdConfirm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg>Confirmed — this is the candidate</button>'+
+            '<button class="btn btn-ghost btn-sm" data-testid="opd-not-a-match" onclick="opdReject()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Not a match</button>')+
+        '<a class="btn btn-ghost btn-sm" href="'+p.url+'" target="_blank" rel="noopener noreferrer" data-testid="opd-open-profile">Open profile &#8599;</a>'+
+      '</div>'+
+      '<div class="ovi-photo-note" data-testid="opd-photo-note">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'+
+        '<span>The photo is shown only to help a human recognise the person. It is never analysed and never scored. This demo shows an initials placeholder &mdash; never a real person&rsquo;s image.</span></div>'+
+    '</div></div>';
+
+  box.innerHTML=h;
+}
+
+function opdLockNote(elId,secId,gated,secNumId){
+  var lock=document.getElementById(elId);
+  var sec=document.getElementById(secId);
+  var num=document.getElementById(secNumId);
+  if(gated){
+    lock.innerHTML='<div class="opd-locknote" data-testid="'+secId+'-lock">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'+
+      'Confirm identity to view findings.</div>';
+    sec.classList.add('opd-gated');
+    sec.setAttribute('aria-hidden','true');
+    if(num)num.classList.add('lock');
+  }else{
+    lock.innerHTML='';
+    sec.classList.remove('opd-gated');
+    sec.removeAttribute('aria-hidden');
+    if(num)num.classList.remove('lock');
+  }
+}
+
+function opdSources(){
+  var c=OPD_C,h='<div class="opd-srcgrid" data-testid="opd-source-grid">';
+  c.sources.forEach(function(s,i){
+    var gone=!!OPD_S.drop[i];
+    h+='<article class="opd-srccard'+(gone?' gone':'')+'" data-testid="opd-source-card-'+i+'">'+
+      '<div class="opd-srccard-h"><span class="ic">'+opdIcon(s.k)+'</span><b>'+OPD_SRCNAME[s.k]+'</b></div>'+
+      '<p>'+s.f+'</p>'+
+      (s.a?'<div class="opd-actnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span><b>Posts / activity:</b> '+s.a+'</span></div>':'')+
+      '<div class="opd-srccard-f">'+
+        '<a href="'+s.url+'" target="_blank" rel="noopener noreferrer" data-testid="opd-source-open-'+i+'">Open source &#8599;</a>'+
+        '<button class="ovi-dismiss" data-testid="opd-source-dismiss-'+i+'" onclick="opdDrop('+i+')">'+(gone?'undo':'looks wrong? dismiss')+'</button>'+
+      '</div>'+
+    '</article>';
+  });
+  h+='</div>';
+  document.getElementById('opd-sources').innerHTML=h;
+  var kept=c.sources.filter(function(s,i){return !OPD_S.drop[i]}).length;
+  document.getElementById('opd-srcstatus').textContent=kept+' of '+c.sources.length+' source'+(c.sources.length===1?'':'s')+' kept';
+}
+
+function opdInfo(){
+  var c=OPD_C,h='<div class="opd-infogrid" data-testid="opd-info-grid">';
+  c.info.forEach(function(f,i){
+    var none=(f[1]==='—');
+    h+='<div class="opd-info'+(none?' none':'')+'" data-testid="opd-info-'+i+'">'+
+      '<div class="k">'+f[0]+'</div>'+
+      '<div class="v">'+(none?'&mdash;':f[1])+'</div>'+
+      '<div class="s">'+(f[2]
+        ? opdIcon(opdSrcIconFor(f[2]),11)+'<span>Source: '+f[2]+'</span>'
+        : '<span>Not found in any public source</span>')+'</div>'+
+    '</div>';
+  });
+  h+='</div><div class="opd-note"><b>&mdash; means nothing was found publicly.</b> Absence of evidence is not evidence of falsehood; it is neutral and must never be read as a negative.</div>';
+  document.getElementById('opd-info').innerHTML=h;
+}
+
+function opdRow(a,b,aLab,bLab,cite,url){
+  return '<div class="opd-row">'+
+    '<div class="side"><em>'+aLab+'</em><span>'+a+'</span></div>'+
+    (b?'<div class="side pub"><em>'+bLab+'</em><span>'+b+'</span></div>':'')+
+    (cite?'<div class="cite">'+cite+(url?' &middot; <a href="'+url+'" target="_blank" rel="noopener noreferrer">Open source &#8599;</a>':'')+'</div>':'')+
+  '</div>';
+}
+
+function opdCross(){
+  var c=OPD_C;
+  var h='<div class="opd-strip" data-testid="opd-cross-summary">'+
+    '<span style="color:var(--success)">'+c.matched.length+' match'+(c.matched.length===1?'':'es')+'</span><span class="sep">·</span>'+
+    '<span style="color:var(--danger)">'+c.contra.length+' mismatch'+(c.contra.length===1?'':'es')+'</span><span class="sep">·</span>'+
+    '<span style="color:var(--muted)">'+c.notfound.length+' not found</span><span class="sep">·</span>'+
+    '<span style="color:var(--info)">'+c.extra.length+' extra</span>'+
+    '<span style="margin-left:auto;font-weight:400;color:var(--muted);font-size:11.5px">Only mismatches are actionable — and only as a question for the candidate.</span>'+
+  '</div><div class="opd-xgrid">';
+
+  /* Matches */
+  h+='<section class="opd-x suc" data-testid="opd-x-matches"><div class="opd-x-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Matches'+
+    '<span class="opd-x-c">'+c.matched.length+'</span></div>'+
+    '<div class="opd-x-s">CV claims corroborated by at least one independent public source.</div>';
+  c.matched.forEach(function(m){h+=opdRow(m[0],m[1],'CV says','Evidence',m[2],m[3])});
+  if(!c.matched.length)h+='<div class="opd-row"><span style="color:var(--muted)">Nothing corroborated yet.</span></div>';
+  h+='</section>';
+
+  /* Mismatches */
+  h+='<section class="opd-x dan" data-testid="opd-x-mismatches"><div class="opd-x-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Mismatches / contradictions'+
+    '<span class="opd-x-c">'+c.contra.length+'</span></div>'+
+    '<div class="opd-x-s">The CV and the public record disagree. Raise with the candidate — never decide on this alone.</div>';
+  c.contra.forEach(function(m){h+=opdRow(m[0],m[1],'CV says','Sources say',m[2],m[3])});
+  if(!c.contra.length)h+='<div class="opd-none" data-testid="opd-no-mismatch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>No contradictions found <span>&mdash; nothing on the CV conflicts with the public record.</span></div>';
+  h+='</section>';
+
+  /* Not found */
+  h+='<section class="opd-x mut" data-testid="opd-x-notfound"><div class="opd-x-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Not found'+
+    '<span class="opd-x-c">'+c.notfound.length+'</span></div>'+
+    '<div class="opd-x-s">CV claims with no public evidence either way.</div>';
+  c.notfound.forEach(function(m){h+=opdRow(m[0],m[1],'CV says','Result','','')});
+  if(!c.notfound.length)h+='<div class="opd-none neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Every CV claim was located publicly.</div>';
+  h+='<div class="opd-note"><b>Absence of evidence is not evidence of falsehood.</b> Most people leave no public trace of most of their work. Nothing in this column may be treated as a negative — verify through references instead.</div>';
+  h+='</section>';
+
+  /* Extra */
+  h+='<section class="opd-x inf" data-testid="opd-x-extra"><div class="opd-x-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Additional findings not on the CV'+
+    '<span class="opd-x-c">'+c.extra.length+'</span></div>'+
+    '<div class="opd-x-s">Public context beyond the CV — useful colour, never a requirement.</div>';
+  c.extra.forEach(function(m){h+=opdRow(m[0],m[1],'Found','Note',m[2],m[3])});
+  if(!c.extra.length)h+='<div class="opd-none neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Nothing found beyond the CV.</div>';
+  h+='</section></div>';
+
+  document.getElementById('opd-cross').innerHTML=h;
+}
+
+function opdSignals(){
+  var c=OPD_C;
+  var h='<div class="opd-siggrid">';
+
+  h+='<section class="opd-sig pos" data-testid="opd-signals-positive"><div class="opd-sig-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Positive / achievements'+
+    '<span class="opd-x-c" style="background:var(--success-s);color:var(--success)">'+c.pos.length+'</span></div>';
+  c.pos.forEach(function(s,i){
+    h+='<div class="opd-sigitem" data-testid="opd-pos-'+i+'"><span class="dot"></span><div><b>'+s[0]+'</b><p>'+s[1]+'</p>'+
+      '<a href="'+s[3]+'" target="_blank" rel="noopener noreferrer" data-testid="opd-pos-src-'+i+'">'+s[2]+' &#8599;</a></div></div>';
+  });
+  if(!c.pos.length)h+='<div class="opd-none neutral" data-testid="opd-no-positive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>None found <span>&mdash; no public recognition located. Neutral: most professionals have none.</span></div>';
+  h+='</section>';
+
+  h+='<section class="opd-sig neg" data-testid="opd-signals-risk"><div class="opd-sig-h">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Risks / adverse findings'+
+    '<span class="opd-x-c" style="background:var(--danger-s);color:var(--danger)">'+c.risks.length+'</span></div>';
+  c.risks.forEach(function(s,i){
+    h+='<div class="opd-sigitem" data-testid="opd-risk-'+i+'"><span class="dot"></span><div><b>'+s[0]+'</b><p>'+s[1]+'</p>'+
+      '<a href="'+s[3]+'" target="_blank" rel="noopener noreferrer" data-testid="opd-risk-src-'+i+'">'+s[2]+' &#8599;</a></div></div>';
+  });
+  if(!c.risks.length)h+='<div class="opd-none" data-testid="opd-no-risk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>None found <span>&mdash; no adverse news, dispute or reputation concern located in public professional sources.</span></div>';
+  h+='</section></div>'+
+    '<div class="opd-note"><b>Adverse findings are questions, not conclusions.</b> Anything listed here must be put to the candidate and assessed by a human. It is never a screening criterion, never automated, and never part of the match score.</div>';
+
+  document.getElementById('opd-signals').innerHTML=h;
+}
+
+function opdRender(){
+  var gated=!OPD_S.confirmed;
+  opdHero();
+  opdIdentity();
+  opdSources();
+  opdInfo();
+  opdCross();
+  opdSignals();
+  opdLockNote('opd-sources-lock','opd-sources',gated,'opd-n-sources');
+  opdLockNote('opd-info-lock','opd-info',gated,'opd-n-info');
+  opdLockNote('opd-cross-lock','opd-cross',gated,'opd-n-cross');
+  opdLockNote('opd-signals-lock','opd-signals',gated,'opd-n-signals');
+  document.getElementById('opd-record').disabled=gated;
+}
+
+function opdInit(){
+  var id=opdQueryId();
+  OPD_C=OPD_DATA[id];
+  var sel=document.getElementById('opd-cand'),o='';
+  OPD_DATA.forEach(function(c){
+    o+='<option value="'+c.id+'"'+(c.id===id?' selected':'')+'>'+c.n+' — '+c.pos+' · '+c.dist+'</option>';
+  });
+  sel.innerHTML=o;
+  document.title=OPD_C.n+' — Online Presence Report · STL ATS';
+  opdRender();
+}
+opdInit();
+</script>
+</body>
+</html>

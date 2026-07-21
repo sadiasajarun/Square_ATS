@@ -340,9 +340,14 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <p>Digital-footprint research on public professional sources · assistive only, never a screening input</p>
           <div class="stage-tag" data-testid="stage-tag"><span class="stage-pill">Stage 5 · companion</span><span>Supports <b>Shortlist</b></span><a href="results.page.html" data-testid="stage-tag-link">Back to Shortlist &rarr;</a></div>
         </div>
-        <a class="btn btn-ghost" href="exports.page.html" data-testid="ovi-export-all" id="ovi-export-all" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Generate &amp; export all reports
-        </a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-ghost" href="online-presence-detail.page.html" data-testid="ovi-sample-report">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>View sample full report
+          </a>
+          <a class="btn btn-ghost" href="exports.page.html" data-testid="ovi-export-all" id="ovi-export-all" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Generate &amp; export all reports
+          </a>
+        </div>
       </div>
 
       <!-- Persistent governance banner — no dismiss control by design -->
@@ -404,6 +409,11 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
         <div class="card-head">
           <h2>Results <span style="color:var(--muted);font-weight:500" id="ovi-rescount"></span></h2>
           <span style="font-size:12px;color:var(--muted)" id="ovi-sumline" data-testid="ovi-summary-line"></span>
+        </div>
+        <div id="ovi-published" data-testid="ovi-published-note" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:var(--success-s);color:var(--success);font-size:12.5px;font-weight:600;border-bottom:1px solid var(--border)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex:none"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Added to <b>CV Analysis</b> &mdash; these findings now appear on the Stage&nbsp;4 dashboard for decision support.</span>
+          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="cv-analysis-dashboard.page.html" data-testid="ovi-open-cva">Open CV Analysis</a>
         </div>
         <div style="overflow-x:auto">
           <table>
@@ -721,11 +731,33 @@ function oviShowResults(){
       '<td style="font-variant-numeric:tabular-nums">'+c.sources.length+' source'+(c.sources.length>1?'s':'')+'</td>'+
       '<td>'+oviConfBadge(c.ident.conf)+(c.ident.cands.length>1?'<div style="font-size:11px;color:var(--warn);font-weight:600;margin-top:3px">Namesake — pick the person</div>':'')+'</td>'+
       '<td>'+oviCrossBadge(c.cross)+'</td>'+
-      '<td><button class="btn btn-ghost btn-sm" data-testid="ovi-report-'+c.id+'" onclick="oviReport('+c.id+')">View report</button></td>'+
+      '<td><a class="btn btn-primary btn-sm" href="online-presence-detail.page.html?c='+c.id+'" data-testid="ovi-report-'+c.id+'">View full report</a></td>'+
     '</tr>';
   });
   document.getElementById('ovi-tbody').innerHTML=h;
+  oviPublishToAnalysis(P);
   document.getElementById('ovi-results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* Publish the run to the CV Analysis dashboard (Stage 4 companion) so HR can
+   weigh public-source corroboration alongside the parsed-CV picture.
+   Assistive only — this never feeds the ATS match score. */
+function oviPublishToAnalysis(P){
+  try{
+    var out=P.map(function(c){
+      return {name:c.n, pos:c.pos, score:c.vis,
+              confidence:c.ident.conf,
+              confirmed:c.ident.conf==='High'&&c.ident.cands.length===1,
+              namesake:c.ident.cands.length>1,
+              mismatches:(c.contra&&c.contra.length)||(c.cross==='dis'?1:0),
+              adverse:(c.adverse&&c.adverse.length)||0,
+              sources:c.sources.length};
+    });
+    localStorage.setItem('stl_presence_results',JSON.stringify(out));
+    localStorage.setItem('stl_presence_run_at',new Date().toISOString());
+    var n=document.getElementById('ovi-published');
+    if(n){ n.style.display=''; }
+  }catch(e){ /* storage unavailable — the dashboard simply shows its empty state */ }
 }
 
 /* ── Report drawer ───────────────────────────────────────────────── */

@@ -366,6 +366,11 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px" id="cva-ch-dist" data-testid="cva-districts"></div>
           <div class="cva-take" id="cva-tk-src"></div>
         </div>
+        <div class="cva-card" data-testid="cva-card-presence">
+          <h3>Online presence <span style="font-weight:500;color:var(--muted);font-size:11.5px">· from Stage 5 analysis</span></h3>
+          <div id="cva-presence-body"></div>
+          <div class="cva-take" id="cva-tk-presence"></div>
+        </div>
       </div>
 
       <!-- Evaluation summaries — drills to the active cohort; View → candidate-detail -->
@@ -769,6 +774,64 @@ function cvaTable(){
    side by side needs a second stats rail and doubles the layout at 1024px.
    The single-cohort read-out already answers the sourcing question by
    toggling one source slice at a time. */
+
+/* ---------------------------------------------------------------
+   Online presence (Stage 5 companion) — results flow in here once the
+   HR user has run the analysis on online-visibility-analysis.page.html.
+   Assistive only: presence never feeds the ATS match score.
+   --------------------------------------------------------------- */
+function cvaPresenceRead(){
+  try{ var r=localStorage.getItem('stl_presence_results'); return r?JSON.parse(r):null; }
+  catch(e){ return null; }
+}
+function cvaPresence(){
+  var body=document.getElementById('cva-presence-body');
+  var take=document.getElementById('cva-tk-presence');
+  if(!body) return;
+  var data=cvaPresenceRead();
+
+  if(!data||!data.length){                       /* not run yet — empty state + CTA */
+    body.innerHTML=''+
+      '<div style="text-align:center;padding:18px 8px;color:var(--muted)" data-testid="cva-presence-empty">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;opacity:.5;margin-bottom:8px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'+
+        '<div style="font-size:12.5px">Online presence analysis has not been run for this cohort.</div>'+
+        '<a class="btn btn-ghost btn-sm" style="margin-top:10px" href="online-visibility-analysis.page.html" data-testid="cva-presence-run">Run Online Presence analysis</a>'+
+      '</div>';
+    take.textContent='Run the Stage 5 analysis to bring public-source corroboration into this view.';
+    return;
+  }
+
+  var n=data.length,
+      strong=data.filter(function(d){return d.score>=70;}).length,
+      mod=data.filter(function(d){return d.score>=40&&d.score<70;}).length,
+      sparse=data.filter(function(d){return d.score<40;}).length,
+      mism=data.filter(function(d){return (d.mismatches||0)>0;}).length,
+      adverse=data.filter(function(d){return (d.adverse||0)>0;}).length,
+      confirmed=data.filter(function(d){return d.confirmed;}).length;
+
+  function bar(lbl,v,col){
+    var pct=n?Math.round(v/n*100):0;
+    return '<div style="margin-bottom:8px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+lbl+'</span><b>'+v+'</b></div>'+
+      '<div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+  }
+  body.innerHTML=''+
+    bar('Strong footprint (&ge;70)',strong,'var(--success)')+
+    bar('Moderate (40&ndash;69)',mod,'var(--warn)')+
+    bar('Sparse (&lt;40)',sparse,'var(--muted)')+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">'+
+      '<span class="badge b-inf" data-testid="cva-presence-analysed">'+n+' analysed</span>'+
+      '<span class="badge b-suc" data-testid="cva-presence-confirmed">'+confirmed+' identity confirmed</span>'+
+      (mism?'<span class="badge b-dan" data-testid="cva-presence-mismatch">'+mism+' with mismatches</span>':'')+
+      (adverse?'<span class="badge b-warn" data-testid="cva-presence-adverse">'+adverse+' adverse finding'+(adverse>1?'s':'')+'</span>':'')+
+    '</div>'+
+    '<a class="cva-act" style="margin-top:12px;display:inline-flex" href="online-visibility-analysis.page.html" data-testid="cva-presence-open">Open Online Presence &rarr;</a>';
+
+  take.innerHTML = mism||adverse
+    ? '<b>'+(mism+adverse)+'</b> candidate(s) need a closer look &mdash; CV claims not corroborated, or adverse public findings. Review before shortlisting; presence is assistive only and never scored.'
+    : 'Public sources corroborate the cohort with no contradictions or adverse findings. Assistive only &mdash; never part of the match score.';
+}
+cvaPresence();
 
 cvaScope();
 </script>

@@ -187,11 +187,77 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
 .opt-preview{margin-top:8px;font-size:12.5px;font-weight:600;color:var(--primary)}
 .modal-foot{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .modal-foot .gov{font-size:11.5px;color:var(--muted);max-width:300px}
+
+/* ══════════════════════════════════════════════════════════════════
+   RP — Online presence merged into Stage 4 (`rp-` namespace).
+   Public professional sources only. Assistive research: never a
+   screening input, never part of the AI match score. Identity is
+   confirmed once by a human; every lookup is logged to the audit trail.
+   ══════════════════════════════════════════════════════════════════ */
+.rp-bulkbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.rp-bulkbar .rp-note{font-size:11.5px;color:var(--muted);max-width:430px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.rp-prog{display:none;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);font-weight:600}
+.rp-prog.on{display:inline-flex}
+.rp-progtrack{width:130px;height:6px;border-radius:6px;background:var(--border);overflow:hidden}
+.rp-progtrack i{display:block;height:100%;background:var(--primary);border-radius:6px;transition:width .2s}
+.rp-published{display:none;align-items:center;gap:8px;padding:10px 20px;background:var(--success-s);color:var(--success);font-size:12.5px;font-weight:600;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.rp-published.on{display:flex}
+.rp-published svg{width:15px;height:15px;flex:none}
+
+.rp-cell{display:flex;flex-direction:column;gap:5px;min-width:158px}
+.rp-scorerow{display:flex;align-items:center;gap:8px}
+.rp-bar{flex:1;min-width:48px;height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.rp-bar i{display:block;height:100%;border-radius:6px}
+.rp-scorerow b{font-variant-numeric:tabular-nums;font-size:12.5px;width:24px;text-align:right}
+.rp-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600;width:fit-content}
+.rp-chip svg{width:11px;height:11px;flex:none}
+.rp-ok{background:var(--success-s);color:var(--success)}
+.rp-warnc{background:var(--warn-s);color:var(--warn)}
+.rp-bad{background:var(--danger-s);color:var(--danger)}
+.rp-mutc{background:var(--muted-s);color:var(--muted)}
+.rp-running{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--primary);font-weight:600}
+.rp-spin{width:13px;height:13px;flex:none;animation:rpspin 1s linear infinite}
+@keyframes rpspin{to{transform:rotate(360deg)}}
+.rp-none{font-size:12px;color:var(--muted)}
+
+/* Drawer block */
+.rp-sec{grid-column:1/-1;margin-top:4px;padding-top:14px;border-top:2px solid var(--border)}
+.rp-sec-h{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.rp-sec-h h4{font-size:12px!important;letter-spacing:.04em;text-transform:uppercase;color:var(--text)!important;margin:0!important}
+.rp-sec-h .rp-spacer{margin-left:auto}
+.rp-lists{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.rp-list{border-radius:10px;padding:12px 14px;border:1px solid transparent}
+.rp-list.ok{background:var(--success-s);border-color:#BBF7D0}
+.rp-list.bad{background:var(--danger-s);border-color:#FECACA}
+.rp-list-h{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;margin-bottom:8px}
+.rp-list-h svg{width:14px;height:14px;flex:none}
+.rp-list.ok .rp-list-h{color:var(--success)}
+.rp-list.bad .rp-list-h{color:var(--danger)}
+.rp-item{display:flex;gap:7px;font-size:12.5px;margin-bottom:8px;line-height:1.45}
+.rp-item:last-child{margin-bottom:0}
+.rp-item svg{width:13px;height:13px;flex:none;margin-top:3px}
+.rp-item .rp-ev{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+.rp-item .rp-ev.contra{color:var(--danger);font-weight:600}
+.rp-srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rp-src{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text)}
+.rp-src svg{width:12px;height:12px;flex:none;color:var(--primary)}
+.rp-empty{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.rp-empty svg{width:16px;height:16px;flex:none}
+.rp-gov{display:flex;gap:10px;align-items:flex-start;background:var(--info-s);border-top:1px solid var(--border);padding:12px 20px;font-size:11.5px;color:var(--text)}
+.rp-gov svg{width:15px;height:15px;flex:none;color:var(--info);margin-top:1px}
+.rp-gov ul{margin:3px 0 0 15px}
+.rp-gov li{margin-bottom:1px}
+.rp-toast{position:fixed;right:22px;bottom:22px;z-index:80;display:flex;align-items:center;gap:9px;background:var(--text);color:#fff;border-radius:10px;padding:12px 16px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:340px}
+.rp-toast.on{opacity:1;transform:translateY(0)}
+.rp-toast svg{width:15px;height:15px;flex:none;color:#4ADE80}
+.rp-toast a{color:#93C5FD;font-weight:700;text-decoration:underline;pointer-events:auto}
 @media(max-width:1024px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
   .drawer-grid{grid-template-columns:1fr}
   .parsed-cell{max-width:200px}
+  .rp-lists{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -201,7 +267,7 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                <div class="nav-label">Workspace</div>
+                    <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -211,7 +277,6 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
     <a class="nav-item active" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
     <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
     <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
-    <a class="nav-item nav-sub" href="online-visibility-analysis.page.html" data-testid="nav-online">Online Presence</a>
     <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
     <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
@@ -220,9 +285,9 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
     <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
     <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
     <div class="nav-label">Talent &amp; System</div>
-    <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates</a>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
   
     <div class="side-foot">
       <span class="avatar">FA</span>
@@ -274,9 +339,14 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
           <h1>Review parsed CVs — Sr. Brand Manager</h1>
           <p>512 candidates ready for review</p>
         </div>
-        <a class="btn btn-ghost" href="results.page.html" data-testid="review-view-results">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening results
-        </a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-ghost" href="online-presence-detail.page.html" data-testid="review-sample-presence">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Sample presence report
+          </a>
+          <a class="btn btn-ghost" href="results.page.html" data-testid="review-view-results">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening results
+          </a>
+        </div>
       </div>
 
       <!-- AI suggestion banner -->
@@ -300,6 +370,26 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
           <h2>Parsed candidates</h2>
           <span style="font-size:12.5px;color:var(--muted)"><span data-testid="review-selected-count">0</span> selected</span>
         </div>
+        <!-- Bulk selection actions (incl. online-presence run) -->
+        <div class="rp-bulkbar" data-testid="review-bulk-bar">
+          <button class="btn btn-primary btn-sm" id="rpBulkBtn" data-testid="review-bulk-runpresence" onclick="runPresenceBulk()" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Run online presence
+          </button>
+          <span class="rp-prog" id="rpBulkProg" data-testid="review-bulk-progress">
+            <span class="rp-progtrack"><i id="rpBulkProgBar" style="width:0%"></i></span>
+            <span id="rpBulkProgLbl">Analysing…</span>
+          </span>
+          <span class="rp-note">Public professional sources only. Assistive research — never a screening input and never part of the AI match score. Every lookup is logged to the audit trail.</span>
+        </div>
+
+        <!-- Publish confirmation -->
+        <div class="rp-published" id="rpPublished" data-testid="review-presence-published">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Findings published to <b>CV Analysis</b> — <span id="rpPublishedCount">0</span> candidate(s) analysed.</span>
+          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="cv-analysis-dashboard.page.html" data-testid="review-presence-open-cva">Open CV Analysis</a>
+        </div>
+
         <div style="overflow:auto">
         <table data-testid="review-table">
           <thead>
@@ -310,12 +400,26 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
               <th>Parsed profile</th>
               <th>Confidence</th>
               <th>AI match score</th>
+              <th>Online presence</th>
               <th>Status</th>
               <th style="text-align:right">Actions</th>
             </tr>
           </thead>
           <tbody id="cvBody"></tbody>
         </table>
+        </div>
+
+        <!-- Governance footnote for the online-presence surface -->
+        <div class="rp-gov" data-testid="review-presence-governance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <b>Online presence — how it works and what it will never do</b>
+            <ul>
+              <li><b>Publicly available professional information only.</b> Assistive research to support HR verification — never a screening input and never part of the AI match score.</li>
+              <li><b>Identity is confirmed once, by a human.</b> AI only proposes a match; nothing is used until a reviewer confirms it. "Not found online" is neutral — only contradictions, not absence, are meaningful.</li>
+              <li>Personal, social and protected-characteristic information is excluded by design. <b>Every lookup is logged in the audit trail</b> and is opt-in per position.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </main>
@@ -333,6 +437,9 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
   </div>
   <div class="cv-body" id="cvDrawerBody"></div>
 </aside>
+
+<!-- ===== Toast (online presence run confirmations) ===== -->
+<div class="rp-toast" id="rpToast" role="status" aria-live="polite" data-testid="review-presence-toast"></div>
 
 <!-- ===== AI Shortlist Suggestion Modal ===== -->
 <div class="modal-mask" id="shortlistModal" data-testid="shortlist-modal" style="display:none">
@@ -529,6 +636,116 @@ var CANDS = [
     flags:[{t:'Missing info',d:'No email verified in CV; phone parsed with low confidence.'},{t:'Insufficient experience',d:'3 yrs vs 7+ required for the role.'}]}
 ];
 
+/* ══════════════════════════════════════════════════════════════════
+   Online presence fixtures (merged in from online-visibility-analysis).
+   Same data model + governance: identity is ONE human decision about the
+   PERSON; LinkedIn/Facebook/portfolio/publications are SOURCE TYPES, i.e.
+   findings attached to a confirmed person — never identity votes.
+   `matched`   — CV claim corroborated by a public source
+   `unmatched` — {cv, src}: src set = real contradiction, src null = no
+                 public evidence found (neutral, never held against anyone)
+   The presence score never feeds the AI match score and cannot change a
+   candidate's status. Everything below is fixture data.
+   ══════════════════════════════════════════════════════════════════ */
+var RP_ICON={
+  linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
+  facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+  social:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+  site:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  pub:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/>',
+  talk:'<path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/>',
+  dir:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>'
+};
+var RP_SRCNAME={linkedin:'LinkedIn',facebook:'Facebook',social:'Instagram / X',site:'Portfolio',pub:'Publications',news:'News',talk:'Speaking',dir:'Directory'};
+
+var PRESENCE={
+  1:{score:88,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[
+       ['Brand Manager, Unilever Bangladesh (2018–present)','LinkedIn shows the same employer, title and dates'],
+       ['MBA, Marketing — IBA, University of Dhaka (2013)','LinkedIn education section matches'],
+       ['Asst. Brand Manager, Pran-RFL (2014–2018)','Corroborated by portfolio case studies'],
+       ['Trade marketing / A&P ownership','Panellist, Dhaka FMCG Summit 2025 — same programme described']],
+     unmatched:[]},
+  2:{score:81,conf:'High',identity:'Confirmed',sources:['linkedin','facebook','pub'],
+     matched:[
+       ['Sr. Brand Executive, ACI Consumer (2017–present)','LinkedIn shows the same role and dates'],
+       ['Brand Executive, Square Toiletries (2013–2017)','Listed in the same LinkedIn history'],
+       ['MBA, Marketing — North South University (2015)','NSU alumni page listing matches']],
+     unmatched:[
+       {cv:'Kantar Brand Health Tracking certification',src:null}]},
+  3:{score:74,conf:'High',identity:'Confirmed',sources:['linkedin','dir','news'],
+     matched:[
+       ['Trade Marketing Manager, Akij Group (2019–present)','LinkedIn shows the same role and dates'],
+       ['Territory Officer, Marico Bangladesh (2015–2019)','Same employment history on LinkedIn'],
+       ['Chattogram-based route-to-market work','Named in a Chattogram distributor-conference report (2024)']],
+     unmatched:[]},
+  4:{score:92,conf:'High',identity:'Confirmed',sources:['linkedin','site','social','pub','news'],
+     matched:[
+       ['Digital Marketing Lead, Bata Bangladesh (2020–present)','LinkedIn shows the same role and dates'],
+       ['Content Executive, Daraz (2018–2020)','Same employment history on LinkedIn'],
+       ['Meta Blueprint and HubSpot Inbound certifications','Both credentials publicly listed and verifiable'],
+       ['Performance-ads and SEO ownership','Public campaign portfolio shows matching work 2020–2026']],
+     unmatched:[
+       {cv:'14-month career break (2018–2020)',src:null}]},
+  5:{score:63,conf:'Medium',identity:'Pending',sources:['linkedin','facebook'],
+     matched:[
+       ['Sales Officer, Nestlé Bangladesh (2016–2018)','LinkedIn shows the same employer and dates'],
+       ['BBA — Metropolitan University, Sylhet (2016)','LinkedIn education section matches']],
+     unmatched:[
+       {cv:'Area Sales Manager, Pran-RFL, 2018–present',src:'LinkedIn shows Territory Sales Officer at Pran-RFL to 2024, then Sr. Sales Executive at Bombay Sweets'},
+       {cv:'Team leadership of 12 field staff',src:null}]},
+  6:{score:48,conf:'Medium',identity:'Confirmed',sources:['linkedin','facebook'],
+     matched:[
+       ['Marketing Officer, Abul Khair Group (2019–present)','LinkedIn shows the same role and dates'],
+       ['BA, English — Khulna University (2018)','Khulna University alumni group listing matches']],
+     unmatched:[
+       {cv:'Brand activation and PR portfolio',src:null},
+       {cv:'bKash internship (2018)',src:null}]},
+  7:{score:21,conf:'Low',identity:'Not found',sources:[],
+     matched:[],
+     unmatched:[
+       {cv:'Sr. Sales Executive, Square Consumer (2016–present)',src:null},
+       {cv:'Sales Rep, Igloo Foods (2013–2016)',src:null},
+       {cv:'HSC, Business Studies — Rajshahi College (2012)',src:null}]},
+  8:{score:70,conf:'High',identity:'Confirmed',sources:['linkedin','dir'],
+     matched:[
+       ['HR Executive, Square Pharmaceuticals (2018–present)','LinkedIn shows the same role and dates'],
+       ['MBA, HRM — East West University (2016)','LinkedIn education section matches'],
+       ['HR intern, Grameenphone (2016)','Same employment history on LinkedIn']],
+     unmatched:[
+       {cv:'SHRM-CP certification',src:null}]},
+  9:{score:77,conf:'High',identity:'Confirmed',sources:['linkedin','pub','dir','news'],
+     matched:[
+       ['BSc, Industrial & Production Engineering — BUET (2013)','BUET alumni directory listing matches'],
+       ['Planner, Coca-Cola Bangladesh (2013–2017)','Same employment history on LinkedIn'],
+       ['CSCP certification','Credential publicly listed and verifiable']],
+     unmatched:[
+       {cv:'Supply Chain Manager, Akij Food & Beverage, 2017–present',src:'LinkedIn shows Deputy Manager — Supply Chain at Akij Food & Beverage since 2019'}]},
+  10:{score:33,conf:'Low',identity:'Pending',sources:['linkedin','facebook','social'],
+     matched:[
+       ['Customer Care Agent, Robi Axiata (2021–present)','A LinkedIn profile with the same name shows this role']],
+     unmatched:[
+       {cv:'BA, Sociology — National University (2020)',src:null},
+       {cv:'CRM tooling experience',src:null}]}
+};
+
+/* run state (prototype only) */
+var PRES_DONE={};      /* id -> analysed */
+var PRES_BUSY={};      /* id -> in-flight */
+
+function presData(id){return PRESENCE[id]||{score:0,conf:'Low',identity:'Not found',sources:[],matched:[],unmatched:[]};}
+function presScoreColor(v){return v<35?'var(--muted)':v<70?'var(--info)':'var(--success)';}
+function presContraCount(p){return p.unmatched.filter(function(u){return !!u.src;}).length;}
+function presIcon(k,size){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'+(size?' style="width:'+size+'px;height:'+size+'px"':'')+'>'+(RP_ICON[k]||RP_ICON.site)+'</svg>';
+}
+function presIdentBadge(p){
+  if(p.identity==='Confirmed')return '<span class="rp-chip rp-ok">Identity confirmed · '+esc(p.conf)+' confidence</span>';
+  if(p.identity==='Pending')return '<span class="rp-chip rp-warnc">Identity pending review · '+esc(p.conf)+' confidence</span>';
+  return '<span class="rp-chip rp-mutc">Identity not found · '+esc(p.conf)+' confidence</span>';
+}
+
 function initials(n){return n.split(' ').map(function(w){return w[0]}).slice(0,2).join('').toUpperCase();}
 function scoreColor(s){return s>=80?'var(--success)':s>=60?'var(--warn)':'var(--danger)';}
 function confColor(c){return c>=90?'var(--success)':c>=70?'var(--warn)':'var(--danger)';}
@@ -541,7 +758,7 @@ function buildRows(){
     var chips=c.skills.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('');
     html+=''+
     '<tr id="row-'+c.id+'" data-testid="review-row-'+c.id+'">'+
-      '<td><input type="checkbox" class="rowcb" data-testid="review-row-'+c.id+'-check" onchange="updateCount()" aria-label="Select '+esc(c.name)+'"></td>'+
+      '<td><input type="checkbox" class="rowcb" data-cid="'+c.id+'" data-testid="review-row-'+c.id+'-check" onchange="updateCount()" aria-label="Select '+esc(c.name)+'"></td>'+
       '<td><div class="cand"><span class="ava">'+initials(c.name)+'</span><div><div style="font-weight:600">'+esc(c.name)+'</div><small>'+esc(c.email)+'</small></div></div></td>'+
       '<td><div style="display:flex;align-items:center;gap:8px">'+
         '<a href="#" download data-testid="review-row-'+c.id+'-download" onclick="downloadCv('+c.id+');return false;" title="Download CV" style="font-size:12.5px;color:var(--primary);font-weight:600;display:inline-flex;align-items:center;gap:6px">'+
@@ -556,6 +773,7 @@ function buildRows(){
         '</div></td>'+
       '<td><div class="score"><div class="bar"><i style="width:'+c.conf+'%;background:'+confColor(c.conf)+'"></i></div><b style="color:'+confColor(c.conf)+'">'+c.conf+'%</b></div></td>'+
       '<td><div class="score"><div class="bar"><i style="width:'+c.score+'%;background:'+scoreColor(c.score)+'"></i></div><b>'+c.score+'%</b></div></td>'+
+      '<td><div class="rp-cell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
       '<td><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
       '<td style="text-align:right;white-space:nowrap">'+
         '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')">Shortlist</button> '+
@@ -563,9 +781,93 @@ function buildRows(){
         '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-pending" onclick="setStatus('+c.id+',\'warn\')">Mark pending</button>'+
       '</td>'+
     '</tr>'+
-    '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="8"><div class="drawer-inner" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
+    '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="9"><div class="drawer-inner" id="profile-'+c.id+'" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
   });
   tb.innerHTML=html;
+}
+
+/* ---------- Online presence: in-row indicator ---------- */
+function presenceCellHTML(id){
+  if(PRES_BUSY[id]){
+    return '<span class="rp-running" data-testid="review-row-'+id+'-presence-running">'+
+      '<svg class="rp-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>Analysing…</span>';
+  }
+  if(!PRES_DONE[id]){
+    return '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+')" title="Run online presence research on public professional sources">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Run online presence</button>';
+  }
+  var p=presData(id);
+  var contra=presContraCount(p);
+  var cls = contra ? 'rp-bad' : (p.unmatched.length ? 'rp-warnc' : 'rp-ok');
+  var ic = contra
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  return ''+
+    '<div class="rp-scorerow"><div class="rp-bar"><i style="width:'+p.score+'%;background:'+presScoreColor(p.score)+'"></i></div>'+
+      '<b style="color:'+presScoreColor(p.score)+'">'+p.score+'</b></div>'+
+    '<span class="rp-chip '+cls+'" data-testid="review-row-'+id+'-presence-chip">'+ic+p.matched.length+' matched · '+p.unmatched.length+' unmatched</span>'+
+    '<button class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:11.5px" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+',true)" title="Re-run online presence research">Re-run</button>';
+}
+
+/* ---------- Online presence: drawer block ---------- */
+function presenceBlockHTML(c){
+  var id=c.id;
+  if(!PRES_DONE[id]){
+    return '<div class="rp-sec" data-testid="review-row-'+id+'-presence-block">'+
+      '<div class="rp-sec-h"><h4>Online presence</h4></div>'+
+      '<div class="rp-empty" data-testid="review-row-'+id+'-presence-placeholder">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'+
+        '<span>Online presence not analysed for '+esc(c.name)+'.</span>'+
+        '<button class="btn btn-primary btn-sm" style="margin-left:auto" data-testid="review-row-'+id+'-runpresence-drawer" onclick="runPresence('+id+')">Run now</button>'+
+      '</div></div>';
+  }
+  var p=presData(id);
+  var contra=presContraCount(p);
+  var matched=p.matched.length
+    ? p.matched.map(function(m){
+        return '<div class="rp-item"><svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'+
+          '<div><b>'+esc(m[0])+'</b><span class="rp-ev">'+esc(m[1])+'</span></div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">No CV claim could be corroborated from public sources.</span></div>';
+  var unmatched=p.unmatched.length
+    ? p.unmatched.map(function(u){
+        var icon = u.src
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        var ev = u.src
+          ? '<span class="rp-ev contra">CV says '+esc(u.cv)+' · sources say '+esc(u.src)+'</span>'
+          : '<span class="rp-ev">No public evidence found — neutral, not a negative signal.</span>';
+        return '<div class="rp-item">'+icon+'<div><b>'+esc(u.cv)+'</b>'+ev+'</div></div>';
+      }).join('')
+    : '<div class="rp-item"><span style="color:var(--muted)">Nothing uncorroborated — every CV claim checked was matched.</span></div>';
+  var srcs=p.sources.length
+    ? p.sources.map(function(s){return '<span class="rp-src" data-testid="review-row-'+id+'-src-'+s+'">'+presIcon(s)+esc(RP_SRCNAME[s]||s)+'</span>';}).join('')
+    : '<span class="rp-none">No public professional sources located — this is neutral.</span>';
+  return ''+
+  '<div class="rp-sec" data-testid="review-row-'+id+'-presence-block">'+
+    '<div class="rp-sec-h">'+
+      '<h4>Online presence</h4>'+
+      presIdentBadge(p)+
+      '<span class="rp-chip '+(contra?'rp-bad':(p.unmatched.length?'rp-warnc':'rp-ok'))+'">Presence score '+p.score+' / 100</span>'+
+      '<span class="rp-spacer"></span>'+
+      '<a class="btn btn-ghost btn-sm" href="online-presence-detail.page.html?c='+id+'" data-testid="review-row-'+id+'-viewpresence" title="View full online presence report" aria-label="View full online presence report for '+esc(c.name)+'">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>View full report</a>'+
+    '</div>'+
+    '<div class="rp-scorerow" style="max-width:280px"><div class="rp-bar"><i style="width:'+p.score+'%;background:'+presScoreColor(p.score)+'"></i></div><b style="color:'+presScoreColor(p.score)+'">'+p.score+'</b></div>'+
+    '<div class="rp-lists">'+
+      '<div class="rp-list ok" data-testid="review-row-'+id+'-presence-matched">'+
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Matched — corroborated by a public source ('+p.matched.length+')</div>'+
+        matched+
+      '</div>'+
+      '<div class="rp-list bad" data-testid="review-row-'+id+'-presence-unmatched">'+
+        '<div class="rp-list-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Unmatched / not corroborated ('+p.unmatched.length+')</div>'+
+        unmatched+
+      '</div>'+
+    '</div>'+
+    '<h4 style="margin-top:14px">Sources found</h4>'+
+    '<div class="rp-srcs" data-testid="review-row-'+id+'-presence-sources">'+srcs+'</div>'+
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:12px">Publicly available professional information only. Assistive research — never a screening input and never part of the AI match score. Identity is confirmed once by a human; every lookup is logged to the audit trail.</div>'+
+  '</div>';
 }
 
 function profileHTML(c){
@@ -588,7 +890,113 @@ function profileHTML(c){
         '<div class="dl"><span>Experience</span><span>'+esc(c.exp)+'</span></div>'+
       '<h4 style="margin-top:14px">Red flags</h4>'+flags+
     '</div>'+
+    presenceBlockHTML(c)+
   '</div>';
+}
+
+/* Re-render an expanded drawer after a presence run so the block appears live */
+function refreshProfile(id){
+  var host=document.getElementById('profile-'+id);
+  if(!host)return;
+  var c=CANDS.filter(function(x){return x.id===id;})[0];
+  if(c) host.innerHTML=profileHTML(c);
+}
+
+/* ---------- Online presence: run (single row) ---------- */
+function renderPresenceCell(id){
+  var cell=document.getElementById('pres-'+id);
+  if(cell) cell.innerHTML=presenceCellHTML(id);
+}
+function runPresence(id,isRerun,done){
+  if(PRES_BUSY[id]){ if(done)done(); return; }
+  PRES_BUSY[id]=true;
+  renderPresenceCell(id);
+  setTimeout(function(){
+    PRES_BUSY[id]=false;
+    PRES_DONE[id]=true;
+    renderPresenceCell(id);
+    refreshProfile(id);
+    if(done){ done(); return; }
+    publishPresence();
+    var c=CANDS.filter(function(x){return x.id===id;})[0];
+    toast('Online presence analysed for '+(c?c.name:'candidate')+(isRerun?' (re-run)':''),true);
+  },900);
+}
+
+/* ---------- Online presence: run (bulk, checked rows) ---------- */
+function selectedIds(){
+  var out=[];
+  document.querySelectorAll('.rowcb:checked').forEach(function(cb){
+    var v=parseInt(cb.getAttribute('data-cid'),10);
+    if(!isNaN(v)) out.push(v);
+  });
+  return out;
+}
+function runPresenceBulk(){
+  var ids=selectedIds();
+  if(!ids.length) return;
+  var btn=document.getElementById('rpBulkBtn');
+  var prog=document.getElementById('rpBulkProg');
+  var bar=document.getElementById('rpBulkProgBar');
+  var lbl=document.getElementById('rpBulkProgLbl');
+  btn.disabled=true;
+  prog.classList.add('on');
+  var i=0;
+  function step(){
+    if(i>=ids.length){
+      prog.classList.remove('on');
+      bar.style.width='0%';
+      btn.disabled=selectedIds().length===0;
+      publishPresence();
+      toast('Online presence analysed for '+ids.length+' candidate'+(ids.length===1?'':'s'),true);
+      return;
+    }
+    lbl.textContent='Analysing '+(i+1)+' of '+ids.length+'…';
+    bar.style.width=Math.round((i/ids.length)*100)+'%';
+    var id=ids[i]; i++;
+    PRES_DONE[id]=false;
+    runPresence(id,false,function(){ bar.style.width=Math.round((i/ids.length)*100)+'%'; step(); });
+  }
+  step();
+}
+
+/* ---------- Publish to CV Analysis (same contract as the Stage 5 page) ----------
+   Assistive only: these findings never feed the ATS match score. */
+function publishPresence(){
+  var ids=Object.keys(PRES_DONE).filter(function(k){return PRES_DONE[k];});
+  if(!ids.length) return;
+  try{
+    var out=ids.map(function(k){
+      var id=parseInt(k,10);
+      var c=CANDS.filter(function(x){return x.id===id;})[0]||{name:'Candidate '+id};
+      var p=presData(id);
+      return {name:c.name, pos:'Sr. Brand Manager', score:p.score,
+              confidence:p.conf,
+              confirmed:p.identity==='Confirmed',
+              namesake:p.identity==='Pending',
+              mismatches:presContraCount(p),
+              adverse:0,
+              sources:p.sources.length};
+    });
+    localStorage.setItem('stl_presence_results',JSON.stringify(out));
+    localStorage.setItem('stl_presence_run_at',new Date().toISOString());
+    var n=document.getElementById('rpPublished');
+    var cnt=document.getElementById('rpPublishedCount');
+    if(cnt) cnt.textContent=out.length;
+    if(n) n.classList.add('on');
+  }catch(e){ /* storage unavailable — the dashboard simply shows its empty state */ }
+}
+
+/* ---------- Toast ---------- */
+var RP_TOAST_T=null;
+function toast(msg,withLink){
+  var t=document.getElementById('rpToast');
+  if(!t)return;
+  t.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>'+esc(msg)+
+    (withLink?' <a href="cv-analysis-dashboard.page.html" data-testid="review-toast-cva-link">Open CV Analysis</a>':'')+'</span>';
+  t.classList.add('on');
+  if(RP_TOAST_T) clearTimeout(RP_TOAST_T);
+  RP_TOAST_T=setTimeout(function(){ t.classList.remove('on'); },4200);
 }
 
 /* ---------- Row expand (parsed profile) ---------- */
@@ -644,6 +1052,8 @@ function toggleAll(cb){
 function updateCount(){
   var n=document.querySelectorAll('.rowcb:checked').length;
   document.querySelector('[data-testid="review-selected-count"]').textContent=n;
+  var btn=document.getElementById('rpBulkBtn');
+  if(btn && !document.getElementById('rpBulkProg').classList.contains('on')) btn.disabled = n===0;
 }
 
 /* ---------- Modal ---------- */
@@ -713,6 +1123,7 @@ function applySuggestion(){
 /* init */
 buildRows();
 onTopN(30);
+updateCount();
 </script>
 </body>
 </html>

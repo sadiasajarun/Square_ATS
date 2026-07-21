@@ -358,3 +358,26 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
   - All 6 candidates render hero/glance/identity/sources/info/cross/signals.
   - Not-a-match cycle on the 3-identity candidate: idx 0 → 1 → 2 → exhausted.
   - Identity controls confirmed present: "Confirmed — this is the candidate" (`opd-confirm`) and "Not a match" (`opd-not-a-match`).
+
+---
+
+# Round 12 — IA consolidation: Online Presence → Review CVs, Candidates → Shortlist · 2026-06-24
+
+**Online Presence merged into Stage 4 (Review CVs)** — `cv-review.page.html`
+- **Per-row "Run online presence"** (with an "Analysing…" state) and **bulk run** for checked rows, disabled when nothing is selected, with progress and a completion toast.
+- **Row indicator**: presence score + colour-coded bar and a `X matched · Y unmatched` chip (green when clean, amber for "no public evidence", red for a genuine contradiction).
+- **Details drawer** gains an Online Presence block: identity status + confidence, score, **Matched** (green, with corroborating source) vs **Unmatched** ("CV says X · sources say Y" in red for contradictions; muted "no public evidence — neutral" for not-found), source chips, and an **eye icon → full report** (`online-presence-detail.page.html?c=<id>`). Un-analysed rows show a "Run now" placeholder.
+- Runs still publish `stl_presence_results` so **CV Analysis** picks them up. Governance carried through: assistive only, never a screening input, never part of the AI match score.
+
+**Candidates merged into Stage 5 (Shortlist)** — `results.page.html`
+- **Filter bar** ported from the Candidate Database: saved views, full-text search, Skills / District / Education / Tags / Stage, Bookmarked toggle, Advanced filters (score range, red-flag type), an active-filter chip line with per-chip removal, and a live result count. Filters narrow the **active tab's** list.
+- **Table / Card view toggle** — cards render the same filtered set and preserve filters + tab.
+- **AI prompt filter** — natural language sets the real controls, e.g. *"Dhaka candidates with trade marketing, MBA, score above 85, no red flags"* → district, skill, education, score threshold and red-flag filters, switching tab on stage words, with an "Interpreted: …" readback and removable chips. Unrecognised prompts leave filters untouched.
+
+**Navigation / IA**
+- Sidebar loses the standalone **Online Presence** and **Candidates** entries; the workflow spine is now 10 numbered stages with CV Analysis, Schedule Viva and Summary Report as sub-items.
+- Presence pages re-parent to **stage 4**, candidate pages to **stage 5**, so the stepper stays truthful.
+- `online-visibility-analysis.page.html` → redirects to Review CVs; `candidates.page.html` → redirects to Shortlist. Both kept on disk (nothing lost, no 404s, no orphans) with a short "has moved" explainer.
+- Added a static **"Sample presence report"** link on Review CVs so the full report keeps a non-JS entry point.
+
+**Verification** (executed, not just syntax-checked): cv-review — 10/10 candidates render the presence cell and drawer in both states, `runPresence` runs for all 10, published payload carries all 9 keys. results — 18 interaction paths pass (boot, every filter control, chip removal, tab switching, card/table swap, all AI-prompt paths incl. the unrecognised case, modals). **41/41 pages reachable · 0 broken links · 0 emoji-icons.**

@@ -144,6 +144,120 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .toast svg{width:18px;height:18px;flex:none}
 .modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 20px;border-top:1px solid var(--border)}
 .pane{display:none}.pane.on{display:block}
+
+/* ══════════════════════════════════════════════════════════════════
+   Advanced filter block — `flt-` namespace, ported from
+   candidates.page.html (Candidate Database) so the Shortlist page
+   filters the active tab with the same controls and the same markup.
+   The `flt-` prefix keeps it clear of the `wf-` workflow stepper and
+   the page's own tab/modal handlers. Every handler is `flt`-prefixed
+   so none can shadow a native DOM API.
+   ══════════════════════════════════════════════════════════════════ */
+.field select{cursor:pointer}
+
+/* Saved views */
+.flt-views{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.flt-views-lbl{font-size:12px;color:var(--muted);font-weight:600}
+.flt-view{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--muted)}
+.flt-view svg{width:13px;height:13px;flex:none}
+.flt-view:hover{border-color:var(--primary);color:var(--primary)}
+.flt-view:focus-visible{outline:none;box-shadow:0 0 0 3px var(--primary-soft)}
+.flt-view.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+
+/* AI prompt filter */
+.flt-ai{border:1px solid var(--border);border-radius:10px;background:var(--surface-2);padding:12px 14px;margin-bottom:14px}
+.flt-ai-h{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+.flt-ai-h svg{width:14px;height:14px;flex:none}
+.flt-ai-row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.flt-ai-row input{flex:1;min-width:240px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.flt-ai-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.flt-ai-read{display:none;align-items:flex-start;gap:8px;margin-top:9px;font-size:12.5px;color:var(--text)}
+.flt-ai-read svg{width:14px;height:14px;color:var(--success);flex:none;margin-top:2px}
+.flt-ai-note{display:none;align-items:flex-start;gap:8px;margin-top:9px;background:var(--warn-s);border-radius:8px;padding:8px 11px;font-size:12.5px}
+.flt-ai-note svg{width:14px;height:14px;color:var(--warn);flex:none;margin-top:2px}
+
+/* Quick filter row */
+.flt-quick{display:grid;grid-template-columns:repeat(5,1fr) auto auto;gap:12px;align-items:end}
+.flt-toggle-adv{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:600}
+.flt-toggle-adv:hover{background:var(--surface-2)}
+.flt-toggle-adv:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.flt-toggle-adv svg{width:14px;height:14px;transition:transform .15s ease}
+.flt-toggle-adv.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.flt-toggle-adv.on svg.flt-chev{transform:rotate(180deg)}
+.flt-n{background:var(--primary);color:#fff;border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;font-variant-numeric:tabular-nums}
+.flt-bm{height:38px}
+.flt-bm.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.flt-bm.on svg{fill:currentColor}
+
+/* Multi-select dropdown */
+.flt-ms{position:relative}
+.flt-ms-btn{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font:inherit;font-size:13.5px;color:var(--text);text-align:left}
+.flt-ms-btn:hover{border-color:var(--primary)}
+.flt-ms-btn:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.flt-ms-lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flt-ms-lbl.ph{color:var(--muted)}
+.flt-ms-cnt{background:var(--primary-soft);color:var(--primary);border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;font-variant-numeric:tabular-nums;flex:none}
+.flt-ms-btn>svg{width:14px;height:14px;color:var(--muted);flex:none}
+.flt-ms-menu{display:none;position:absolute;z-index:30;top:calc(100% + 4px);left:0;min-width:100%;max-height:264px;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);padding:6px}
+.flt-ms.on .flt-ms-menu{display:block}
+.flt-ms .flt-ms-opt{display:flex;align-items:center;gap:9px;padding:7px 9px;margin:0;border-radius:7px;font-size:13px;font-weight:400;white-space:nowrap;cursor:pointer}
+.flt-ms .flt-ms-opt:hover{background:var(--surface-2)}
+.flt-ms .flt-ms-opt input{accent-color:var(--primary);width:15px;height:15px;flex:none;cursor:pointer}
+.flt-ms .flt-ms-opt input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* Advanced panel */
+.flt-panel{display:none;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin-top:16px;box-shadow:var(--shadow)}
+.flt-panel.on{display:block}
+.flt-grp{border-bottom:1px solid var(--border);padding:16px 20px}
+.flt-grp-h{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.flt-row{display:grid;gap:16px}
+.flt-c2{grid-template-columns:repeat(2,1fr)}
+.flt-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:var(--surface-2);border-radius:0 0 var(--radius) var(--radius);flex-wrap:wrap}
+.flt-foot-note{font-size:12px;color:var(--muted)}
+
+/* Dual-handle range slider */
+.flt-range{position:relative;height:26px;margin-top:2px}
+.flt-range-track{position:absolute;top:11px;left:8px;right:8px;height:5px;border-radius:6px;background:var(--surface-2)}
+.flt-range-fill{position:absolute;height:100%;border-radius:6px;background:var(--primary)}
+.flt-range-in{position:absolute;top:0;left:0;width:100%;height:26px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none}
+.flt-range-in::-webkit-slider-thumb{pointer-events:auto;-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--primary);box-shadow:var(--shadow);cursor:pointer}
+.flt-range-in::-moz-range-thumb{pointer-events:auto;width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--primary);box-shadow:var(--shadow);cursor:pointer}
+.flt-range-in:focus{outline:none}
+.flt-range-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.flt-range-head label{margin:0}
+.flt-out{font-variant-numeric:tabular-nums}
+
+/* Segmented tri-state */
+.flt-seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.flt-seg button{flex:1;padding:8px 4px;background:var(--surface);border:0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.flt-seg button+button{border-left:1px solid var(--border)}
+.flt-seg button:hover{background:var(--surface-2)}
+.flt-seg button.on{background:var(--primary-soft);color:var(--primary)}
+
+/* View mode toggle (Table / Card) */
+.flt-vt{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.flt-vt button{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;background:var(--surface);border:0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.flt-vt button+button{border-left:1px solid var(--border)}
+.flt-vt button svg{width:14px;height:14px}
+.flt-vt button:hover{background:var(--surface-2)}
+.flt-vt button.on{background:var(--primary-soft);color:var(--primary)}
+
+/* Card view */
+.flt-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:14px;padding:20px}
+.flt-cd{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--surface);display:block}
+.flt-cd:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.flt-cd-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.flt-cd-meta{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.flt-cd-sk{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.flt-cd-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+
+/* Filter bar shell — sits between the tabs and the results table */
+.flt-bar{padding:16px 20px 4px;border-bottom:1px solid var(--border)}
+.flt-tw{overflow-x:auto}
+
+@media (max-width:1280px){.flt-quick{grid-template-columns:repeat(3,1fr) auto auto}}
+@media (max-width:1024px){.flt-quick{grid-template-columns:repeat(2,1fr)}.flt-c2{grid-template-columns:1fr}}
+@media (max-width:768px){.flt-quick{grid-template-columns:1fr}}
 @media(max-width:1024px){.kpis{grid-template-columns:repeat(2,1fr)!important}}
 </style>
 </head>
@@ -153,7 +267,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-                <div class="nav-label">Workspace</div>
+                    <div class="nav-label">Workspace</div>
     <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
     <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
@@ -163,7 +277,6 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
     <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
     <a class="nav-item active" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
-    <a class="nav-item nav-sub" href="online-visibility-analysis.page.html" data-testid="nav-online">Online Presence</a>
     <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
     <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
     <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
@@ -172,9 +285,9 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
     <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
     <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
     <div class="nav-label">Talent &amp; System</div>
-    <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates</a>
     <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
     <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
   
     <div class="side-foot">
       <span class="avatar">FA</span>
@@ -277,18 +390,177 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
       </div>
 
       <div class="card">
+        <div class="card-head">
+          <h2>Ranked results <span style="color:var(--muted);font-weight:500">· <span id="flt-count" data-testid="results-count">8</span> of <span id="flt-total">8</span> shown in this tab</span></h2>
+          <div class="flt-vt" role="group" aria-label="Result view mode" data-testid="results-view-toggle">
+            <button type="button" class="on" id="flt-vt-table" data-testid="results-view-table" aria-pressed="true" onclick="fltSetView('table')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>Table view
+            </button>
+            <button type="button" id="flt-vt-cards" data-testid="results-view-cards" aria-pressed="false" onclick="fltSetView('cards')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Card view
+            </button>
+          </div>
+        </div>
         <div class="tabs-row" style="margin:0;padding:0 8px">
           <button class="tab on" data-testid="tab-shortlisted" onclick="switchTab('shortlisted',this)">Shortlisted <span style="color:var(--muted)">(125)</span></button>
           <button class="tab" data-testid="tab-pending" onclick="switchTab('pending',this)">Pending <span style="color:var(--muted)">(230)</span></button>
           <button class="tab" data-testid="tab-rejected" onclick="switchTab('rejected',this)">Rejected <span style="color:var(--muted)">(145)</span></button>
         </div>
 
+        <!-- ══ Filter bar (ported from candidates.page.html) — filters the active tab ══ -->
+        <div class="flt-bar" data-testid="results-filter-bar">
+
+          <!-- Saved views — pinned filter sets. In-memory only for the prototype. -->
+          <div class="flt-views" data-testid="saved-views">
+            <span class="flt-views-lbl">Saved views:</span>
+            <span id="flt-views-list" style="display:contents"></span>
+            <button class="flt-view" data-testid="save-view-open" onclick="fltOpenSave()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Save current filters
+            </button>
+          </div>
+
+          <!-- AI prompt filter — free text is parsed into the controls below -->
+          <div class="flt-ai" data-testid="results-ai-filter">
+            <div class="flt-ai-h">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><line x1="19" y1="15" x2="19" y2="21"/><line x1="16" y1="18" x2="22" y2="18"/></svg>
+              AI filter prompt
+            </div>
+            <div class="flt-ai-row">
+              <label for="results-ai-prompt" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Describe the candidates you are looking for</label>
+              <input id="results-ai-prompt" type="text" data-testid="results-ai-prompt" placeholder="Describe who you're looking for — e.g. &quot;Dhaka candidates with trade marketing, MBA, score above 85, no red flags&quot;" onkeydown="if(event.key==='Enter'){event.preventDefault();fltAiApply()}">
+              <button class="btn btn-primary" data-testid="results-ai-apply" onclick="fltAiApply()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Apply
+              </button>
+              <button class="btn btn-ghost" data-testid="results-ai-clear" onclick="fltAiClear()">Clear</button>
+            </div>
+            <div class="flt-ai-read" id="flt-ai-read" data-testid="results-ai-readback">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span id="flt-ai-read-txt"></span>
+            </div>
+            <div class="flt-ai-note" id="flt-ai-note" data-testid="results-ai-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Sorry — nothing in that prompt was recognised, so your filters were left untouched. Try naming a district, skill, education level, a score threshold (&ldquo;score above 85&rdquo;), or &ldquo;no red flags&rdquo;.</span>
+            </div>
+          </div>
+
+          <div class="search" style="margin-left:0;width:100%;margin-bottom:14px;position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <label for="results-search" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Full-text search</label>
+            <input id="results-search" type="text" placeholder="Search skills, parsed CV content, education, experience…" data-testid="results-search" oninput="fltSetQ(this.value)">
+          </div>
+
+          <div class="flt-quick">
+            <div class="field" style="margin:0">
+              <label id="lbl-skills">Skills</label>
+              <div class="flt-ms" id="ms-skills" data-testid="filter-skills">
+                <button class="flt-ms-btn" type="button" aria-labelledby="lbl-skills" aria-haspopup="true" aria-expanded="false" data-testid="filter-skills-btn" onclick="fltMenu(event,'skills')">
+                  <span class="flt-ms-lbl ph">All skills</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="flt-ms-menu"></div>
+              </div>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-district">District</label>
+              <select id="f-district" data-testid="filter-district" onchange="fltSetOne('district',this.value)"></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-education">Education</label>
+              <select id="f-education" data-testid="filter-education" onchange="fltSetOne('education',this.value)"></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="f-tags">Tags</label>
+              <select id="f-tags" data-testid="filter-tags" onchange="fltSetOne('tag',this.value)"></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label id="lbl-stage">Stage</label>
+              <div class="flt-ms" id="ms-stages" data-testid="filter-stage">
+                <button class="flt-ms-btn" type="button" aria-labelledby="lbl-stage" aria-haspopup="true" aria-expanded="false" data-testid="filter-stage-btn" onclick="fltMenu(event,'stages')">
+                  <span class="flt-ms-lbl ph">All stages</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="flt-ms-menu"></div>
+              </div>
+            </div>
+            <button class="btn btn-ghost flt-bm" id="flt-bm" data-testid="filter-bookmarked" aria-pressed="false" onclick="fltToggleBm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Bookmarked
+            </button>
+            <button class="flt-toggle-adv" id="flt-adv-btn" data-testid="advanced-toggle" aria-expanded="false" aria-controls="flt-panel" onclick="fltAdvanced()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+              Advanced filters<span class="flt-n" id="flt-adv-n" style="display:none">0</span>
+              <svg class="flt-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+
+          <!-- ── Advanced filters panel ────────────────────────────── -->
+          <section class="flt-panel" id="flt-panel" data-testid="advanced-panel" aria-label="Advanced filters">
+            <div class="flt-grp">
+              <div class="flt-grp-h">Scoring</div>
+              <div class="flt-row flt-c2">
+                <div>
+                  <div class="flt-range-head">
+                    <label id="lbl-score" style="font-size:12.5px;font-weight:600">AI match score</label>
+                    <span class="badge b-mut flt-out" id="out-score" data-testid="out-score">0–100</span>
+                  </div>
+                  <div class="flt-range" data-testid="filter-score">
+                    <div class="flt-range-track"><div class="flt-range-fill" id="fill-score"></div></div>
+                    <input class="flt-range-in" type="range" min="0" max="100" value="0" aria-label="Minimum AI match score" data-testid="filter-score-min" oninput="fltRange(0,this.value)">
+                    <input class="flt-range-in" type="range" min="0" max="100" value="100" aria-label="Maximum AI match score" data-testid="filter-score-max" oninput="fltRange(1,this.value)">
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-end">
+                  <p class="hint" style="margin:0">The score band is applied on top of the active tab — the shortlist threshold (≥ 75) still governs which candidates reach the Shortlisted tab.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flt-grp">
+              <div class="flt-grp-h">Signals (red flags)</div>
+              <div class="flt-row flt-c2">
+                <div>
+                  <label id="lbl-flags" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Red flag type</label>
+                  <div class="flt-ms" id="ms-flags" data-testid="filter-redflags">
+                    <button class="flt-ms-btn" type="button" aria-labelledby="lbl-flags" aria-haspopup="true" aria-expanded="false" data-testid="filter-redflags-btn" onclick="fltMenu(event,'flags')">
+                      <span class="flt-ms-lbl ph">Any red flag</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="flt-ms-menu"></div>
+                  </div>
+                </div>
+                <div>
+                  <span style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px" id="lbl-fm">Red flags present</span>
+                  <div class="flt-seg" role="group" aria-labelledby="lbl-fm" id="seg-flagMode" data-testid="filter-flagmode">
+                    <button type="button" data-v="has" data-testid="filter-flagmode-has" onclick="fltSeg('flagMode','has')">Has red flag</button>
+                    <button type="button" data-v="none" data-testid="filter-flagmode-none" onclick="fltSeg('flagMode','none')">No red flags</button>
+                    <button type="button" data-v="any" class="on" data-testid="filter-flagmode-any" onclick="fltSeg('flagMode','any')">Any</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flt-foot">
+              <span class="flt-foot-note">Filters combine with <b>AND</b> across groups and <b>OR</b> within a multi-select.</span>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost btn-sm" data-testid="advanced-reset" onclick="fltResetAdvanced()">Reset advanced</button>
+                <button class="btn btn-primary btn-sm" data-testid="advanced-apply" onclick="fltAdvanced()">Show <span id="flt-apply-n" style="font-variant-numeric:tabular-nums">8</span> results</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Active filter chips -->
+          <div style="display:flex;gap:8px;margin-top:14px;margin-bottom:14px;align-items:center;flex-wrap:wrap" data-testid="active-filters">
+            <span style="font-size:12px;color:var(--muted);font-weight:600">Active filters:</span>
+            <span id="flt-chips" style="display:contents"></span>
+            <span id="flt-none" class="hint" style="margin:0">None — showing all results.</span>
+            <button class="btn btn-ghost btn-sm" data-testid="clear-filters" onclick="fltClearAll()" id="flt-clear" style="display:none">Clear all</button>
+          </div>
+        </div>
+
+        <div id="flt-panes">
         <!-- SHORTLISTED -->
         <div class="pane on" id="pane-shortlisted" data-testid="pane-shortlisted">
           <table>
             <thead><tr><th>Rank</th><th>Candidate</th><th>AI match score</th><th>Top criteria contributions</th><th>Red flags</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-              <tr data-testid="sl-row-1">
+              <tr data-testid="sl-row-1" data-district="Dhaka" data-edu="Master's / MBA" data-skills="Brand Management|Trade Marketing|P&amp;L Management" data-tags="High potential" data-flags="" data-bm="1">
                 <td style="font-weight:700">1</td>
                 <td><div class="cand"><span class="ava">MR</span><div>Mahmudur Rahman<small>Dhaka · MBA Marketing, IBA DU</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:96%;background:var(--success)"></i></div><b>96</b></div></td>
@@ -297,7 +569,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-1-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-2">
+              <tr data-testid="sl-row-2" data-district="Chattogram" data-edu="Master's / MBA" data-skills="Trade Marketing|Distribution|FMCG Sales" data-tags="Referral" data-flags="" data-bm="0">
                 <td style="font-weight:700">2</td>
                 <td><div class="cand"><span class="ava">SK</span><div>Sadia Karim<small>Chattogram · MBA, North South University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:93%;background:var(--success)"></i></div><b>93</b></div></td>
@@ -306,7 +578,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-2-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-3">
+              <tr data-testid="sl-row-3" data-district="Dhaka" data-edu="Master's / MBA" data-skills="Brand Management|Market Research|Analytics" data-tags="High potential" data-flags="Career break" data-bm="1">
                 <td style="font-weight:700">3</td>
                 <td><div class="cand"><span class="ava">TI</span><div>Tanvir Islam<small>Dhaka · BBA + MBA, BUP</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:91%;background:var(--success)"></i></div><b>91</b></div></td>
@@ -315,7 +587,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-3-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-4">
+              <tr data-testid="sl-row-4" data-district="Sylhet" data-edu="Master's / MBA" data-skills="Trade Marketing|Distribution|Analytics" data-tags="" data-flags="" data-bm="0">
                 <td style="font-weight:700">4</td>
                 <td><div class="cand"><span class="ava">NF</span><div>Nusrat Fariha<small>Sylhet · MBA Marketing, SUST</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:89%;background:var(--success)"></i></div><b>89</b></div></td>
@@ -324,7 +596,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-4-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-5">
+              <tr data-testid="sl-row-5" data-district="Dhaka" data-edu="Master's / MBA" data-skills="FMCG Sales|Distribution|Negotiation" data-tags="Re-applicant" data-flags="Frequent job changes" data-bm="0">
                 <td style="font-weight:700">5</td>
                 <td><div class="cand"><span class="ava">RA</span><div>Rifat Ahmed<small>Dhaka · MBA, Dhaka University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:86%;background:var(--success)"></i></div><b>86</b></div></td>
@@ -333,7 +605,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-5-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-6">
+              <tr data-testid="sl-row-6" data-district="Khulna" data-edu="Master's / MBA" data-skills="Brand Management|Digital Marketing" data-tags="Strong communicator" data-flags="" data-bm="0">
                 <td style="font-weight:700">6</td>
                 <td><div class="cand"><span class="ava">FH</span><div>Farhana Haque<small>Khulna · MBA Marketing, KU</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:83%;background:var(--success)"></i></div><b>83</b></div></td>
@@ -342,7 +614,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-6-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-7">
+              <tr data-testid="sl-row-7" data-district="Dhaka" data-edu="Bachelor's" data-skills="Trade Marketing|FMCG Sales" data-tags="" data-flags="Over-qualification" data-bm="0">
                 <td style="font-weight:700">7</td>
                 <td><div class="cand"><span class="ava">AK</span><div>Asif Kabir<small>Dhaka · BBA, Brac University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:79%;background:var(--success)"></i></div><b>79</b></div></td>
@@ -351,7 +623,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-suc">Shortlisted</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="sl-7-view">View</a></td>
               </tr>
-              <tr data-testid="sl-row-8">
+              <tr data-testid="sl-row-8" data-district="Rajshahi" data-edu="Master's / MBA" data-skills="Market Research|Analytics" data-tags="High potential" data-flags="" data-bm="1">
                 <td style="font-weight:700">8</td>
                 <td><div class="cand"><span class="ava">SB</span><div>Sumaiya Binte Anwar<small>Rajshahi · MBA Marketing, RU</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:76%;background:var(--success)"></i></div><b>76</b></div></td>
@@ -369,7 +641,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <table>
             <thead><tr><th>Candidate</th><th>AI match score</th><th>Top criteria contributions</th><th>Red flags</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-              <tr data-testid="pd-row-1">
+              <tr data-testid="pd-row-1" data-district="Dhaka" data-edu="Bachelor's" data-skills="FMCG Sales|Distribution" data-tags="" data-flags="Skill gap" data-bm="0">
                 <td><div class="cand"><span class="ava">JM</span><div>Jamil Mahmud<small>Dhaka · BBA, Jagannath University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:71%;background:var(--warn)"></i></div><b>71</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:68%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:74%"></i></div></div></div></td>
@@ -377,7 +649,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-warn">Pending review</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="pd-1-view">View</a></td>
               </tr>
-              <tr data-testid="pd-row-2">
+              <tr data-testid="pd-row-2" data-district="Cumilla" data-edu="Master's / MBA" data-skills="Trade Marketing|Market Research" data-tags="Re-applicant" data-flags="" data-bm="1">
                 <td><div class="cand"><span class="ava">TA</span><div>Tahmina Akhtar<small>Cumilla · MBA, Premier University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:68%;background:var(--warn)"></i></div><b>68</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:62%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:80%"></i></div></div></div></td>
@@ -385,7 +657,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-warn">Pending review</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="pd-2-view">View</a></td>
               </tr>
-              <tr data-testid="pd-row-3">
+              <tr data-testid="pd-row-3" data-district="Bogura" data-edu="Bachelor's" data-skills="Distribution" data-tags="" data-flags="Missing info" data-bm="0">
                 <td><div class="cand"><span class="ava">MH</span><div>Mizanur Haque<small>Bogura · BBA, Varendra University</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:64%;background:var(--warn)"></i></div><b>64</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:58%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:70%"></i></div></div></div></td>
@@ -402,7 +674,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
           <table>
             <thead><tr><th>Candidate</th><th>AI match score</th><th>Top criteria contributions</th><th>Red flags</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-              <tr data-testid="rj-row-1">
+              <tr data-testid="rj-row-1" data-district="Dhaka" data-edu="SSC / HSC" data-skills="FMCG Sales" data-tags="" data-flags="Under-qualification" data-bm="0">
                 <td><div class="cand"><span class="ava">SR</span><div>Shamsur Rahman<small>Dhaka · HSC only</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:42%;background:var(--danger)"></i></div><b>42</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:40%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:35%"></i></div></div></div></td>
@@ -410,7 +682,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-dan">Rejected-pending</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="rj-1-view">View</a></td>
               </tr>
-              <tr data-testid="rj-row-2">
+              <tr data-testid="rj-row-2" data-district="Gazipur" data-edu="SSC / HSC" data-skills="Distribution" data-tags="" data-flags="Skill gap" data-bm="0">
                 <td><div class="cand"><span class="ava">NK</span><div>Nazmul Karim<small>Gazipur · Diploma in Marketing</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:38%;background:var(--danger)"></i></div><b>38</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:30%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:45%"></i></div></div></div></td>
@@ -418,7 +690,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
                 <td><span class="badge b-dan">Rejected-pending</span></td>
                 <td><a class="btn btn-ghost btn-sm" href="application-detail.page.html" data-testid="rj-2-view">View</a></td>
               </tr>
-              <tr data-testid="rj-row-3">
+              <tr data-testid="rj-row-3" data-district="Barishal" data-edu="Bachelor's" data-skills="" data-tags="" data-flags="Missing info" data-bm="0">
                 <td><div class="cand"><span class="ava">RB</span><div>Rabeya Begum<small>Barishal · BA (General)</small></div></div></td>
                 <td><div class="score"><div class="bar"><i style="width:29%;background:var(--danger)"></i></div><b>29</b></div></td>
                 <td><div class="contrib"><div class="row"><span>Exp</span><div class="mini"><i style="width:22%"></i></div></div><div class="row"><span>Edu</span><div class="mini"><i style="width:38%"></i></div></div></div></td>
@@ -428,6 +700,20 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
               </tr>
             </tbody>
           </table>
+        </div>
+        </div>
+
+        <!-- Card view — same filtered set as the table, rendered as cards -->
+        <div class="flt-cards" id="flt-cards" data-testid="results-cards" style="display:none"></div>
+
+        <!-- Empty state — no candidate in this tab matches the active filters -->
+        <div id="flt-empty" data-testid="results-empty" style="display:none">
+          <div class="empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div style="font-weight:600;color:var(--text);font-size:15px">No matching candidates in this tab</div>
+            <p style="margin-top:6px">No candidate in this tab matches your current search and filters. Try removing a filter, broadening your keywords, or switching tab.</p>
+            <button class="btn btn-ghost btn-sm" data-testid="empty-clear-filters" onclick="fltClearAll()" style="margin-top:14px">Clear all filters</button>
+          </div>
         </div>
       </div>
     </main>
@@ -471,6 +757,8 @@ function switchTab(name, el){
   el.classList.add('on');
   document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});
   document.getElementById('pane-'+name).classList.add('on');
+  /* Keep the filter block in sync — it filters the ACTIVE tab only. */
+  if(typeof fltTab==='function')fltTab(name);
 }
 function openHmModal(){ document.getElementById('hmModal').style.display='grid'; }
 function closeHmModal(){ document.getElementById('hmModal').style.display='none'; }
@@ -509,6 +797,482 @@ function confirmSendHm(){
 <script>
   function openRescreen(){ document.getElementById('rescreenModal').style.display='grid'; }
   function closeRescreen(){ document.getElementById('rescreenModal').style.display='none'; }
+</script>
+
+<!-- Save-view modal (filter bar) -->
+<div class="modal-mask" id="flt-save-mask" style="display:none" data-testid="save-view-modal">
+  <div class="modal">
+    <div class="card-head"><h3>Save current filters</h3>
+      <button class="icon-btn" data-testid="save-view-close" onclick="fltCloseSave()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="field" style="margin:0">
+        <label for="flt-save-name">View name</label>
+        <input id="flt-save-name" type="text" placeholder="e.g. Dhaka · Shortlisted · Score &gt;80" data-testid="save-view-name">
+        <div class="hint" id="flt-save-summary">No filters applied.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-testid="save-view-cancel" onclick="fltCloseSave()">Cancel</button>
+      <button class="btn btn-primary" data-testid="save-view-confirm" onclick="fltSaveView()">Save view</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   FLT — filter bar + card view + AI prompt filter for the Shortlist
+   (Stage 5) screening results. Ported from candidates.page.html so
+   both surfaces share markup, classes and behaviour.
+
+   The three tabs stay the source of truth for the candidate set: the
+   filter block narrows the ACTIVE tab only. Rows are the ones already
+   in the HTML tables — facets are read off each <tr>'s data-* attrs,
+   so the table markup remains the single source of truth and nothing
+   is re-invented in JS.
+
+   All globals are `flt`/`FLT`-prefixed; no name here shadows a native
+   DOM API or the page's existing switchTab / modal handlers.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Facet vocabularies ───────────────────────────────────────────── */
+var FLT_SKILLS=['Analytics','Brand Management','Digital Marketing','Distribution','FMCG Sales','Market Research','Negotiation','P&L Management','Trade Marketing'];
+var FLT_DISTRICTS=['Dhaka','Chattogram','Sylhet','Khulna','Rajshahi','Cumilla','Barishal','Rangpur','Mymensingh','Gazipur','Bogura','Narayanganj'];
+var FLT_EDU=["SSC / HSC","Bachelor's","Master's / MBA"];
+var FLT_TAGS=['High potential','Re-applicant','Referral','Strong communicator'];
+var FLT_FLAGS=['Career break','Frequent job changes','Missing info','Over-qualification','Under-qualification','Skill gap'];
+/* Stage keys deliberately equal the pane ids so a stage selection can move the tab. */
+var FLT_STAGE_DEF=[['shortlisted','b-suc','Shortlisted'],['pending','b-warn','Pending review'],['rejected','b-dan','Rejected-pending']];
+function fltStage(k){for(var i=0;i<FLT_STAGE_DEF.length;i++)if(FLT_STAGE_DEF[i][0]===k)return FLT_STAGE_DEF[i];return FLT_STAGE_DEF[0]}
+function fltEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ── Row model — harvested from the existing tables ───────────────── */
+var FLT_ROWS=[];
+var FLT_PANES=['shortlisted','pending','rejected'];
+function fltCollect(){
+  var id=0;
+  FLT_PANES.forEach(function(pane){
+    var body=document.querySelector('#pane-'+pane+' tbody');
+    if(!body)return;
+    Array.prototype.forEach.call(body.querySelectorAll('tr'),function(tr){
+      var tds=tr.children;
+      var link=tds[tds.length-1].querySelector('a');
+      var box=tr.querySelector('.cand>div');
+      var meta='',name='';
+      if(box){
+        var small=box.querySelector('small');
+        meta=small?small.textContent.trim():'';
+        var clone=box.cloneNode(true),cs=clone.querySelector('small');
+        if(cs&&cs.parentNode)cs.parentNode.removeChild(cs);
+        name=clone.textContent.trim();
+      }
+      var ava=tr.querySelector('.cand .ava');
+      var sb=tr.querySelector('.score b');
+      id++;
+      FLT_ROWS.push({
+        id:id,pane:pane,tr:tr,
+        name:name,meta:meta,
+        ini:ava?ava.textContent.trim():'',
+        rank:pane==='shortlisted'?tds[0].textContent.trim():'',
+        score:sb?(parseInt(sb.textContent,10)||0):0,
+        district:tr.getAttribute('data-district')||'',
+        edu:tr.getAttribute('data-edu')||'',
+        skills:(tr.getAttribute('data-skills')||'').split('|').filter(Boolean),
+        tags:(tr.getAttribute('data-tags')||'').split('|').filter(Boolean),
+        flags:(tr.getAttribute('data-flags')||'').split('|').filter(Boolean),
+        bm:tr.getAttribute('data-bm')==='1',
+        statusHtml:tds[tds.length-2]?tds[tds.length-2].innerHTML:'',
+        href:link?link.getAttribute('href'):'application-detail.page.html'
+      });
+    });
+  });
+}
+
+/* ── Filter state ─────────────────────────────────────────────────── */
+function fltBlank(){return{
+  q:'',skills:[],district:'',education:'',tag:'',stages:[],bm:false,
+  scMin:0,scMax:100,flags:[],flagMode:'any'
+}}
+var F=fltBlank();
+var FLT_MODE='table';
+var FLT_TAB='shortlisted';
+
+/* Saved views — in-memory only for the prototype. */
+var FLT_VIEWS=[
+  {name:'Dhaka · Shortlisted · Score >80',tab:'shortlisted',f:Object.assign(fltBlank(),{district:'Dhaka',stages:['shortlisted'],scMin:80})},
+  {name:'Pending review · Has red flag',tab:'pending',f:Object.assign(fltBlank(),{stages:['pending'],flagMode:'has'})}
+];
+
+/* ── Match — AND across groups, OR within a multi-select ──────────── */
+function fltMatch(c){
+  if(F.q){
+    var hay=(c.name+' '+c.meta+' '+c.district+' '+c.edu+' '+c.skills.join(' ')+' '+c.tags.join(' ')+' '+c.flags.join(' ')).toLowerCase();
+    if(hay.indexOf(F.q.toLowerCase())<0)return false;
+  }
+  if(F.skills.length&&!c.skills.some(function(s){return F.skills.indexOf(s)>-1}))return false;
+  if(F.district&&c.district!==F.district)return false;
+  if(F.education&&c.edu!==F.education)return false;
+  if(F.tag&&c.tags.indexOf(F.tag)<0)return false;
+  if(F.stages.length&&F.stages.indexOf(c.pane)<0)return false;
+  if(F.bm&&!c.bm)return false;
+  if(c.score<F.scMin||c.score>F.scMax)return false;
+  if(F.flags.length&&!c.flags.some(function(x){return F.flags.indexOf(x)>-1}))return false;
+  if(F.flagMode==='has'&&c.flags.length===0)return false;
+  if(F.flagMode==='none'&&c.flags.length>0)return false;
+  return true;
+}
+
+/* ── Multi-select plumbing ───────────────────────────────────────── */
+var FLT_MS={
+  skills:{el:'ms-skills',opts:FLT_SKILLS,ph:'All skills',one:'skill'},
+  stages:{el:'ms-stages',opts:null,ph:'All stages',one:'stage'},
+  flags:{el:'ms-flags',opts:FLT_FLAGS,ph:'Any red flag',one:'red flag'}
+};
+function fltBuildMenus(){
+  Object.keys(FLT_MS).forEach(function(k){
+    var cfg=FLT_MS[k],host=document.getElementById(cfg.el);
+    if(!host)return;
+    var menu=host.querySelector('.flt-ms-menu'),h='';
+    h+='<label class="flt-ms-opt" style="border-bottom:1px solid var(--border);margin-bottom:4px;padding-bottom:9px"><input type="checkbox" class="flt-ms-allcb" checked data-testid="opt-'+k+'-all" onchange="fltMultiAll(\''+k+'\')"><span style="font-weight:600">'+cfg.ph+'</span></label>';
+    if(k==='stages'){
+      FLT_STAGE_DEF.forEach(function(s){
+        h+='<label class="flt-ms-opt"><input type="checkbox" value="'+s[0]+'" data-testid="opt-stage-'+s[0]+'" onchange="fltMulti(\'stages\',this.value,this.checked)"><span class="badge '+s[1]+'">'+s[2]+'</span></label>';
+      });
+    }else{
+      cfg.opts.forEach(function(o,i){
+        h+='<label class="flt-ms-opt"><input type="checkbox" value="'+fltEsc(o)+'" data-testid="opt-'+k+'-'+i+'" onchange="fltMulti(\''+k+'\',this.value,this.checked)"><span>'+fltEsc(o)+'</span></label>';
+      });
+    }
+    menu.innerHTML=h;
+  });
+}
+function fltMenu(ev,k){
+  ev.stopPropagation();
+  var host=document.getElementById(FLT_MS[k].el),wasOn=host.classList.contains('on');
+  fltShut();
+  if(!wasOn){host.classList.add('on');host.querySelector('.flt-ms-btn').setAttribute('aria-expanded','true')}
+}
+function fltShut(){
+  document.querySelectorAll('.flt-ms.on').forEach(function(m){
+    m.classList.remove('on');m.querySelector('.flt-ms-btn').setAttribute('aria-expanded','false');
+  });
+}
+document.addEventListener('click',function(e){if(e.target&&e.target.closest&&!e.target.closest('.flt-ms'))fltShut()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){fltShut();fltCloseSave()}});
+
+function fltMulti(k,v,on){
+  var a=F[k],i=a.indexOf(v);
+  if(on&&i<0)a.push(v); else if(!on&&i>-1)a.splice(i,1);
+  /* A single stage selection moves the active tab — the tab is the cohort. */
+  if(k==='stages'&&F.stages.length===1)fltSetTabUI(F.stages[0]);
+  fltRender();
+}
+function fltMultiAll(k){
+  F[k]=[];
+  document.getElementById(FLT_MS[k].el).querySelectorAll('input[type=checkbox]').forEach(function(cb){
+    cb.checked=cb.classList.contains('flt-ms-allcb');
+  });
+  fltRender();
+}
+function fltSetOne(k,v){F[k]=v;fltRender()}
+function fltSetQ(v){F.q=v;fltRender()}
+function fltSeg(k,v){F[k]=v;fltRender()}
+function fltToggleBm(){F.bm=!F.bm;fltRender()}
+function fltRange(hi,v){
+  v=+v;
+  if(hi){F.scMax=Math.max(v,F.scMin)}else{F.scMin=Math.min(v,F.scMax)}
+  fltRender();
+}
+function fltAdvanced(){
+  var p=document.getElementById('flt-panel'),b=document.getElementById('flt-adv-btn');
+  var on=p.classList.toggle('on');
+  b.classList.toggle('on',on);b.setAttribute('aria-expanded',on?'true':'false');
+}
+function fltSetView(mode){FLT_MODE=mode;fltRender()}
+
+/* ── Tab bridge — switchTab() calls fltTab(), and saved views/AI can move tabs ── */
+function fltTab(name){FLT_TAB=name;fltRender()}
+function fltSetTabUI(name){
+  if(FLT_PANES.indexOf(name)<0)return;
+  FLT_TAB=name;
+  document.querySelectorAll('.tabs-row .tab').forEach(function(t){t.classList.remove('on')});
+  var btn=document.querySelector('[data-testid="tab-'+name+'"]');
+  if(btn)btn.classList.add('on');
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on')});
+  var pane=document.getElementById('pane-'+name);
+  if(pane)pane.classList.add('on');
+}
+
+/* ── Active-filter chips ─────────────────────────────────────────── */
+function fltChip(label,key,val){
+  var v=String(val).replace(/'/g,"\\'");
+  return '<span class="chip" data-testid="active-filter-'+key+'">'+fltEsc(label)+
+    ' <span class="x" role="button" tabindex="0" aria-label="Remove filter" data-testid="remove-filter-'+key+'" onclick="fltDrop(\''+key+'\',\''+v+'\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();fltDrop(\''+key+'\',\''+v+'\')}">×</span></span>';
+}
+function fltDrop(key,val){
+  if(FLT_MS[key]){var i=F[key].indexOf(val);if(i>-1)F[key].splice(i,1)}
+  else if(key==='q')F.q='';
+  else if(key==='bm')F.bm=false;
+  else if(key==='score'){F.scMin=0;F.scMax=100}
+  else if(key==='flagMode')F.flagMode='any';
+  else F[key]='';
+  fltSync();fltRender();
+}
+function fltChips(){
+  var h='';
+  if(F.q)h+=fltChip('Search: “'+F.q+'”','q','');
+  F.skills.forEach(function(v){h+=fltChip('Skill: '+v,'skills',v)});
+  if(F.district)h+=fltChip('District: '+F.district,'district','');
+  if(F.education)h+=fltChip('Education: '+F.education,'education','');
+  if(F.tag)h+=fltChip('Tag: '+F.tag,'tag','');
+  F.stages.forEach(function(v){h+=fltChip('Stage: '+fltStage(v)[2],'stages',v)});
+  if(F.bm)h+=fltChip('Bookmarked only','bm','');
+  if(F.scMin>0||F.scMax<100)h+=fltChip('Score: '+F.scMin+'–'+F.scMax,'score','');
+  F.flags.forEach(function(v){h+=fltChip('Red flag: '+v,'flags',v)});
+  if(F.flagMode==='has')h+=fltChip('Has red flag','flagMode','');
+  if(F.flagMode==='none')h+=fltChip('No red flags','flagMode','');
+  return h;
+}
+function fltAdvN(){
+  var n=0;
+  if(F.scMin>0||F.scMax<100)n++;
+  n+=F.flags.length;
+  if(F.flagMode!=='any')n++;
+  return n;
+}
+
+/* ── Render ──────────────────────────────────────────────────────── */
+function fltBandCls(v){return v<50?'b-dan':v<75?'b-warn':'b-suc'}
+function fltBandHex(v){return v<50?'var(--danger)':v<75?'var(--warn)':'var(--success)'}
+function fltRender(){
+  var inTab=FLT_ROWS.filter(function(c){return c.pane===FLT_TAB});
+  var rows=inTab.filter(fltMatch);
+  var keep={};
+  rows.forEach(function(c){keep[c.id]=1});
+
+  /* Table — hide the rows that fall out of the filter, keep the ranking order. */
+  FLT_ROWS.forEach(function(c){c.tr.style.display=keep[c.id]?'':'none'});
+
+  document.getElementById('flt-count').textContent=rows.length;
+  document.getElementById('flt-total').textContent=inTab.length;
+  document.getElementById('flt-apply-n').textContent=rows.length;
+
+  /* Card view — same filtered set */
+  var cd='';
+  rows.forEach(function(c){
+    cd+='<div class="flt-cd" data-testid="result-card-'+c.id+'">'+
+      '<div class="flt-cd-top">'+
+        '<span style="width:34px;height:34px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none">'+fltEsc(c.ini)+'</span>'+
+        '<div style="min-width:0;flex:1"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+fltEsc(c.name)+'</div>'+
+        '<small style="color:var(--muted);font-size:12px">'+(c.rank?'Rank #'+fltEsc(c.rank)+' · ':'')+fltEsc(c.district)+'</small></div>'+
+        (c.bm?'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--primary);flex:none" aria-label="Bookmarked"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>':'')+
+      '</div>'+
+      '<div class="flt-cd-meta">'+fltEsc(c.meta)+'</div>'+
+      c.statusHtml+
+      '<div class="score" style="margin-top:10px"><div class="bar"><i style="width:'+c.score+'%;background:'+fltBandHex(c.score)+'"></i></div><b>'+c.score+'</b></div>'+
+      '<div class="flt-cd-sk">'+c.skills.slice(0,3).map(function(s){return '<span class="chip">'+fltEsc(s)+'</span>'}).join('')+'</div>'+
+      '<div class="flt-cd-foot">'+
+        (c.flags.length?'<span class="badge b-cau">'+fltEsc(c.flags[0])+'</span>':'<span class="hint" style="margin:0">No red flags</span>')+
+        '<a class="btn btn-ghost btn-sm" href="'+fltEsc(c.href)+'" data-testid="result-card-'+c.id+'-view">View</a>'+
+      '</div>'+
+    '</div>';
+  });
+  document.getElementById('flt-cards').innerHTML=cd;
+
+  var has=rows.length>0;
+  document.getElementById('flt-panes').style.display=(has&&FLT_MODE==='table')?'':'none';
+  document.getElementById('flt-cards').style.display=(has&&FLT_MODE==='cards')?'':'none';
+  document.getElementById('flt-empty').style.display=has?'none':'';
+  var vt=document.getElementById('flt-vt-table'),vc=document.getElementById('flt-vt-cards');
+  vt.classList.toggle('on',FLT_MODE==='table');vt.setAttribute('aria-pressed',FLT_MODE==='table'?'true':'false');
+  vc.classList.toggle('on',FLT_MODE==='cards');vc.setAttribute('aria-pressed',FLT_MODE==='cards'?'true':'false');
+
+  /* Chips */
+  var ch=fltChips();
+  document.getElementById('flt-chips').innerHTML=ch;
+  document.getElementById('flt-none').style.display=ch?'none':'';
+  document.getElementById('flt-clear').style.display=ch?'':'none';
+
+  /* Advanced count badge */
+  var an=fltAdvN(),ab=document.getElementById('flt-adv-n');
+  ab.textContent=an;ab.style.display=an?'':'none';
+
+  /* Score readout + fill */
+  var so=document.getElementById('out-score');
+  so.textContent=F.scMin+'–'+F.scMax;
+  so.className='badge flt-out '+((F.scMin>0||F.scMax<100)?fltBandCls(F.scMin):'b-mut');
+  document.getElementById('fill-score').style.left=F.scMin+'%';
+  document.getElementById('fill-score').style.right=(100-F.scMax)+'%';
+
+  /* Multi-select button labels */
+  Object.keys(FLT_MS).forEach(function(k){
+    var cfg=FLT_MS[k],host=document.getElementById(cfg.el);
+    if(!host)return;
+    var n=F[k].length,lbl=host.querySelector('.flt-ms-lbl'),old=host.querySelector('.flt-ms-cnt');
+    if(old&&old.parentNode)old.parentNode.removeChild(old);
+    var allcb=host.querySelector('.flt-ms-allcb');
+    if(allcb)allcb.checked=n===0;
+    if(n){
+      lbl.classList.remove('ph');
+      lbl.textContent=n===1?(k==='stages'?fltStage(F[k][0])[2]:F[k][0]):n+' '+cfg.one+'s';
+      var b=document.createElement('span');b.className='flt-ms-cnt';b.textContent=n;
+      var btn=host.querySelector('.flt-ms-btn');
+      btn.insertBefore(b,btn.querySelector('svg'));
+    }else{lbl.classList.add('ph');lbl.textContent=cfg.ph}
+  });
+
+  /* Bookmarked toggle */
+  var bm=document.getElementById('flt-bm');
+  bm.classList.toggle('on',F.bm);bm.setAttribute('aria-pressed',F.bm?'true':'false');
+
+  /* Segmented control */
+  document.querySelectorAll('#seg-flagMode button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-v')===F.flagMode)});
+
+  /* Saved views */
+  var vh='';
+  FLT_VIEWS.forEach(function(v,i){
+    vh+='<button class="flt-view'+(fltSameView(v.f)?' on':'')+'" data-testid="saved-view-'+i+'" onclick="fltUseView('+i+')">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'+fltEsc(v.name)+'</button>';
+  });
+  document.getElementById('flt-views-list').innerHTML=vh;
+}
+function fltSameView(f){return JSON.stringify(f)===JSON.stringify(F)}
+
+/* ── Sync DOM controls back from state ───────────────────────────── */
+function fltSync(){
+  document.getElementById('results-search').value=F.q;
+  document.getElementById('f-district').value=F.district||'';
+  document.getElementById('f-education').value=F.education||'';
+  document.getElementById('f-tags').value=F.tag||'';
+  document.querySelector('[data-testid="filter-score-min"]').value=F.scMin;
+  document.querySelector('[data-testid="filter-score-max"]').value=F.scMax;
+  Object.keys(FLT_MS).forEach(function(k){
+    var host=document.getElementById(FLT_MS[k].el);
+    if(!host)return;
+    host.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+      cb.checked=cb.classList.contains('flt-ms-allcb')?F[k].length===0:F[k].indexOf(cb.value)>-1;
+    });
+  });
+}
+function fltClearAll(){F=fltBlank();fltSync();fltRender()}
+function fltResetAdvanced(){
+  var keep={q:F.q,skills:F.skills,district:F.district,education:F.education,tag:F.tag,stages:F.stages,bm:F.bm};
+  F=Object.assign(fltBlank(),keep);
+  fltSync();fltRender();
+}
+
+/* ── Saved views ─────────────────────────────────────────────────── */
+function fltUseView(i){
+  var v=FLT_VIEWS[i];
+  F=JSON.parse(JSON.stringify(v.f));
+  if(v.tab)fltSetTabUI(v.tab);
+  fltSync();fltRender();
+}
+function fltOpenSave(){
+  var n=document.getElementById('flt-chips').textContent.replace(/×/g,'').trim().replace(/\s+/g,' ');
+  document.getElementById('flt-save-summary').textContent=n?'Captures: '+n:'No filters applied — the saved view would show every result in this tab.';
+  document.getElementById('flt-save-name').value='';
+  document.getElementById('flt-save-mask').style.display='grid';
+  document.getElementById('flt-save-name').focus();
+}
+function fltCloseSave(){document.getElementById('flt-save-mask').style.display='none'}
+function fltSaveView(){
+  var n=document.getElementById('flt-save-name').value.trim();
+  if(!n){document.getElementById('flt-save-name').focus();return}
+  FLT_VIEWS.push({name:n,tab:FLT_TAB,f:JSON.parse(JSON.stringify(F))});
+  fltCloseSave();fltRender();
+}
+
+/* ══ AI prompt filter ══════════════════════════════════════════════
+   Lightweight keyword / regex interpretation — no model call. The
+   prompt only ever SETS the visible controls, so whatever it decides
+   stays fully inspectable and reversible via the chips below.       */
+var FLT_AI_SKILLS=[
+  ['trade marketing','Trade Marketing'],['trade mktg','Trade Marketing'],
+  ['brand','Brand Management'],['p&l','P&L Management'],['p & l','P&L Management'],['profit and loss','P&L Management'],
+  ['distribution','Distribution'],['fmcg','FMCG Sales'],['sales','FMCG Sales'],
+  ['market research','Market Research'],['research','Market Research'],
+  ['analytic','Analytics'],['data analysis','Analytics'],
+  ['digital','Digital Marketing'],['negotiat','Negotiation']
+];
+function fltAiApply(){
+  var raw=document.getElementById('results-ai-prompt').value||'';
+  var low=raw.toLowerCase();
+  var read=document.getElementById('flt-ai-read'),note=document.getElementById('flt-ai-note');
+  var parts=[],next=fltBlank(),tab=null;
+
+  /* District */
+  FLT_DISTRICTS.forEach(function(d){
+    if(!next.district&&low.indexOf(d.toLowerCase())>-1){next.district=d;parts.push('District = '+d)}
+  });
+  /* Skills */
+  FLT_AI_SKILLS.forEach(function(pair){
+    if(low.indexOf(pair[0])>-1&&next.skills.indexOf(pair[1])<0){next.skills.push(pair[1]);parts.push('Skill = '+pair[1])}
+  });
+  /* Education */
+  if(/\bmba\b|\bmsc\b|\bm\.sc\b|master/.test(low)){next.education="Master's / MBA";parts.push('Education = Master’s / MBA')}
+  else if(/\bbba\b|\bbsc\b|\bb\.sc\b|bachelor/.test(low)){next.education="Bachelor's";parts.push('Education = Bachelor’s')}
+  else if(/\bhsc\b|\bssc\b/.test(low)){next.education='SSC / HSC';parts.push('Education = SSC / HSC')}
+  /* Tags */
+  FLT_TAGS.forEach(function(t){
+    if(!next.tag&&low.indexOf(t.toLowerCase())>-1){next.tag=t;parts.push('Tag = '+t)}
+  });
+  /* Score threshold */
+  var m=low.match(/(?:above|over|greater than|more than|at least|higher than|minimum(?:\s+of)?|min|>=|>)\s*(\d{1,3})/);
+  if(m){var v=Math.max(0,Math.min(100,parseInt(m[1],10)));next.scMin=v;parts.push('Score ≥ '+v)}
+  var mb=low.match(/(?:below|under|less than|lower than|at most|maximum(?:\s+of)?|max|<=|<)\s*(\d{1,3})/);
+  if(mb){var v2=Math.max(0,Math.min(100,parseInt(mb[1],10)));next.scMax=v2;parts.push('Score ≤ '+v2)}
+  /* Red flags */
+  if(/no red flag|without red flag|clean record|no flags/.test(low)){next.flagMode='none';parts.push('No red flags')}
+  else if(/red flag/.test(low)){next.flagMode='has';parts.push('Has red flag')}
+  /* Named red flag types */
+  FLT_FLAGS.forEach(function(fl){
+    if(next.flagMode!=='none'&&low.indexOf(fl.toLowerCase())>-1&&next.flags.indexOf(fl)<0){
+      next.flags.push(fl);next.flagMode='has';parts.push('Red flag = '+fl);
+    }
+  });
+  /* Bookmarked */
+  if(/bookmark|saved candidate|starred/.test(low)){next.bm=true;parts.push('Bookmarked only')}
+  /* Stage / status → moves the tab */
+  if(/shortlist/.test(low)){tab='shortlisted'}
+  else if(/pending/.test(low)){tab='pending'}
+  else if(/reject/.test(low)){tab='rejected'}
+  if(tab){next.stages=[tab];parts.push('Stage = '+fltStage(tab)[2])}
+
+  if(!parts.length){
+    read.style.display='none';
+    note.style.display='flex';
+    return;
+  }
+  note.style.display='none';
+  F=next;
+  if(tab)fltSetTabUI(tab);
+  fltSync();fltRender();
+  document.getElementById('flt-ai-read-txt').textContent='Interpreted: '+parts.join(' · ')+'. Everything else was reset — adjust or remove any chip below.';
+  read.style.display='flex';
+}
+function fltAiClear(){
+  document.getElementById('results-ai-prompt').value='';
+  document.getElementById('flt-ai-read').style.display='none';
+  document.getElementById('flt-ai-note').style.display='none';
+  fltClearAll();
+}
+
+/* ── Boot ────────────────────────────────────────────────────────── */
+function fltFill(id,opts,all){
+  var s=document.getElementById(id),h='<option value="">'+all+'</option>';
+  opts.forEach(function(o){h+='<option value="'+fltEsc(o)+'">'+fltEsc(o)+'</option>'});
+  s.innerHTML=h;
+}
+fltCollect();
+fltFill('f-district',FLT_DISTRICTS,'All districts');
+fltFill('f-education',FLT_EDU,'All education');
+fltFill('f-tags',FLT_TAGS,'All tags');
+fltBuildMenus();
+fltSync();
+fltRender();
 </script>
 </body>
 </html>

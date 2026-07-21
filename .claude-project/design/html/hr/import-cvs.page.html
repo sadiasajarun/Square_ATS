@@ -22,7 +22,7 @@ body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var
 a{color:inherit;text-decoration:none;cursor:pointer}
 button{font:inherit;cursor:pointer}
 .app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
 .brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
 .brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
 .nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
@@ -112,10 +112,26 @@ tbody tr:hover td{background:var(--primary-soft)}
 .wf-sep{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 8px}
 .wf-sep.done{background:var(--success)}
 a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primary)}a.wf-step:hover{color:var(--primary)}
+
+/* ---- workflow spine v2 (stepper + numbered nav) ---- */
+.wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
+.wf-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+.wf-step .wf-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);font-size:12px;border:1px solid var(--border);flex:none}
+.wf-step .wf-dot svg{width:14px;height:14px}
+.wf-step.done{color:var(--text)}.wf-step.done .wf-dot{background:var(--success-s);color:var(--success);border-color:var(--success-s)}
+.wf-step.current{color:var(--primary)}.wf-step.current .wf-dot{background:var(--primary);color:#fff;border-color:var(--primary)}
+a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--primary)}
+.wf-sep{flex:1;min-width:14px;height:2px;background:var(--border);margin:0 8px}
+.wf-sep.done{background:var(--success)}
+.nav-num{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:5px;background:var(--surface-2);color:var(--muted);font-size:10.5px;font-weight:700;flex:none}
+.nav-item.active .nav-num{background:var(--primary);color:#fff}
+.nav-sub{padding-left:38px !important;font-size:12.5px}
+.nav-sub::after{content:"";position:absolute;left:22px;top:50%;width:8px;height:1px;background:var(--border)}
+.nav-sub{position:relative}
 </style>
 <!-- page-local style (existing tokens only) -->
 <style>
-.intake-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.intake-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 @media(max-width:1024px){.intake-grid{grid-template-columns:1fr}}
 .source-card{display:flex;flex-direction:column}
 .source-icon{width:40px;height:40px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex:none}
@@ -146,57 +162,29 @@ a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primar
     <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
       <span class="logo">S</span><span>STL ATS</span>
     </a>
-            <div class="nav-label">Workspace</div>
-    <nav>
-      <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
-      </a>
-      <a class="nav-item" href="positions.page.html" data-testid="nav-positions">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions
-      </a>
-    </nav>
+                <div class="nav-label">Workspace</div>
+    <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+    <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
     <div class="nav-label">Hiring Workflow</div>
-    <nav>
-      <a class="nav-item active" href="import-cvs.page.html" data-testid="nav-import">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import CVs
-      </a>
-      <a class="nav-item" href="cv-review.page.html" data-testid="nav-review">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Review CVs
-      </a>
-      <a class="nav-item" href="results.page.html" data-testid="nav-results">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Screening Results
-      </a>      <a class="nav-item" href="cv-analysis-dashboard.page.html" data-testid="nav-cv-analysis">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>CV Analysis
-      </a>
-      <a class="nav-item" href="online-visibility-analysis.page.html" data-testid="nav-online-presence">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Online Presence
-      </a>
-      <a class="nav-item" href="written-exam.page.html" data-testid="nav-written-exam">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Written Exam
-      </a>
-
-      <a class="nav-item" href="interviews.page.html" data-testid="nav-interviews">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Interviews
-      </a>      <a class="nav-item" href="assessment-summary-report.page.html" data-testid="nav-assessment-report">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13l2 2 4-4"/></svg>Summary Report
-      </a>
-
-      <a class="nav-item" href="final-selection.page.html" data-testid="nav-final">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Final Selection
-      </a>
-    </nav>
-    <div class="nav-label">Talent & System</div>
-    <nav>
-      <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates
-      </a>
-      <a class="nav-item" href="exports.page.html" data-testid="nav-exports">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports
-      </a>
-      <a class="nav-item" href="settings.page.html" data-testid="nav-settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
-      </a>
-    </nav>
+    <a class="nav-item" href="template-builder.page.html" data-testid="nav-s1"><span class="nav-num">1</span>Screening Template</a>
+    <a class="nav-item active" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
+    <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
+    <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
+    <a class="nav-item nav-sub" href="cv-analysis-dashboard.page.html" data-testid="nav-cvanalysis">CV Analysis</a>
+    <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
+    <a class="nav-item nav-sub" href="online-visibility-analysis.page.html" data-testid="nav-online">Online Presence</a>
+    <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
+    <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
+    <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
+    <a class="nav-item nav-sub" href="interview-schedule.page.html" data-testid="nav-schedule">Schedule Viva</a>
+    <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
+    <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
+    <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
+    <div class="nav-label">Talent &amp; System</div>
+    <a class="nav-item" href="candidates.page.html" data-testid="nav-candidates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidates</a>
+    <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
+    <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
     <div class="side-foot">
       <span class="avatar">FA</span>
       <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
@@ -225,31 +213,54 @@ a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primar
     <span class="wf-sep done"></span>
     <span class="wf-step current" data-testid="step-2"><span class="wf-dot">2</span>Import</span>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-3"><span class="wf-dot">3</span>Process</span>
+    <a class="wf-step" href="processing.page.html" data-testid="step-3"><span class="wf-dot">3</span>Process</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-4"><span class="wf-dot">4</span>Review</span>
+    <a class="wf-step" href="cv-review.page.html" data-testid="step-4"><span class="wf-dot">4</span>Review</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</span>
+    <a class="wf-step" href="results.page.html" data-testid="step-5"><span class="wf-dot">5</span>Shortlist</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</span>
+    <a class="wf-step" href="../hiring-manager/shortlist.page.html" data-testid="step-6"><span class="wf-dot">6</span>Hiring Manager</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-7"><span class="wf-dot">7</span>Written Exam</span>
+    <a class="wf-step" href="written-exam.page.html" data-testid="step-7"><span class="wf-dot">7</span>Written Exam</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-8"><span class="wf-dot">8</span>Viva</span>
+    <a class="wf-step" href="interviews.page.html" data-testid="step-8"><span class="wf-dot">8</span>Viva</a>
     <span class="wf-sep"></span>
-    <span class="wf-step" data-testid="step-9"><span class="wf-dot">9</span>Hire</span>
+    <a class="wf-step" href="final-selection.page.html" data-testid="step-9"><span class="wf-dot">9</span>Selection</a>
+    <span class="wf-sep"></span>
+    <a class="wf-step" href="onboarding.page.html" data-testid="step-10"><span class="wf-dot">10</span>Onboard</a>
   </nav>
       <div class="page-head">
         <div>
           <h1>Import CVs</h1>
-          <p>Position: <b>Sr. Brand Manager</b> · Marketing (Grade 6) — pull candidate CVs from multiple sources into one batch.</p>
+          <p>Position: <b id="posName">Sr. Brand Manager</b> · <span id="posDept">Marketing (Grade 6)</span> — upload candidate CVs into one batch.</p>
         </div>
         <a class="btn btn-ghost" href="positions.page.html" data-testid="import-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to positions
         </a>
       </div>
 
-      <!-- THREE INTAKE SOURCE CARDS -->
+      <!-- POSITION PICKER -->
+      <section class="card" style="margin-bottom:16px" data-testid="position-picker">
+        <div class="card-body" style="display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap">
+          <div class="field" style="margin-bottom:0;flex:1;min-width:340px">
+            <label for="positionSelect">Import CVs into position</label>
+            <select id="positionSelect" data-testid="import-position" onchange="onPositionChange()">
+              <option value="Sr. Brand Manager" data-dept="Marketing (Grade 6)" selected>Sr. Brand Manager &mdash; Marketing (Grade 6)</option>
+              <option value="Asst. Brand Manager" data-dept="Marketing (Grade 4)">Asst. Brand Manager &mdash; Marketing (Grade 4)</option>
+              <option value="Trade Marketing Executive" data-dept="Trade Marketing (Grade 4)">Trade Marketing Executive &mdash; Trade Marketing (Grade 4)</option>
+              <option value="Territory Officer" data-dept="Sales (Grade 3)">Territory Officer &mdash; Sales (Grade 3)</option>
+              <option value="Sales Executive" data-dept="Sales (Grade 3)">Sales Executive &mdash; Sales (Grade 3)</option>
+              <option value="Lab Chemist" data-dept="Quality Assurance (Grade 4)">Lab Chemist &mdash; Quality Assurance (Grade 4)</option>
+            </select>
+            <div class="hint">CVs in this batch are screened against the selected position&rsquo;s template.</div>
+          </div>
+          <a class="btn btn-ghost" href="template-builder.page.html" data-testid="import-view-template">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>View screening template
+          </a>
+        </div>
+      </section>
+
+      <!-- CV SOURCE -->
       <div class="intake-grid">
 
         <!-- 3.1 Bulk file upload -->
@@ -290,94 +301,7 @@ a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primar
           </div>
         </section>
 
-        <!-- 3.2 Import from job portals -->
-        <section class="card source-card" data-testid="source-portals">
-          <div class="card-head" style="gap:12px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span class="source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-              <h2>Import from job portals</h2>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="portal-pills" data-testid="portal-pills">
-              <button type="button" class="portal-pill on" data-portal="LinkedIn" data-testid="portal-linkedin" onclick="selectPortal(this)">LinkedIn</button>
-              <button type="button" class="portal-pill" data-portal="BDJobs" data-testid="portal-bdjobs" onclick="selectPortal(this)">BDJobs</button>
-              <button type="button" class="portal-pill" data-portal="Bdjobs Premium" data-testid="portal-bdjobs-premium" onclick="selectPortal(this)">Bdjobs Premium</button>
-              <button type="button" class="portal-pill" data-portal="Other" data-testid="portal-other" onclick="selectPortal(this)">Other</button>
-            </div>
-
-            <div class="status-row">
-              <span id="portalStatus" class="badge b-mut" data-testid="portal-status">Not connected</span>
-              <span class="hint" style="margin-top:0">Source: <b id="portalName">LinkedIn</b></span>
-            </div>
-
-            <div class="field">
-              <label for="portalUrl">Job posting URL</label>
-              <input id="portalUrl" type="url" placeholder="https://www.linkedin.com/jobs/view/3819…" value="https://www.linkedin.com/jobs/view/3819204471" data-testid="portal-url">
-            </div>
-
-            <!-- auto-sync toggle: shown only once a portal is connected -->
-            <div class="toggle-row" id="portalSyncRow" data-testid="portal-sync-row" style="display:none">
-              <button type="button" class="toggle on" id="portalSync" data-testid="portal-sync-toggle" role="switch" aria-checked="true" aria-label="Sync new applicants automatically" onclick="togglePortalSync(this)"></button>
-              <span>Sync new applicants automatically</span>
-            </div>
-
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button type="button" class="btn btn-ghost btn-sm" id="portalConnectBtn" data-testid="portal-connect" onclick="connectPortal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Connect account
-              </button>
-              <button type="button" class="btn btn-primary btn-sm" id="portalFetchBtn" data-testid="portal-fetch" style="display:none" onclick="fetchPortalCVs()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="portalFetchLabel">Fetch CVs</span>
-              </button>
-            </div>
-            <p class="hint" id="portalFetchMsg" data-testid="portal-fetch-msg" style="display:none"></p>
-            <p class="hint">New applicants from connected postings are pulled into this batch every 15 minutes.</p>
-          </div>
-        </section>
-
-        <!-- 3.3 Import from email inbox -->
-        <section class="card source-card" data-testid="source-email">
-          <div class="card-head" style="gap:12px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span class="source-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></span>
-              <h2>Import from email inbox</h2>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="status-row">
-              <span id="emailStatus" class="badge b-mut" data-testid="email-status">Not connected</span>
-            </div>
-            <div class="field">
-              <label for="emailInbox">Monitored inbox</label>
-              <input id="emailInbox" type="email" value="careers@stl.com" data-testid="email-inbox">
-            </div>
-            <div class="field">
-              <label for="emailSubject">Subject keyword filter</label>
-              <input id="emailSubject" type="text" value="Application for" placeholder="e.g. Application for" data-testid="email-subject">
-            </div>
-            <div class="field">
-              <label for="emailAttach">Attachment filter</label>
-              <select id="emailAttach" data-testid="email-attach">
-                <option>PDF and DOC/DOCX</option>
-                <option>PDF only</option>
-                <option>DOC/DOCX only</option>
-                <option>PDF, DOC and images</option>
-              </select>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-              <button type="button" class="btn btn-ghost btn-sm" data-testid="email-connect-gmail" onclick="connectEmail('Gmail')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>Connect Gmail
-              </button>
-              <button type="button" class="btn btn-ghost btn-sm" data-testid="email-connect-outlook" onclick="connectEmail('Outlook')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>Connect Outlook
-              </button>
-            </div>
-            <div class="toggle-row" style="margin-bottom:0">
-              <button type="button" class="toggle" id="emailAuto" data-testid="email-auto-toggle" role="switch" aria-checked="false" aria-label="Auto-import new CVs as they arrive" onclick="toggleSwitch(this)"></button>
-              <span>Auto-import new CVs as they arrive</span>
-            </div>
-          </div>
-        </section>
+        
       </div>
 
       <!-- CURRENT BATCH -->
@@ -388,10 +312,8 @@ a.wf-step{text-decoration:none}a.wf-step:hover .wf-dot{border-color:var(--primar
         </div>
         <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
           <div class="batch-stat">
-            <div class="s"><div class="n" data-testid="batch-queued">512</div><div class="l">Files queued</div></div>
-            <div class="s"><div class="n" data-testid="batch-upload">480</div><div class="l">From upload</div></div>
-            <div class="s"><div class="n" data-testid="batch-portals">24</div><div class="l">From portals</div></div>
-            <div class="s"><div class="n" data-testid="batch-email">8</div><div class="l">From email</div></div>
+            <div class="s"><div class="n" data-testid="batch-queued">480</div><div class="l">Files queued</div></div>
+            <div class="s"><div class="n" data-testid="batch-upload">480</div><div class="l">From upload</div></div>
           </div>
           <a class="btn btn-primary" href="processing.page.html" data-testid="import-start">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start processing
@@ -433,117 +355,12 @@ function appendFiles(files){
   }
 }
 
-// --- Job portal: per-portal connect / fetch flow ---
-// Each portal keeps its own state so switching tabs restores the right view.
-var portalState = {
-  'LinkedIn':        {url:'https://www.linkedin.com/jobs/view/3819204471', count:36, connected:false, fetched:false, fetching:false, autoSync:true},
-  'BDJobs':          {url:'https://www.bdjobs.com/jobs/sr-brand-manager-stl', count:52, connected:false, fetched:false, fetching:false, autoSync:true},
-  'Bdjobs Premium':  {url:'', count:28, connected:false, fetched:false, fetching:false, autoSync:true},
-  'Other':           {url:'', count:14, connected:false, fetched:false, fetching:false, autoSync:true}
-};
-var activePortal = 'LinkedIn';
-
-function selectPortal(btn){
-  document.querySelectorAll('.portal-pill').forEach(function(p){p.classList.remove('on');});
-  btn.classList.add('on');
-  activePortal = btn.getAttribute('data-portal');
-  renderPortal();
-}
-
-// Render the portal card to match the active portal's stored state.
-function renderPortal(){
-  var st = portalState[activePortal];
-  document.getElementById('portalName').textContent = activePortal;
-  document.getElementById('portalUrl').value = st.url;
-
-  var status   = document.getElementById('portalStatus');
-  var connectB = document.getElementById('portalConnectBtn');
-  var fetchB   = document.getElementById('portalFetchBtn');
-  var fetchLbl = document.getElementById('portalFetchLabel');
-  var syncRow  = document.getElementById('portalSyncRow');
-  var syncTog  = document.getElementById('portalSync');
-  var msg      = document.getElementById('portalFetchMsg');
-
-  if(st.connected){
-    status.className = 'badge b-suc';
-    status.textContent = 'Connected';
-    connectB.style.display = 'none';
-    fetchB.style.display = 'inline-flex';
-    syncRow.style.display = 'flex';
-  } else {
-    status.className = 'badge b-mut';
-    status.textContent = 'Not connected';
-    connectB.style.display = 'inline-flex';
-    fetchB.style.display = 'none';
-    syncRow.style.display = 'none';
-  }
-
-  // restore auto-sync toggle state for this portal
-  if(st.autoSync){ syncTog.classList.add('on'); syncTog.setAttribute('aria-checked','true'); }
-  else { syncTog.classList.remove('on'); syncTog.setAttribute('aria-checked','false'); }
-
-  // fetch button + confirmation message
-  if(st.fetching){
-    fetchB.disabled = true;
-    fetchLbl.textContent = 'Fetching…';
-    msg.style.display = 'none';
-  } else {
-    fetchB.disabled = false;
-    fetchLbl.textContent = st.fetched ? 'Re-fetch CVs' : 'Fetch CVs';
-    if(st.fetched){
-      msg.style.display = 'block';
-      msg.className = 'hint';
-      msg.style.color = 'var(--success)';
-      msg.textContent = 'Imported ' + st.count + ' CVs from ' + activePortal;
-    } else {
-      msg.style.display = 'none';
-    }
-  }
-}
-
-function connectPortal(){
-  portalState[activePortal].connected = true;
-  renderPortal();
-}
-
-function fetchPortalCVs(){
-  var st = portalState[activePortal];
-  if(!st.connected || st.fetching || st.fetched) return;
-  var portal = activePortal; // capture in case the user switches tabs mid-fetch
-  st.fetching = true;
-  renderPortal();
-  setTimeout(function(){
-    var p = portalState[portal];
-    p.fetching = false;
-    p.fetched = true;
-    addPortalCVsToBatch(p.count);
-    if(activePortal === portal){ renderPortal(); }
-  }, 1100);
-}
-
-// Increment the "Current batch" totals when portal CVs are imported.
-function addPortalCVsToBatch(amount){
-  var queuedEl  = document.querySelector('[data-testid="batch-queued"]');
-  var portalsEl = document.querySelector('[data-testid="batch-portals"]');
-  queuedEl.textContent  = (parseInt(queuedEl.textContent, 10)  || 0) + amount;
-  portalsEl.textContent = (parseInt(portalsEl.textContent, 10) || 0) + amount;
-}
-
-// auto-sync toggle persists per portal
-function togglePortalSync(el){
-  var on = el.classList.toggle('on');
-  el.setAttribute('aria-checked', on ? 'true' : 'false');
-  portalState[activePortal].autoSync = on;
-}
-
-// initialise the portal card on load
-renderPortal();
-
-// --- Email connect ---
-function connectEmail(provider){
-  var s = document.getElementById('emailStatus');
-  s.className='badge b-suc';
-  s.textContent='Connected · '+provider;
+// --- Position picker: keep the header in sync with the selected position ---
+function onPositionChange(){
+  var sel = document.getElementById('positionSelect');
+  var opt = sel.options[sel.selectedIndex];
+  document.getElementById('posName').textContent = opt.value;
+  document.getElementById('posDept').textContent = opt.getAttribute('data-dept') || '';
 }
 
 // --- Generic toggle switch ---

@@ -293,3 +293,22 @@ The R12 prompt's premise was that "a static prototype can't produce a true `.xls
 - **Graceful degradation:** if the shared scripts fail to load, the page shows a clear message and disables Generate rather than failing silently.
 - **Governance:** age and gender are **not offered as fields at all** (not merely unchecked) with an on-page note; online-presence and screening exports carry their assistive-only header line; `REJECTED_PENDING_REVIEW` stays distinct from `REJECTED` in every status column; every generate still writes an audit-style history row.
 - **QA:** all script blocks + both shared libs syntax-clean · every generated file opens · shared assets resolve from `hr/` and return 200 over the server · `docs/` 22 HR pages + 2 JS assets byte-identical.
+
+---
+
+# Round 9 — workflow spine (P0 + P1 from the workflow audit) · 2026-06-24
+
+Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
+
+**P0 — demo blockers**
+- **HM → HR handoff made real.** It previously existed only as a timed JS redirect; added a visible "Open HR selection panel" link (`hm/final-selection` → `hr/final-selection`).
+- **Stepper now spans roles.** Rebuilt as a role-aware component: present on all 19 workflow pages including the 5 Hiring Manager stage pages, with targets resolving correctly across `hr/` ↔ `hiring-manager/`.
+- **Spine extended to 10 stages** — stage 9 relabelled *Selection*, new stage **10 · Onboard**, so the cycle visibly completes.
+
+**P1 — clarity**
+- **Both sidebars rebuilt to mirror the spine**: numbered *Hiring Workflow* group (1–10) with indented companion views, plus a separate *Talent & System* group. Previously-missing stages (Template, Processing, Schedule Viva, Onboarding) are now navigable.
+- **Interview pages disambiguated**: `interviews` = Viva & Interviews **tracker**; `interview-schedule` = **Schedule Viva** action. Retitled, cross-linked, one sidebar entry + sub-item.
+- **Analysis pages given a home**: CV Analysis (Stage 4), Online Presence (Stage 5), Summary Report (Stage 9) each carry a stage tag + link back to the owning stage.
+- Sidebars made sticky + internally scrollable for the longer numbered nav.
+
+**QA:** 40/40 reachable · 0 broken links · 0 emoji-icons · brand blue 40/40.

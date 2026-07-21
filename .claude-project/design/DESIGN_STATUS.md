@@ -13,5 +13,5 @@ phase_complete: true
 roles: [admin, auth, hiring-manager, hr, viewer]
 prd_hash_at_generation: "39cc2b1e90ddfaa2ca787a677ab90826b22d1dfbc1681f853d990501c4c791eb"
 prd_version: "v2"
-html_bundle_hash: "9ffa92b82d6f02033768d12027b8cf88e7484a07b908e1708f0ec759c6dabf53"
+html_bundle_hash: "5ac7a4ab50198541fc3b8963d40c6b322474bdf40ac4545d1ffb0379cc49a90c"
 generated_at: "2026-06-23T00:00:00Z"

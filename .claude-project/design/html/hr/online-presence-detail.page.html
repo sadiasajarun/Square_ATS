@@ -259,6 +259,22 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 .stage-tag{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
 .stage-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:11px;letter-spacing:.02em}
 .stage-tag a{color:var(--primary);font-weight:600}
+
+/* ---- overflow guards: long URLs/strings must never widen the page ---- */
+.opd-wrap,.opd-hero,.opd-hero>div,.opd-sec,.opd-card,.opd-x-row,.opd-sig,.opd-src{min-width:0}
+.opd-hero-sub,.opd-hero-meta,.opd-src,.opd-x-row,.opd-sig,.opd-kv,.opd-card{overflow-wrap:anywhere;word-break:break-word}
+.opd-src a,.opd-sig a,.opd-x-row a,.opd-kv a{overflow-wrap:anywhere}
+.content{max-width:100%;overflow-x:hidden}
+
+/* ---- at-a-glance verdict strip (quick scan) ---- */
+.opd-glance{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.opd-g{background:var(--surface);padding:12px 14px;min-width:0}
+.opd-g .k{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.opd-g .k svg{width:13px;height:13px;flex:none}
+.opd-g .v{font-size:19px;font-weight:700;margin-top:5px;font-variant-numeric:tabular-nums;line-height:1.2}
+.opd-g .s{font-size:11px;color:var(--muted);margin-top:1px;overflow-wrap:anywhere}
+@media(max-width:1280px){.opd-glance{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1024px){.opd-glance{grid-template-columns:repeat(2,1fr)}}
 </style>
 
 <!-- ═══ page-local components for the full-page report (`opd-` ns) ═══
@@ -499,6 +515,7 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 
       <!-- candidate hero + score -->
       <section class="card opd-hero" id="opd-hero" data-testid="opd-hero"></section>
+      <section class="opd-glance" id="opd-glance" data-testid="opd-glance" aria-label="Report at a glance"></section>
 
       <!-- ═══ 2 · identity verification ═══ -->
       <section class="opd-sec" data-testid="opd-sec-identity">
@@ -644,7 +661,7 @@ var OPD_DATA=[
   ['Panellist, Dhaka FMCG Summit 2025','Speaking engagement not mentioned anywhere on the CV','Conference','https://example.com/fmcg-summit-2025'],
   ['Press quote on category growth, The Business Standard 2026','Media presence not on the CV','News &amp; press','https://example.com/tbs/personal-care-growth'],
   ['Nielsen Retail Audit certification (2024)','Certification not listed on the CV','LinkedIn','https://example.com/in/tanvir-hasan']],
- pos:[
+ positives:[
   ['Summit panellist, Dhaka FMCG Summit 2025','Invited to a national industry panel on trade marketing.','Conference','https://example.com/fmcg-summit-2025'],
   ['Published industry article, 2025','Peer-reviewed trade publication on rural route-to-market economics.','Publications','https://example.com/marketing-review-bd/rtm'],
   ['Quoted as a category expert, 2026','National business daily sought comment on personal-care growth.','News &amp; press','https://example.com/tbs/personal-care-growth'],
@@ -686,7 +703,7 @@ var OPD_DATA=[
   ['Sales Officer, Meghna Group, 2018–2021','No public record of the earlier employment located']],
  extra:[
   ['Distributor conference 2025 (employer page)','Participation not mentioned on the CV','Facebook','https://example.com/fb/akij-khulna-sales']],
- pos:[
+ positives:[
   ['Recognised in employer distributor conference, 2025','Named on the employer&rsquo;s public page among regional sales leads.','Facebook','https://example.com/fb/akij-khulna-sales']],
  risks:[]},
 
@@ -726,7 +743,7 @@ var OPD_DATA=[
  extra:[
   ['Speaker, BrandCon Dhaka 2024','Speaking engagement not mentioned on the CV','Conference','https://example.com/brandcon-2024'],
   ['MAB association membership','Membership not on the CV','Professional directory','https://example.com/mab-directory/rumana']],
- pos:[
+ positives:[
   ['Conference speaker, BrandCon Dhaka 2024','Invited talk on consumer-insight-led portfolio strategy.','Conference','https://example.com/brandcon-2024'],
   ['Active professional association member','MAB member in good standing since 2022.','Professional directory','https://example.com/mab-directory/rumana']],
  risks:[
@@ -765,7 +782,7 @@ var OPD_DATA=[
   ['Warehouse digitisation project lead','No public record located'],
   ['Certified Supply Chain Analyst (2023)','No public certification record located']],
  extra:[],
- pos:[],
+ positives:[],
  risks:[]},
 
 /* ── 4 · RESEARCH / PORTFOLIO HEAVY ────────────────────────────── */
@@ -807,7 +824,7 @@ var OPD_DATA=[
   ['Keynote speaker, Bangladesh Insights Forum 2025','Keynote not mentioned on the CV','Conference','https://example.com/insights-forum-2025'],
   ['Public methods portfolio','Open methods library not mentioned on the CV','Personal website','https://example.com/sabrina-methods'],
   ['Research cited in national business daily, 2025','Media citation not on the CV','News &amp; press','https://example.com/tbs/rural-insight']],
- pos:[
+ positives:[
   ['Keynote speaker, Bangladesh Insights Forum 2025','Invited keynote on panel design for low-literacy rural samples.','Conference','https://example.com/insights-forum-2025'],
   ['Three peer-reviewed publications','Sustained methodological contribution across 2022–2026.','Publications','https://example.com/journal/consumer-panel-bd'],
   ['Research cited by national press','Business-daily feature on rural consumer behaviour cites her work.','News &amp; press','https://example.com/tbs/rural-insight'],
@@ -849,7 +866,7 @@ var OPD_DATA=[
  extra:[
   ['Public retail page with ~4,000 followers','A substantial professional-topic audience not mentioned on the CV','Facebook','https://example.com/fb/imran-sales-tips'],
   ['Regular public commentary on shelf compliance','Ongoing trade-execution commentary not on the CV','Instagram / X','https://example.com/x/imran-retail']],
- pos:[
+ positives:[
   ['Builds a professional retail audience','Runs a ~4,000-follower public page on retail execution in Sylhet.','Facebook','https://example.com/fb/imran-sales-tips']],
  risks:[]}
 ];
@@ -862,7 +879,7 @@ OPD_DATA.forEach(function(c,i){
   c.sub={
     breadth:Math.round(Math.min(1,c.sources.length/8)*100),
     corrob:claims?Math.round(c.matched.length/claims*100):0,
-    activity:Math.min(100,c.extra.length*14+c.pos.length*12+(c.sources.length>2?10:0))
+    activity:Math.min(100,c.extra.length*14+c.positives.length*12+(c.sources.length>2?10:0))
   };
   c.score=Math.round(c.sub.breadth*0.4+c.sub.corrob*0.4+c.sub.activity*0.2);
 });
@@ -914,6 +931,38 @@ function opdBackMatch(){
 function opdMarkNotFound(){OPD_S.nofind=true;opdRender()}
 function opdReopen(){OPD_S.confirmed=false;OPD_S.nofind=false;opdRender()}
 function opdDrop(i){OPD_S.drop[i]=!OPD_S.drop[i];opdRender()}
+
+
+/* At-a-glance verdict strip — the whole report in one scan line.
+   Cross-check figures stay hidden until a human confirms identity. */
+function opdGlance(){
+  var c=OPD_DATA[OPD_ID], box=document.getElementById('opd-glance');
+  if(!box) return;
+  var locked=!OPD_S.confirmed, dash='<span style="color:var(--muted)">&mdash;</span>';
+  function cell(icon,label,val,sub,col){
+    return '<div class="opd-g" data-testid="opd-glance-'+label.toLowerCase().replace(/[^a-z]+/g,'-')+'">'+
+      '<div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+icon+'</svg>'+label+'</div>'+
+      '<div class="v"'+(col?' style="color:'+col+'"':'')+'>'+val+'</div>'+
+      '<div class="s">'+sub+'</div></div>';
+  }
+  var idIcon='<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>';
+  var idVal,idSub,idCol;
+  if(OPD_S.nofind){idVal='Not found';idSub='no public profile located';idCol='var(--muted)';}
+  else if(OPD_S.confirmed){idVal='Confirmed';idSub='verified by a human';idCol='var(--success)';}
+  else {idVal='Pending';idSub='confirm to unlock findings';idCol='var(--warn)';}
+
+  box.innerHTML=
+    cell(idIcon,'Identity',idVal,idSub,idCol)+
+    cell('<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+         'Sources',c.sources.length,c.sources.length===1?'public source':'public sources','')+
+    cell('<polyline points="20 6 9 17 4 12"/>','Matches',locked?dash:c.matched.length,'CV claims corroborated',locked?'':'var(--success)')+
+    cell('<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+         'Mismatches',locked?dash:c.contra.length,'CV vs public sources',locked||!c.contra.length?'':'var(--danger)')+
+    cell('<circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/>',
+         'Not found',locked?dash:c.notfound.length,'no public evidence','')+
+    cell('<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+         'Risks',locked?dash:c.risks.length,c.risks.length?'adverse findings':'none found',locked||!c.risks.length?'':'var(--danger)');
+}
 
 /* ── renderers ───────────────────────────────────────────────────── */
 function opdHero(){
@@ -1136,12 +1185,12 @@ function opdSignals(){
 
   h+='<section class="opd-sig pos" data-testid="opd-signals-positive"><div class="opd-sig-h">'+
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Positive / achievements'+
-    '<span class="opd-x-c" style="background:var(--success-s);color:var(--success)">'+c.pos.length+'</span></div>';
-  c.pos.forEach(function(s,i){
+    '<span class="opd-x-c" style="background:var(--success-s);color:var(--success)">'+c.positives.length+'</span></div>';
+  c.positives.forEach(function(s,i){
     h+='<div class="opd-sigitem" data-testid="opd-pos-'+i+'"><span class="dot"></span><div><b>'+s[0]+'</b><p>'+s[1]+'</p>'+
       '<a href="'+s[3]+'" target="_blank" rel="noopener noreferrer" data-testid="opd-pos-src-'+i+'">'+s[2]+' &#8599;</a></div></div>';
   });
-  if(!c.pos.length)h+='<div class="opd-none neutral" data-testid="opd-no-positive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>None found <span>&mdash; no public recognition located. Neutral: most professionals have none.</span></div>';
+  if(!c.positives.length)h+='<div class="opd-none neutral" data-testid="opd-no-positive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>None found <span>&mdash; no public recognition located. Neutral: most professionals have none.</span></div>';
   h+='</section>';
 
   h+='<section class="opd-sig neg" data-testid="opd-signals-risk"><div class="opd-sig-h">'+
@@ -1161,6 +1210,7 @@ function opdSignals(){
 function opdRender(){
   var gated=!OPD_S.confirmed;
   opdHero();
+  opdGlance();
   opdIdentity();
   opdSources();
   opdInfo();

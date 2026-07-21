@@ -343,3 +343,9 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
 - Governance preserved throughout: presence is **assistive only and never part of the ATS match score**.
 
 **QA:** 41/41 reachable · 0 broken links · 0 emoji-icons · brand blue 41/41 · stepper on 20 pages.
+
+## Round 11a — fix: Online Presence report layout blowout · 2026-06-24
+
+- **Bug:** every fixture record defined `pos:` **twice** — once as the job title string and again as the positives array. JS keeps the last key, so `c.pos` was always the array; the hero subtitle rendered the whole array as comma-joined text (including full URLs), which forced the page into infinite horizontal scroll. Renamed the array key to `positives:` across all 6 records and updated its 4 consumers. Verified: `pos` is now a string and `positives`/`risks` are arrays for all 6 candidates.
+- **Overflow guards** added so no long URL or string can widen the page again: `min-width:0` on grid/flex children, `overflow-wrap:anywhere` on text blocks, `overflow-x:hidden` on the content column.
+- **"At a glance" verdict strip** added under the hero for fast scanning — Identity · Sources · Matches · Mismatches · Not found · Risks, colour-coded, with cross-check figures deliberately hidden until a human confirms identity (collapses 6→3→2 columns responsively).

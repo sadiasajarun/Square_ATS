@@ -468,3 +468,24 @@ Clicking **View** on the Summary Report opened a profile with no written/viva ma
 - Data comes from the shared `STLF.assess()` fixture, so the marks reconcile exactly with the Summary Report and Exports.
 
 **Verified by execution:** four entry points (two real rolls, no roll, unknown roll) plus an identity-coherence check proving the header follows the roll (`Rumana Parvin` vs `Nazia Islam`) rather than staying fixed. Values match the merit sheet — e.g. STL-BM-0101 → MCQ 26/30, Total 85/100, Qualified in both. The whole renderer is wrapped so it can never blank the profile. 41 pages, 0 broken links.
+
+## Round 14 — Review CVs: position/batch scope, chart-driven filtering, 45-candidate pool · 2026-07-22
+
+**1. Scope first, filters second.** Review CVs now opens on a **Position + Batch** scope. Everything downstream — the pool-analysis charts, the candidate table, the rank column, the count, and the shortlist assistant — reads that one scoped set, so a chart and the list can never disagree about who is in play. Sr. Brand Manager → 30 candidates, Trade Marketing Officer → 9, QA Chemist → 6; adding a batch narrows it (30 → 15).
+
+**2. Clicking a chart segment is a real filter.** Previously the charts were decoration computed from a different data source (120 synthetic CVs) than the table (10 fixtures) — a click could never reconcile. Both now share `CANDS`:
+- Click a bar/slice → the table filters to exactly that segment. Verified segment-by-segment: **the number the chart shows equals the number of rows the table shows** (score 80–89 → 7/7, ≥90 → 3/3, low confidence → 6/6, Career break → 5/5, Dhaka → 3/3, LinkedIn → 8/8, Trade Marketing → 22/22).
+- **Second click returns that dimension to All** — verified for every dimension tested.
+- **One bar per chart, several charts at once**, AND-combined: `Trade Marketing + confidence 70–89 + 6–10 yrs → 7`, `Dhaka + Trade Marketing → 2`.
+- Chart selections and the dropdown filters are **one filter state**, so they compose: `chart(skill) + dropdown(district) → 2`.
+- **Clear all** resets every dropdown *and* every chart selection, while the Position/Batch scope survives — clearing filters should not throw away what you were looking at.
+
+**3. Experience buckets reconciled.** The dropdown offered `0–4 / 5–7 / 8–10 / 11+` while the chart plotted `0–2 / 3–5 / 6–10 / 10+`, so a chart click and the matching dropdown entry returned different people. The dropdown now derives from the same band table as the chart (`STLF.exK`); both agree on all four buckets (4 / 7 / 14 / 5, partitioning the 30).
+
+**4. A pool that actually exercises the filters — 45 candidates.** Generated rather than hand-written, with deliberate coverage: score bands 3/7/8/8/8/11 · confidence 10 high / 19 medium / 16 low · **all six red-flag types** (17 candidates clean) · 10 districts · 6 institutions · 4 sources · every required skill represented. Edge cases are embedded on purpose: a very long name and filename (truncation), a candidate with zero parsed skills, one missing phone and institution, and a **namesake pair** to exercise the online-presence "not the right person" path.
+
+**5. Shortlist assistant now has data to reason over.** "Meets every must-have" returned 0 against the old 10-candidate fixture; it now returns 25, and "Balanced skill coverage" covers 6/6 required skills. Each strategy was checked against its own rule rather than just for not throwing — the clean-record set genuinely has zero flags and clears 70%, the reliable set is genuinely all ≥90% parsing confidence, and the geographic set genuinely respects its per-district cap.
+
+**6. Bugs found and fixed during verification.** Splicing the new fixture in had silently removed five definitions the page depends on — `cvfRankMap`, `aiEval`, `AI_SIGCLS`, `RP_ICON`, `RP_SRCNAME` — and `cvaRenderAll` lost the `cfg` it prints the position name from. Each would have thrown at load and left the page blank in a browser while `node --check` still reported valid syntax. All restored, and the rank column's tie-break (by id, so ranks stay contiguous) restored with it.
+
+**Verified by execution, not inspection:** scope + reconciliation + toggle + multi-chart AND + clear-all (35 assertions) · filter discrimination and band partitioning · rank contiguous and score-ordered across 9 filter states · bulk decisions · shortlist strategies · presence report render incl. the not-a-match cycle. 41 pages, 0 broken links.

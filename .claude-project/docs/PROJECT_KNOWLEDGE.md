@@ -324,7 +324,7 @@ Exit condition: `evaluation_score >= 0.8`. Safety valve: `iterations > 10`.
 ### Artifact hashes (P3g snapshot)
 
 - `prd_hash_at_generation`: `af5ab029646450bce8908c8cd44b85d7a9bc18e5692d85b41700f49e03cf9a63`
-- `html_bundle_hash`: `5315e1551484bbfb6a7f3c68150ff4534a695b40aa0c419aafba82f5c80a752f`
+- `html_bundle_hash`: `f059e1eb4c39b2e3278cb232906a94b4902bfc4f76667cde40367613bf6e09bd`
 - P3-design gate `checks_hash`: `058618ec2a7e98fe484e96039b95a6268ab4eeba5b224bec7127ea609d02f238`
 
 ---

@@ -714,10 +714,10 @@ table[data-testid="review-table"]{min-width:1180px}
             </select>
             <select class="cvf-sel" id="cvfExp" data-testid="cvf-experience" aria-label="Filter by years of experience" onchange="applyCvFilters()">
               <option value="">All experience</option>
-              <option value="0-4">0–4 yrs</option>
-              <option value="5-7">5–7 yrs</option>
-              <option value="8-10">8–10 yrs</option>
-              <option value="11">11+ yrs</option>
+              <option value="0-2">0–2 yrs</option>
+              <option value="3-5">3–5 yrs</option>
+              <option value="6-10">6–10 yrs</option>
+              <option value="10+">10+ yrs</option>
             </select>
             <button class="btn btn-ghost btn-sm" data-testid="cvf-clear-all" onclick="clearCvFilters()" title="Clear all filters">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Clear all
@@ -902,126 +902,474 @@ function downloadCv(id){
 }
 /* ---------- Mock data (FMCG / Bangladesh) ---------- */
 var CANDS = [
-  {id:1, name:'Tanvir Hasan', email:'tanvir.hasan@gmail.com', file:'Tanvir_Hasan_CV.pdf', conf:96, score:92, district:'Dhaka',
-    skills:['Brand Strategy','Trade Marketing','P&L'], edu:'MBA, Marketing — IBA, DU', exp:'11 yrs',
-    edus:['MBA, Marketing — IBA, University of Dhaka (2013)','BBA — North South University (2010)'],
-    work:['Brand Manager — Unilever Bangladesh (2018–Present)','Asst. Brand Manager — Pran-RFL (2014–2018)'],
-    skillsFull:['Brand Strategy','Trade Marketing','P&L Management','ATL/BTL','Consumer Insights','Distributor Management'],
-    certs:['Nielsen Retail Audit Certification','Google Digital Marketing'], phone:'+880 1711-204050', flags:[]},
-  {id:2, name:'Nusrat Jahan', email:'nusrat.jahan@yahoo.com', file:'Nusrat_Jahan_Resume.docx', conf:91, score:88, district:'Dhaka',
-    skills:['ATL/BTL','Consumer Insights','NPD'], edu:'MBA — North South University', exp:'9 yrs',
-    edus:['MBA, Marketing — North South University (2015)','BSc Economics — BRAC University (2011)'],
-    work:['Sr. Brand Executive — ACI Consumer (2017–Present)','Brand Executive — Square Toiletries (2013–2017)'],
-    skillsFull:['ATL/BTL','Consumer Insights','New Product Development','Media Planning','Budgeting'],
-    certs:['Kantar Brand Health Tracking'], phone:'+880 1819-556677', flags:[]},
-  {id:3, name:'Rakibul Islam', email:'rakib.islam@outlook.com', file:'Rakibul_Islam_CV.pdf', conf:88, score:84, district:'Chattogram',
-    skills:['Trade Marketing','Distribution','Sales'], edu:'BBA — University of Chittagong', exp:'8 yrs',
-    edus:['BBA, Marketing — University of Chittagong (2014)'],
-    work:['Trade Marketing Manager — Akij Group (2019–Present)','Territory Officer — Marico Bangladesh (2015–2019)'],
-    skillsFull:['Trade Marketing','Distribution','Field Sales','Route-to-Market','SKU Planning'],
-    certs:[], phone:'+880 1521-998877', flags:[]},
-  {id:4, name:'Sadia Afrin', email:'sadia.afrin@gmail.com', file:'Sadia_Afrin.pdf', conf:74, score:79, district:'Dhaka',
-    skills:['Digital Marketing','Social Media','Content'], edu:'BBA — BRAC University', exp:'6 yrs',
-    edus:['BBA, Marketing — BRAC University (2017)'],
-    work:['Digital Marketing Lead — Bata Bangladesh (2020–Present)','Content Executive — Daraz (2018–2020)'],
-    skillsFull:['Digital Marketing','Social Media','Content Strategy','SEO','Performance Ads'],
-    certs:['Meta Blueprint','HubSpot Inbound'], phone:'+880 1717-334455',
-    flags:[{t:'Career break',d:'14-month gap between 2018 and 2020 (unexplained).'}]},
-  {id:5, name:'Mahin Chowdhury', email:'mahin.ch@gmail.com', file:'Mahin_Chowdhury_CV.pdf', conf:82, score:73, district:'Sylhet',
-    skills:['Sales','Distribution','Negotiation'], edu:'BBA — Metropolitan University', exp:'7 yrs',
-    edus:['BBA — Metropolitan University, Sylhet (2016)'],
-    work:['Area Sales Manager — Pran-RFL (2018–Present)','Sales Officer — Nestlé Bangladesh (2016–2018)'],
-    skillsFull:['Sales','Distribution','Negotiation','Team Leadership','Forecasting'],
-    certs:[], phone:'+880 1611-223344', flags:[]},
-  {id:6, name:'Farhana Rahman', email:'farhana.r@gmail.com', file:'Farhana_Rahman_Resume.pdf', conf:69, score:68, district:'Khulna',
-    skills:['Marketing','Events','PR'], edu:'BA, English — Khulna University', exp:'5 yrs',
-    edus:['BA, English — Khulna University (2018)'],
-    work:['Marketing Officer — Abul Khair Group (2019–Present)','Intern — bKash (2018)'],
-    skillsFull:['Event Management','PR','Brand Activation','Vendor Management'],
-    certs:[], phone:'+880 1300-112233',
-    flags:[{t:'Skill gap',d:'No P&L or brand strategy experience for a managerial brand role.'}]},
-  {id:7, name:'Imran Kabir', email:'imran.kabir@gmail.com', file:'Imran_Kabir_scan.pdf', conf:61, score:61, district:'Rajshahi',
-    skills:['Sales','Retail','Merchandising'], edu:'HSC — Rajshahi College', exp:'9 yrs',
-    edus:['HSC, Business Studies — Rajshahi College (2012)'],
-    work:['Sr. Sales Executive — Square Consumer (2016–Present)','Sales Rep — Igloo Foods (2013–2016)'],
-    skillsFull:['Field Sales','Retail Execution','Merchandising','Order Booking'],
-    certs:[], phone:'+880 1733-445566',
-    flags:[{t:'Under-qualified',d:'HSC only; role requires a Bachelor degree minimum.'},{t:'Low OCR confidence',d:'Scanned CV — parsing confidence below 70%.'}]},
-  {id:8, name:'Sumaiya Akter', email:'sumaiya.akter@gmail.com', file:'Sumaiya_Akter_CV.docx', conf:78, score:55, district:'Dhaka',
-    skills:['HR','Recruitment','Admin'], edu:'MBA, HRM — East West University', exp:'6 yrs',
-    edus:['MBA, HRM — East West University (2016)','BBA — East West University (2014)'],
-    work:['HR Executive — Square Pharmaceuticals (2018–Present)','HR Intern — Grameenphone (2016)'],
-    skillsFull:['Recruitment','HR Operations','Payroll','Employee Relations'],
-    certs:['SHRM-CP'], phone:'+880 1911-667788',
-    flags:[{t:'Domain mismatch',d:'HR background — limited marketing/brand exposure.'}]},
-  {id:9, name:'Arif Mahmud', email:'arif.mahmud@gmail.com', file:'Arif_Mahmud_Resume.pdf', conf:84, score:49, district:'Chattogram',
-    skills:['Supply Chain','Logistics','Procurement'], edu:'BSc IPE — BUET', exp:'10 yrs',
-    edus:['BSc, Industrial & Production Engineering — BUET (2013)'],
-    work:['Supply Chain Manager — Akij Food & Beverage (2017–Present)','Planner — Coca-Cola Bangladesh (2013–2017)'],
-    skillsFull:['Supply Chain','Logistics','Procurement','Demand Planning','SAP'],
-    certs:['CSCP'], phone:'+880 1555-889900',
-    flags:[{t:'Frequent job changes',d:'4 employers in 6 years before 2017.'}]},
-  {id:10, name:'Jannatul Ferdous', email:'jannat.f@gmail.com', file:'Jannatul_Ferdous_CV.pdf', conf:55, score:41, district:'Barishal',
-    skills:['Customer Service','Telesales'], edu:'BA — National University', exp:'3 yrs',
-    edus:['BA, Sociology — National University (2020)'],
-    work:['Customer Care Agent — Robi Axiata (2021–Present)'],
-    skillsFull:['Customer Service','Telesales','CRM Tools'],
-    certs:[], phone:'+880 1400-998877',
-    flags:[{t:'Missing info',d:'No email verified in CV; phone parsed with low confidence.'},{t:'Insufficient experience',d:'3 yrs vs 7+ required for the role.'}]}
+  {id:1, name:'Tanvir Hasan', email:'tanvir.hasan@yahoo.com', file:'Tanvir_Hasan_Resume.docx', conf:97, score:95, district:'Dhaka',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'Master\'s / MBA — IBA, University of Dhaka', exp:'11 yrs',
+    edus:['Master\'s / MBA — IBA, University of Dhaka (2011)','HSC — Dhaka City College (2007)'],
+    work:['Brand Manager — Unilever Bangladesh (2022–Present)','Brand Executive — Pran-RFL Group (2015–2022)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:[], phone:'+880 1700-200000',
+    flags:[],
+    sc:95, cf:97, sk:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'], rf:[], yr:11, so:'Bulk upload', ed:'Master\'s / MBA', d:'Dhaka', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:2, name:'Nusrat Afrin', email:'nusrat.afrin@gmail.com', file:'Nusrat_Afrin_CV.pdf', conf:95, score:92, district:'Chattogram',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Master\'s / MBA — North South University', exp:'9 yrs',
+    edus:['Master\'s / MBA — North South University (2013)','HSC — Dhaka City College (2009)'],
+    work:['Asst. Brand Manager — Square Toiletries (2022–Present)','Trade Marketing Executive — Akij Group (2017–2022)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1601-200137',
+    flags:[],
+    sc:92, cf:95, sk:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'], rf:[], yr:9, so:'LinkedIn', ed:'Master\'s / MBA', d:'Chattogram', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:3, name:'Rakibul Hossain', email:'rakibul.hossain@gmail.com', file:'Rakibul_Hossain_CV.pdf', conf:93, score:91, district:'Sylhet',
+    skills:['Market Research','A&P Budgeting','Consumer Insights'], edu:'PhD — BUET', exp:'12 yrs',
+    edus:['PhD — BUET (2010)','HSC — Dhaka City College (2006)'],
+    work:['Brand Executive — ACI Limited (2022–Present)','Market Research Analyst — Meghna Group (2014–2022)'],
+    skillsFull:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1502-200274',
+    flags:[],
+    sc:91, cf:93, sk:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing'], rf:[], yr:12, so:'BDJobs', ed:'PhD', d:'Sylhet', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:4, name:'Sadia Akter', email:'sadia.akter@yahoo.com', file:'Sadia_Akter_Resume.docx', conf:92, score:89, district:'Khulna',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'Master\'s / MBA — BRAC University', exp:'8 yrs',
+    edus:['Master\'s / MBA — BRAC University (2014)','HSC — Dhaka City College (2010)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2022–Present)','Category Executive — Marico Bangladesh (2018–2022)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1703-200411',
+    flags:[],
+    sc:89, cf:92, sk:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research'], rf:[], yr:8, so:'Email inbox', ed:'Master\'s / MBA', d:'Khulna', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:5, name:'Mahin Anjum', email:'mahin.anjum@gmail.com', file:'Mahin_Anjum_CV.pdf', conf:90, score:88, district:'Rajshahi',
+    skills:['Consumer Insights','Campaign Management','Brand Management'], edu:'Master\'s / MBA — Khulna University', exp:'7 yrs',
+    edus:['Master\'s / MBA — Khulna University (2015)','HSC — Dhaka City College (2011)'],
+    work:['Market Research Analyst — Akij Group (2022–Present)','Campaign Executive — Reckitt Bangladesh (2019–2022)'],
+    skillsFull:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting'],
+    certs:[], phone:'+880 1604-200548',
+    flags:[{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'}],
+    sc:88, cf:90, sk:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting'], rf:['Career break'], yr:7, so:'Bulk upload', ed:'Master\'s / MBA', d:'Rajshahi', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:6, name:'Farhana Kabir', email:'farhana.kabir@gmail.com', file:'Farhana_Kabir_CV.pdf', conf:88, score:86, district:'Cumilla',
+    skills:['Campaign Management','Brand Management','Trade Marketing'], edu:'Master\'s / MBA — University of Rajshahi', exp:'10 yrs',
+    edus:['Master\'s / MBA — University of Rajshahi (2012)','HSC — Dhaka City College (2008)'],
+    work:['Category Executive — Meghna Group (2022–Present)','Territory Officer — Unilever Bangladesh (2016–2022)'],
+    skillsFull:['Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1505-200685',
+    flags:[],
+    sc:86, cf:88, sk:['Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'], rf:[], yr:10, so:'LinkedIn', ed:'Master\'s / MBA', d:'Cumilla', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:7, name:'Imran Uddin', email:'imran.uddin@yahoo.com', file:'Imran_Uddin_Resume.docx', conf:91, score:85, district:'Barishal',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'Bachelor\'s — University of Chittagong', exp:'6 yrs',
+    edus:['Bachelor\'s — University of Chittagong (2016)','HSC — Dhaka City College (2012)'],
+    work:['Campaign Executive — Marico Bangladesh (2022–Present)','Brand Manager — Square Toiletries (2020–2022)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1706-200822',
+    flags:[],
+    sc:85, cf:91, sk:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'], rf:[], yr:6, so:'BDJobs', ed:'Bachelor\'s', d:'Barishal', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:8, name:'Jannatul Mahmud', email:'jannatul.mahmud@gmail.com', file:'Jannatul_Mahmud_CV.pdf', conf:87, score:83, district:'Rangpur',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Master\'s / MBA — SUST', exp:'9 yrs',
+    edus:['Master\'s / MBA — SUST (2013)','HSC — Dhaka City College (2009)'],
+    work:['Territory Officer — Reckitt Bangladesh (2022–Present)','Asst. Brand Manager — ACI Limited (2017–2022)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1607-200959',
+    flags:[{t:'Frequent job change',d:'Four employers in the last five years.'}],
+    sc:83, cf:87, sk:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'], rf:['Frequent job change'], yr:9, so:'Email inbox', ed:'Master\'s / MBA', d:'Rangpur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:9, name:'Arif Khatun', email:'arif.khatun@gmail.com', file:'Arif_Khatun_CV.pdf', conf:94, score:82, district:'Mymensingh',
+    skills:['Market Research','A&P Budgeting','Consumer Insights'], edu:'Master\'s / MBA — IBA, University of Dhaka', exp:'5 yrs',
+    edus:['Master\'s / MBA — IBA, University of Dhaka (2017)','HSC — Dhaka City College (2013)'],
+    work:['Brand Manager — Unilever Bangladesh (2022–Present)','Brand Executive — Pran-RFL Group (2021–2022)'],
+    skillsFull:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'],
+    certs:[], phone:'+880 1508-201096',
+    flags:[],
+    sc:82, cf:94, sk:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'], rf:[], yr:5, so:'Bulk upload', ed:'Master\'s / MBA', d:'Mymensingh', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:10, name:'Sumaiya Islam', email:'sumaiya.islam@yahoo.com', file:'Sumaiya_Islam_Resume.docx', conf:78, score:81, district:'Gazipur',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'PhD — North South University', exp:'14 yrs',
+    edus:['PhD — North South University (2008)','HSC — Dhaka City College (2004)'],
+    work:['Asst. Brand Manager — Square Toiletries (2022–Present)','Trade Marketing Executive — Akij Group (2012–2022)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1709-201233',
+    flags:[{t:'Overqualification',d:'Seniority and salary expectation sit well above the role band.'}],
+    sc:81, cf:78, sk:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management','Trade Marketing'], rf:['Overqualification'], yr:14, so:'LinkedIn', ed:'PhD', d:'Gazipur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:11, name:'Rumana Karim', email:'rumana.karim@gmail.com', file:'Rumana_Karim_CV.pdf', conf:89, score:79, district:'Dhaka',
+    skills:['Consumer Insights','Campaign Management','Brand Management'], edu:'Bachelor\'s — BUET', exp:'7 yrs',
+    edus:['Bachelor\'s — BUET (2015)','HSC — Dhaka City College (2011)'],
+    work:['Brand Executive — ACI Limited (2022–Present)','Market Research Analyst — Meghna Group (2019–2022)'],
+    skillsFull:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1610-201370',
+    flags:[],
+    sc:79, cf:89, sk:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing','Market Research'], rf:[], yr:7, so:'BDJobs', ed:'Bachelor\'s', d:'Dhaka', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:12, name:'Shafiqul Rahman', email:'shafiqul.rahman@gmail.com', file:'Shafiqul_Rahman_CV.pdf', conf:86, score:78, district:'Chattogram',
+    skills:['Campaign Management','Brand Management','Trade Marketing'], edu:'Bachelor\'s — BRAC University', exp:'4 yrs',
+    edus:['Bachelor\'s — BRAC University (2018)','HSC — Dhaka City College (2014)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2022–Present)','Category Executive — Marico Bangladesh (2022–2022)'],
+    skillsFull:['Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1511-201507',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'}],
+    sc:78, cf:86, sk:['Campaign Management','Brand Management','Trade Marketing','Market Research','A&P Budgeting'], rf:['Skill gap'], yr:4, so:'Email inbox', ed:'Bachelor\'s', d:'Chattogram', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:13, name:'Mohammad Ashraful Alam Chowdhury Siddique', email:'mohammad.ashraful.alam.chowdhury.siddique@yahoo.com', file:'Mohammad_Ashraful_Alam_Chowdhury_Siddique_Brand_Manager_CV_final_v3.pdf', conf:92, score:77, district:'Sylhet',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'Master\'s / MBA — Khulna University', exp:'8 yrs',
+    edus:['Master\'s / MBA — Khulna University (2014)','HSC — Dhaka City College (2010)'],
+    work:['Market Research Analyst — Akij Group (2022–Present)','Campaign Executive — Reckitt Bangladesh (2018–2022)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'],
+    certs:[], phone:'+880 1712-201644',
+    flags:[],
+    sc:77, cf:92, sk:['Brand Management','Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'], rf:[], yr:8, so:'Bulk upload', ed:'Master\'s / MBA', d:'Sylhet', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:14, name:'Rezaul Sultana', email:'rezaul.sultana@gmail.com', file:'Rezaul_Sultana_CV.pdf', conf:74, score:75, district:'Khulna',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Bachelor\'s — University of Rajshahi', exp:'6 yrs',
+    edus:['Bachelor\'s — University of Rajshahi (2016)','HSC — Dhaka City College (2012)'],
+    work:['Category Executive — Meghna Group (2022–Present)','Territory Officer — Unilever Bangladesh (2020–2022)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1613-201781',
+    flags:[{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'}],
+    sc:75, cf:74, sk:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights','Campaign Management'], rf:['Career break'], yr:6, so:'LinkedIn', ed:'Bachelor\'s', d:'Khulna', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:15, name:'Tasnim Nasrin', email:'tasnim.nasrin@gmail.com', file:'Tasnim_Nasrin_CV.pdf', conf:68, score:74, district:'Rajshahi',
+    skills:['Market Research','A&P Budgeting','Consumer Insights'], edu:'Diploma — University of Chittagong', exp:'3 yrs',
+    edus:['Diploma — University of Chittagong (2019)','HSC — Dhaka City College (2015)'],
+    work:['Campaign Executive — Marico Bangladesh (2023–Present)','Brand Manager — Square Toiletries (2023–2023)'],
+    skillsFull:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1514-201918',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'},{t:'Underqualification',d:'Below the minimum education/experience the template requires.'}],
+    sc:74, cf:68, sk:['Market Research','A&P Budgeting','Consumer Insights','Campaign Management'], rf:['Missing information','Underqualification'], yr:3, so:'BDJobs', ed:'Diploma', d:'Rajshahi', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:16, name:'Fahim Siddique', email:'fahim.siddique@yahoo.com', file:'Fahim_Siddique_Resume.docx', conf:90, score:73, district:'Cumilla',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'Master\'s / MBA — SUST', exp:'9 yrs',
+    edus:['Master\'s / MBA — SUST (2013)','HSC — Dhaka City College (2009)'],
+    work:['Territory Officer — Reckitt Bangladesh (2022–Present)','Asst. Brand Manager — ACI Limited (2017–2022)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1715-202055',
+    flags:[],
+    sc:73, cf:90, sk:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'], rf:[], yr:9, so:'Email inbox', ed:'Master\'s / MBA', d:'Cumilla', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:17, name:'Anisur Bhuiyan', email:'anisur.bhuiyan@gmail.com', file:'Anisur_Bhuiyan_CV.pdf', conf:71, score:72, district:'Barishal',
+    skills:['Consumer Insights','Campaign Management','Brand Management'], edu:'Bachelor\'s — IBA, University of Dhaka', exp:'11 yrs',
+    edus:['Bachelor\'s — IBA, University of Dhaka (2011)','HSC — Dhaka City College (2007)'],
+    work:['Brand Manager — Unilever Bangladesh (2022–Present)','Brand Executive — Pran-RFL Group (2015–2022)'],
+    skillsFull:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing'],
+    certs:[], phone:'+880 1616-202192',
+    flags:[{t:'Frequent job change',d:'Four employers in the last five years.'}],
+    sc:72, cf:71, sk:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing'], rf:['Frequent job change'], yr:11, so:'Bulk upload', ed:'Bachelor\'s', d:'Barishal', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:18, name:'Shamima Jahan', email:'shamima.jahan@gmail.com', file:'Shamima_Jahan_CV.pdf', conf:85, score:71, district:'Rangpur',
+    skills:['Campaign Management','Brand Management','Trade Marketing'], edu:'Bachelor\'s — North South University', exp:'5 yrs',
+    edus:['Bachelor\'s — North South University (2017)','HSC — Dhaka City College (2013)'],
+    work:['Asst. Brand Manager — Square Toiletries (2022–Present)','Trade Marketing Executive — Akij Group (2021–2022)'],
+    skillsFull:['Campaign Management','Brand Management','Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1517-202329',
+    flags:[],
+    sc:71, cf:85, sk:['Campaign Management','Brand Management','Trade Marketing','Market Research'], rf:[], yr:5, so:'LinkedIn', ed:'Bachelor\'s', d:'Rangpur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:19, name:'Zahid Chowdhury', email:'zahid.chowdhury@yahoo.com', file:'Zahid_Chowdhury_Resume.docx', conf:66, score:69, district:'Mymensingh',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'HSC — BUET', exp:'2 yrs',
+    edus:['HSC — BUET (2020)','HSC — Dhaka City College (2016)'],
+    work:['Brand Executive — ACI Limited (2024–Present)','Market Research Analyst — Meghna Group (2024–2024)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research','A&P Budgeting'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1718-202466',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'}],
+    sc:69, cf:66, sk:['Brand Management','Trade Marketing','Market Research','A&P Budgeting'], rf:['Missing information'], yr:2, so:'BDJobs', ed:'HSC', d:'Mymensingh', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:20, name:'Marufa Ferdous', email:'marufa.ferdous@gmail.com', file:'Marufa_Ferdous_CV.pdf', conf:88, score:68, district:'Gazipur',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Bachelor\'s — BRAC University', exp:'7 yrs',
+    edus:['Bachelor\'s — BRAC University (2015)','HSC — Dhaka City College (2011)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2022–Present)','Category Executive — Marico Bangladesh (2019–2022)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1619-202603',
+    flags:[],
+    sc:68, cf:88, sk:['Trade Marketing','Market Research','A&P Budgeting','Consumer Insights'], rf:[], yr:7, so:'Email inbox', ed:'Bachelor\'s', d:'Gazipur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:21, name:'Rifat Parvin', email:'rifat.parvin@gmail.com', file:'Rifat_Parvin_CV.pdf', conf:72, score:67, district:'Dhaka',
+    skills:[], edu:'Diploma — Khulna University', exp:'4 yrs',
+    edus:['Diploma — Khulna University (2018)','HSC — Dhaka City College (2014)'],
+    work:['Market Research Analyst — Akij Group (2022–Present)','Campaign Executive — Reckitt Bangladesh (2022–2022)'],
+    skillsFull:[],
+    certs:[], phone:'+880 1520-202740',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'}],
+    sc:67, cf:72, sk:[], rf:['Skill gap'], yr:4, so:'Bulk upload', ed:'Diploma', d:'Dhaka', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:22, name:'Nazia Haque', email:'nazia.haque@yahoo.com', file:'Nazia_Haque_Resume.docx', conf:64, score:66, district:'Chattogram',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'SSC', exp:'1 yrs',
+    edus:['SSC — University of Rajshahi (2021)','HSC — Dhaka City College (2017)'],
+    work:['Category Executive — Meghna Group (2025–Present)','Territory Officer — Unilever Bangladesh (2025–2025)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'],
+    certs:['Nielsen Retail Audit'], phone:'',
+    flags:[{t:'Underqualification',d:'Below the minimum education/experience the template requires.'},{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'}],
+    sc:66, cf:64, sk:['A&P Budgeting','Consumer Insights','Campaign Management','Brand Management'], rf:['Underqualification','Career break'], yr:1, so:'LinkedIn', ed:'SSC', d:'Chattogram', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:23, name:'Aminul Ahmed', email:'aminul.ahmed@gmail.com', file:'Aminul_Ahmed_CV.pdf', conf:83, score:65, district:'Sylhet',
+    skills:['Consumer Insights','Campaign Management','Brand Management'], edu:'Bachelor\'s — University of Chittagong', exp:'6 yrs',
+    edus:['Bachelor\'s — University of Chittagong (2016)','HSC — Dhaka City College (2012)'],
+    work:['Campaign Executive — Marico Bangladesh (2022–Present)','Brand Manager — Square Toiletries (2020–2022)'],
+    skillsFull:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1622-203014',
+    flags:[],
+    sc:65, cf:83, sk:['Consumer Insights','Campaign Management','Brand Management','Trade Marketing'], rf:[], yr:6, so:'BDJobs', ed:'Bachelor\'s', d:'Sylhet', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:24, name:'Sanjida Begum', email:'sanjida.begum@gmail.com', file:'Sanjida_Begum_CV.pdf', conf:91, score:63, district:'Khulna',
+    skills:['Campaign Management','Brand Management','Trade Marketing'], edu:'Master\'s / MBA — SUST', exp:'8 yrs',
+    edus:['Master\'s / MBA — SUST (2014)','HSC — Dhaka City College (2010)'],
+    work:['Territory Officer — Reckitt Bangladesh (2022–Present)','Asst. Brand Manager — ACI Limited (2018–2022)'],
+    skillsFull:['Campaign Management','Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1523-203151',
+    flags:[],
+    sc:63, cf:91, sk:['Campaign Management','Brand Management','Trade Marketing'], rf:[], yr:8, so:'Email inbox', ed:'Master\'s / MBA', d:'Khulna', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:25, name:'Rasel Yeasmin', email:'rasel.yeasmin@yahoo.com', file:'Rasel_Yeasmin_Resume.docx', conf:69, score:62, district:'Rajshahi',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'PhD — IBA, University of Dhaka', exp:'13 yrs',
+    edus:['PhD — IBA, University of Dhaka (2009)','HSC — Dhaka City College (2005)'],
+    work:['Brand Manager — Unilever Bangladesh (2022–Present)','Brand Executive — Pran-RFL Group (2013–2022)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research'],
+    certs:[], phone:'+880 1724-203288',
+    flags:[{t:'Overqualification',d:'Seniority and salary expectation sit well above the role band.'}],
+    sc:62, cf:69, sk:['Brand Management','Trade Marketing','Market Research'], rf:['Overqualification'], yr:13, so:'Bulk upload', ed:'PhD', d:'Rajshahi', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:26, name:'Emran Hasan', email:'emran.hasan@gmail.com', file:'Emran_Hasan_CV.pdf', conf:76, score:61, district:'Cumilla',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Diploma — North South University', exp:'3 yrs',
+    edus:['Diploma — North South University (2019)','HSC — Dhaka City College (2015)'],
+    work:['Asst. Brand Manager — Square Toiletries (2023–Present)','Trade Marketing Executive — Akij Group (2023–2023)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1625-203425',
+    flags:[{t:'Frequent job change',d:'Four employers in the last five years.'}],
+    sc:61, cf:76, sk:['Trade Marketing','Market Research','A&P Budgeting'], rf:['Frequent job change'], yr:3, so:'LinkedIn', ed:'Diploma', d:'Cumilla', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:27, name:'Nishat Afrin', email:'nishat.afrin@gmail.com', file:'Nishat_Afrin_CV.pdf', conf:58, score:59, district:'Barishal',
+    skills:['Market Research','A&P Budgeting','Consumer Insights'], edu:'HSC — BUET', exp:'1 yrs',
+    edus:['HSC — BUET (2021)','HSC — Dhaka City College (2017)'],
+    work:['Brand Executive — ACI Limited (2025–Present)','Market Research Analyst — Meghna Group (2025–2025)'],
+    skillsFull:['Market Research','A&P Budgeting','Consumer Insights'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1526-203562',
+    flags:[{t:'Underqualification',d:'Below the minimum education/experience the template requires.'},{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'}],
+    sc:59, cf:58, sk:['Market Research','A&P Budgeting','Consumer Insights'], rf:['Underqualification','Career break'], yr:1, so:'BDJobs', ed:'HSC', d:'Barishal', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:28, name:'Mahbub Hossain', email:'mahbub.hossain@yahoo.com', file:'Mahbub_Hossain_Resume.docx', conf:81, score:58, district:'Rangpur',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'Bachelor\'s — BRAC University', exp:'5 yrs',
+    edus:['Bachelor\'s — BRAC University (2017)','HSC — Dhaka City College (2013)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2022–Present)','Category Executive — Marico Bangladesh (2021–2022)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1727-203699',
+    flags:[{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'}],
+    sc:58, cf:81, sk:['A&P Budgeting','Consumer Insights','Campaign Management'], rf:['Career break'], yr:5, so:'Email inbox', ed:'Bachelor\'s', d:'Rangpur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:29, name:'Delwar Akter', email:'delwar.akter@gmail.com', file:'Delwar_Akter_CV.pdf', conf:63, score:57, district:'Mymensingh',
+    skills:['Consumer Insights','Campaign Management','Brand Management'], edu:'Diploma — Khulna University', exp:'2 yrs',
+    edus:['Diploma — Khulna University (2020)','HSC — Dhaka City College (2016)'],
+    work:['Market Research Analyst — Akij Group (2024–Present)','Campaign Executive — Reckitt Bangladesh (2024–2024)'],
+    skillsFull:['Consumer Insights','Campaign Management','Brand Management'],
+    certs:[], phone:'+880 1628-203836',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'}],
+    sc:57, cf:63, sk:['Consumer Insights','Campaign Management','Brand Management'], rf:['Missing information'], yr:2, so:'Bulk upload', ed:'Diploma', d:'Mymensingh', ba:'Jun-2026 Trade Mktg Drive', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:30, name:'Mehedi Anjum', email:'mehedi.anjum@gmail.com', file:'Mehedi_Anjum_CV.pdf', conf:87, score:56, district:'Gazipur',
+    skills:['Campaign Management','Brand Management','Trade Marketing'], edu:'Bachelor\'s — University of Rajshahi', exp:'7 yrs',
+    edus:['Bachelor\'s — University of Rajshahi (2015)','HSC — Dhaka City College (2011)'],
+    work:['Category Executive — Meghna Group (2022–Present)','Territory Officer — Unilever Bangladesh (2019–2022)'],
+    skillsFull:['Campaign Management','Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1529-203973',
+    flags:[],
+    sc:56, cf:87, sk:['Campaign Management','Brand Management','Trade Marketing'], rf:[], yr:7, so:'LinkedIn', ed:'Bachelor\'s', d:'Gazipur', ba:'May-2026 Sales Expansion', position:'sbm', positionName:'Sr. Brand Manager'},
+  {id:31, name:'Afsana Kabir', email:'afsana.kabir@yahoo.com', file:'Afsana_Kabir_Resume.docx', conf:61, score:55, district:'Dhaka',
+    skills:['Brand Management','Trade Marketing','Market Research'], edu:'HSC — University of Chittagong', exp:'3 yrs',
+    edus:['HSC — University of Chittagong (2019)','HSC — Dhaka City College (2015)'],
+    work:['Campaign Executive — Marico Bangladesh (2023–Present)','Brand Manager — Square Toiletries (2023–2023)'],
+    skillsFull:['Brand Management','Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1730-204110',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'}],
+    sc:55, cf:61, sk:['Brand Management','Trade Marketing','Market Research'], rf:['Skill gap'], yr:3, so:'BDJobs', ed:'HSC', d:'Dhaka', ba:'Jun-2026 Trade Mktg Drive', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:32, name:'Kamrul Uddin', email:'kamrul.uddin@gmail.com', file:'Kamrul_Uddin_CV.pdf', conf:79, score:54, district:'Chattogram',
+    skills:['Trade Marketing','Market Research','A&P Budgeting'], edu:'Diploma — SUST', exp:'2 yrs',
+    edus:['Diploma — SUST (2020)','HSC — Dhaka City College (2016)'],
+    work:['Territory Officer — Reckitt Bangladesh (2024–Present)','Asst. Brand Manager — ACI Limited (2024–2024)'],
+    skillsFull:['Trade Marketing','Market Research','A&P Budgeting'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1631-204247',
+    flags:[{t:'Underqualification',d:'Below the minimum education/experience the template requires.'}],
+    sc:54, cf:79, sk:['Trade Marketing','Market Research','A&P Budgeting'], rf:['Underqualification'], yr:2, so:'Email inbox', ed:'Diploma', d:'Chattogram', ba:'May-2026 Sales Expansion', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:33, name:'Bushra Mahmud', email:'bushra.mahmud@gmail.com', file:'Bushra_Mahmud_CV.pdf', conf:67, score:52, district:'Sylhet',
+    skills:['Market Research','A&P Budgeting','Consumer Insights'], edu:'Diploma — IBA, University of Dhaka', exp:'4 yrs',
+    edus:['Diploma — IBA, University of Dhaka (2018)','HSC — Dhaka City College (2014)'],
+    work:['Brand Manager — Unilever Bangladesh (2022–Present)','Brand Executive — Pran-RFL Group (2022–2022)'],
+    skillsFull:['Market Research','A&P Budgeting','Consumer Insights'],
+    certs:[], phone:'+880 1532-204384',
+    flags:[{t:'Frequent job change',d:'Four employers in the last five years.'},{t:'Overqualification',d:'Seniority and salary expectation sit well above the role band.'}],
+    sc:52, cf:67, sk:['Market Research','A&P Budgeting','Consumer Insights'], rf:['Frequent job change','Overqualification'], yr:4, so:'Bulk upload', ed:'Diploma', d:'Sylhet', ba:'Jun-2026 Trade Mktg Drive', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:34, name:'Kamrul Hasan', email:'kamrul.hasan@yahoo.com', file:'Kamrul_Hasan_Resume.docx', conf:84, score:51, district:'Khulna',
+    skills:['A&P Budgeting','Consumer Insights','Campaign Management'], edu:'Bachelor\'s — North South University', exp:'6 yrs',
+    edus:['Bachelor\'s — North South University (2016)','HSC — Dhaka City College (2012)'],
+    work:['Asst. Brand Manager — Square Toiletries (2022–Present)','Trade Marketing Executive — Akij Group (2020–2022)'],
+    skillsFull:['A&P Budgeting','Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1733-204521',
+    flags:[],
+    sc:51, cf:84, sk:['A&P Budgeting','Consumer Insights','Campaign Management'], rf:[], yr:6, so:'LinkedIn', ed:'Bachelor\'s', d:'Khulna', ba:'May-2026 Sales Expansion', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:35, name:'Kamrul Hasan', email:'kamrul.hasan@gmail.com', file:'Kamrul_Hasan_CV.pdf', conf:57, score:48, district:'Rajshahi',
+    skills:['Consumer Insights','Campaign Management'], edu:'SSC — BUET', exp:'1 yrs',
+    edus:['SSC — BUET (2021)','HSC — Dhaka City College (2017)'],
+    work:['Brand Executive — ACI Limited (2025–Present)','Market Research Analyst — Meghna Group (2025–2025)'],
+    skillsFull:['Consumer Insights','Campaign Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1634-204658',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'},{t:'Frequent job change',d:'Four employers in the last five years.'}],
+    sc:48, cf:57, sk:['Consumer Insights','Campaign Management'], rf:['Skill gap','Frequent job change'], yr:1, so:'BDJobs', ed:'SSC', d:'Rajshahi', ba:'Jun-2026 Trade Mktg Drive', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:36, name:'Golam Karim', email:'golam.karim@gmail.com', file:'Golam_Karim_CV.pdf', conf:73, score:46, district:'Cumilla',
+    skills:['Campaign Management','Brand Management'], edu:'HSC — BRAC University', exp:'2 yrs',
+    edus:['HSC — BRAC University (2020)','HSC — Dhaka City College (2016)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2024–Present)','Category Executive — Marico Bangladesh (2024–2024)'],
+    skillsFull:['Campaign Management','Brand Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1535-204795',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'}],
+    sc:46, cf:73, sk:['Campaign Management','Brand Management'], rf:['Missing information'], yr:2, so:'Email inbox', ed:'HSC', d:'Cumilla', ba:'May-2026 Sales Expansion', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:37, name:'Sabrina Rahman', email:'sabrina.rahman@yahoo.com', file:'Sabrina_Rahman_Resume.docx', conf:62, score:44, district:'Barishal',
+    skills:['Brand Management','Trade Marketing'], edu:'HSC — Khulna University', exp:'1 yrs',
+    edus:['HSC — Khulna University (2021)','HSC — Dhaka City College (2017)'],
+    work:['Market Research Analyst — Akij Group (2025–Present)','Campaign Executive — Reckitt Bangladesh (2025–2025)'],
+    skillsFull:['Brand Management','Trade Marketing'],
+    certs:[], phone:'+880 1736-204932',
+    flags:[{t:'Underqualification',d:'Below the minimum education/experience the template requires.'}],
+    sc:44, cf:62, sk:['Brand Management','Trade Marketing'], rf:['Underqualification'], yr:1, so:'Bulk upload', ed:'HSC', d:'Barishal', ba:'Jun-2026 Trade Mktg Drive', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:38, name:'Rokeya Alam', email:'rokeya.alam@gmail.com', file:'Rokeya_Alam_CV.pdf', conf:55, score:42, district:'Rangpur',
+    skills:['Trade Marketing','Market Research'], edu:'Master\'s / MBA — University of Rajshahi', exp:'9 yrs',
+    edus:['Master\'s / MBA — University of Rajshahi (2013)','HSC — Dhaka City College (2009)'],
+    work:['Category Executive — Meghna Group (2022–Present)','Territory Officer — Unilever Bangladesh (2017–2022)'],
+    skillsFull:['Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1637-205069',
+    flags:[{t:'Career break',d:'Unexplained gap of more than 12 months in the work history.'},{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'}],
+    sc:42, cf:55, sk:['Trade Marketing','Market Research'], rf:['Career break','Missing information'], yr:9, so:'LinkedIn', ed:'Master\'s / MBA', d:'Rangpur', ba:'May-2026 Sales Expansion', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:39, name:'Shahriar Sultana', email:'shahriar.sultana@gmail.com', file:'Shahriar_Sultana_CV.pdf', conf:80, score:39, district:'Mymensingh',
+    skills:['Market Research','A&P Budgeting'], edu:'PhD — University of Chittagong', exp:'15 yrs',
+    edus:['PhD — University of Chittagong (2007)','HSC — Dhaka City College (2003)'],
+    work:['Campaign Executive — Marico Bangladesh (2022–Present)','Brand Manager — Square Toiletries (2011–2022)'],
+    skillsFull:['Market Research','A&P Budgeting'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1538-205206',
+    flags:[{t:'Overqualification',d:'Seniority and salary expectation sit well above the role band.'}],
+    sc:39, cf:80, sk:['Market Research','A&P Budgeting'], rf:['Overqualification'], yr:15, so:'BDJobs', ed:'PhD', d:'Mymensingh', ba:'Jun-2026 Trade Mktg Drive', position:'tmo', positionName:'Trade Marketing Officer'},
+  {id:40, name:'Umme Nasrin', email:'umme.nasrin@yahoo.com', file:'Umme_Nasrin_Resume.docx', conf:59, score:37, district:'Gazipur',
+    skills:['A&P Budgeting','Consumer Insights'], edu:'SSC — SUST', exp:'2 yrs',
+    edus:['SSC — SUST (2020)','HSC — Dhaka City College (2016)'],
+    work:['Territory Officer — Reckitt Bangladesh (2024–Present)','Asst. Brand Manager — ACI Limited (2024–2024)'],
+    skillsFull:['A&P Budgeting','Consumer Insights'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1739-205343',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'}],
+    sc:37, cf:59, sk:['A&P Budgeting','Consumer Insights'], rf:['Skill gap'], yr:2, so:'Email inbox', ed:'SSC', d:'Gazipur', ba:'May-2026 Sales Expansion', position:'qac', positionName:'QA Chemist'},
+  {id:41, name:'Mizanur Siddique', email:'mizanur.siddique@gmail.com', file:'Mizanur_Siddique_CV.pdf', conf:68, score:35, district:'Dhaka',
+    skills:['Consumer Insights','Campaign Management'], edu:'SSC — IBA, University of Dhaka', exp:'1 yrs',
+    edus:['SSC — IBA, University of Dhaka (2021)','HSC — Dhaka City College (2017)'],
+    work:['Brand Manager — Unilever Bangladesh (2025–Present)','Brand Executive — Pran-RFL Group (2025–2025)'],
+    skillsFull:['Consumer Insights','Campaign Management'],
+    certs:[], phone:'+880 1640-205480',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'},{t:'Underqualification',d:'Below the minimum education/experience the template requires.'}],
+    sc:35, cf:68, sk:['Consumer Insights','Campaign Management'], rf:['Missing information','Underqualification'], yr:1, so:'Bulk upload', ed:'SSC', d:'Dhaka', ba:'Jun-2026 Trade Mktg Drive', position:'qac', positionName:'QA Chemist'},
+  {id:42, name:'Lubna Bhuiyan', email:'lubna.bhuiyan@gmail.com', file:'Lubna_Bhuiyan_CV.pdf', conf:52, score:33, district:'Chattogram',
+    skills:['Campaign Management','Brand Management'], edu:'HSC — North South University', exp:'1 yrs',
+    edus:['HSC — North South University (2021)','HSC — Dhaka City College (2017)'],
+    work:['Asst. Brand Manager — Square Toiletries (2025–Present)','Trade Marketing Executive — Akij Group (2025–2025)'],
+    skillsFull:['Campaign Management','Brand Management'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1541-205617',
+    flags:[{t:'Underqualification',d:'Below the minimum education/experience the template requires.'}],
+    sc:33, cf:52, sk:['Campaign Management','Brand Management'], rf:['Underqualification'], yr:1, so:'LinkedIn', ed:'HSC', d:'Chattogram', ba:'May-2026 Sales Expansion', position:'qac', positionName:'QA Chemist'},
+  {id:43, name:'Tanjim Jahan', email:'tanjim.jahan@yahoo.com', file:'Tanjim_Jahan_Resume.docx', conf:77, score:31, district:'Sylhet',
+    skills:['Brand Management','Trade Marketing'], edu:'Diploma — BUET', exp:'3 yrs',
+    edus:['Diploma — BUET (2019)','HSC — Dhaka City College (2015)'],
+    work:['Brand Executive — ACI Limited (2023–Present)','Market Research Analyst — Meghna Group (2023–2023)'],
+    skillsFull:['Brand Management','Trade Marketing'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1742-205754',
+    flags:[],
+    sc:31, cf:77, sk:['Brand Management','Trade Marketing'], rf:[], yr:3, so:'BDJobs', ed:'Diploma', d:'Sylhet', ba:'Jun-2026 Trade Mktg Drive', position:'qac', positionName:'QA Chemist'},
+  {id:44, name:'Sohel Chowdhury', email:'sohel.chowdhury@gmail.com', file:'Sohel_Chowdhury_CV.pdf', conf:49, score:28, district:'Khulna',
+    skills:['Trade Marketing','Market Research'], edu:'SSC — BRAC University', exp:'1 yrs',
+    edus:['SSC — BRAC University (2021)','HSC — Dhaka City College (2017)'],
+    work:['Trade Marketing Executive — Pran-RFL Group (2025–Present)','Category Executive — Marico Bangladesh (2025–2025)'],
+    skillsFull:['Trade Marketing','Market Research'],
+    certs:['Nielsen Retail Audit'], phone:'+880 1643-205891',
+    flags:[{t:'Skill gap',d:'Missing several skills the screening template marks as required.'},{t:'Frequent job change',d:'Four employers in the last five years.'}],
+    sc:28, cf:49, sk:['Trade Marketing','Market Research'], rf:['Skill gap','Frequent job change'], yr:1, so:'Email inbox', ed:'SSC', d:'Khulna', ba:'May-2026 Sales Expansion', position:'qac', positionName:'QA Chemist'},
+  {id:45, name:'Habiba Ferdous', email:'habiba.ferdous@gmail.com', file:'Habiba_Ferdous_CV.pdf', conf:54, score:24, district:'Rajshahi',
+    skills:['Market Research','A&P Budgeting'], edu:'HSC — Khulna University', exp:'2 yrs',
+    edus:['HSC — Khulna University (2020)','HSC — Dhaka City College (2016)'],
+    work:['Market Research Analyst — Akij Group (2024–Present)','Campaign Executive — Reckitt Bangladesh (2024–2024)'],
+    skillsFull:['Market Research','A&P Budgeting'],
+    certs:[], phone:'+880 1544-206028',
+    flags:[{t:'Missing information',d:'Contact details or dates could not be extracted from the CV.'}],
+    sc:24, cf:54, sk:['Market Research','A&P Budgeting'], rf:['Missing information'], yr:2, so:'Bulk upload', ed:'HSC', d:'Rajshahi', ba:'Jun-2026 Trade Mktg Drive', position:'qac', positionName:'QA Chemist'},
 ];
 
-/* ══════════════════════════════════════════════════════════════════
-   AI evaluation summaries + key signals (merged in from the former
-   CV Analysis "Evaluation Summaries" table).
-   `s` — one assistive sentence, clamped to two lines in the table and
-         shown in full inside the row's details drawer.
-   `k` — key signals; `p` positive, `n` neutral, `r` risk. Signals are
-         review prompts, never disqualifiers, and never scored.
-   ══════════════════════════════════════════════════════════════════ */
 var AI_EVAL={
-  1:{s:'Strong FMCG brand fit — 11 yrs across Unilever Bangladesh and Pran-RFL with full P&L and trade-marketing ownership; covers every required skill and the CV carries no red flags.',
-     k:[['Strong FMCG fit','p'],['Budget ownership','p'],['ATL/BTL depth','p'],['No red flags','p']]},
-  2:{s:'Solid brand fit — 9 yrs at ACI Consumer and Square Toiletries with NPD and consumer-insight ownership; media planning is well covered but no explicit P&L accountability is evidenced.',
-     k:[['NPD ownership','p'],['Ex-Square Toiletries','p'],['No P&L evidence','n']]},
-  3:{s:'Solid trade-marketing fit — 8 yrs at Akij Group and Marico covering route-to-market, SKU planning and distributor management; brand-strategy exposure is thinner than this role asks for.',
-     k:[['Route-to-market','p'],['Distributor network','p'],['Light brand strategy','n']]},
-  4:{s:'Partial fit — 6 yrs of digital and content leadership at Bata Bangladesh and Daraz with strong performance-ads coverage; an unexplained 14-month gap between 2018 and 2020 needs a conversation.',
-     k:[['Digital depth','p'],['Career break','r'],['Low P&L exposure','n']]},
-  5:{s:'Partial fit — 7 yrs of Sylhet-region sales and distribution at Pran-RFL and Nestlé Bangladesh; strong field execution and forecasting, but no brand-management ownership on record.',
-     k:[['Field sales strength','p'],['Regional coverage','n'],['No brand ownership','n']]},
-  6:{s:'Partial fit — 5 yrs of brand activation, events and PR at Abul Khair Group; no P&L or brand-strategy experience for a managerial brand role, and below the experience bar.',
-     k:[['Activation experience','p'],['Skill gap','r'],['Below experience bar','n']]},
-  7:{s:'Weak fit on paper — 9 yrs of retail execution and merchandising at Square Consumer, but HSC-only education against a Bachelor minimum and a scanned CV parsed at 61% confidence.',
-     k:[['Long FMCG tenure','p'],['Under-qualified','r'],['Low OCR confidence','r']]},
-  8:{s:'Weak fit — 6 yrs of HR operations and recruitment at Square Pharmaceuticals; strong internal-process exposure but a clear domain mismatch against a brand-management remit.',
-     k:[['Internal candidate','n'],['Domain mismatch','r'],['Limited brand exposure','n']]},
-  9:{s:'Weak fit — 10 yrs of supply-chain and demand planning at Akij Food & Beverage and Coca-Cola Bangladesh; a strong operations profile outside the brand-marketing remit, with frequent early job changes.',
-     k:[['Supply-chain depth','p'],['Domain mismatch','r'],['Frequent job changes','r']]},
-  10:{s:'Weak fit — 3 yrs in customer service and telesales at Robi Axiata against a 7+ yr requirement; contact details parsed at low confidence and key CV fields are missing.',
-     k:[['Below experience bar','r'],['Missing information','r'],['Service background','n']]}
+  1:{s:'Strong fit — 11 yrs at Unilever Bangladesh covering Brand Management, Trade Marketing, Market Research; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  2:{s:'Strong fit — 9 yrs at Square Toiletries covering Trade Marketing, Market Research, A&P Budgeting; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  3:{s:'Strong fit — 12 yrs at ACI Limited covering Market Research, A&P Budgeting, Consumer Insights; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  4:{s:'Strong fit — 8 yrs at Pran-RFL Group covering A&P Budgeting, Consumer Insights, Campaign Management; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  5:{s:'Strong fit — 7 yrs at Akij Group covering Consumer Insights, Campaign Management, Brand Management; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Broad skill cover','p'],['Career break','n']]},
+  6:{s:'Strong fit — 10 yrs at Meghna Group covering Campaign Management, Brand Management, Trade Marketing; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  7:{s:'Strong fit — 6 yrs at Marico Bangladesh covering Brand Management, Trade Marketing, Market Research; covers every required skill.',
+     k:[['Strong FMCG fit','p'],['Broad skill cover','p'],['No red flags','p']]},
+  8:{s:'Strong fit — 9 yrs at Reckitt Bangladesh covering Trade Marketing, Market Research, A&P Budgeting; misses 1 required skill(s).',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['Frequent job change','n']]},
+  9:{s:'Strong fit — 5 yrs at Unilever Bangladesh covering Market Research, A&P Budgeting, Consumer Insights; misses 1 required skill(s).',
+     k:[['Strong FMCG fit','p'],['Broad skill cover','p'],['No red flags','p']]},
+  10:{s:'Strong fit — 14 yrs at Square Toiletries covering A&P Budgeting, Consumer Insights, Campaign Management; misses 1 required skill(s).',
+     k:[['Strong FMCG fit','p'],['Senior experience','p'],['Broad skill cover','p'],['Overqualification','n']]},
+  11:{s:'Solid fit — 7 yrs at ACI Limited covering Consumer Insights, Campaign Management, Brand Management; misses 1 required skill(s).',
+     k:[['Broad skill cover','p'],['No red flags','p']]},
+  12:{s:'Solid fit — 4 yrs at Pran-RFL Group covering Campaign Management, Brand Management, Trade Marketing; misses 1 required skill(s).',
+     k:[['Broad skill cover','p'],['Skill gap','n']]},
+  13:{s:'Solid fit — 8 yrs at Akij Group covering Brand Management, Trade Marketing, Market Research; misses 1 required skill(s).',
+     k:[['Senior experience','p'],['Broad skill cover','p'],['No red flags','p']]},
+  14:{s:'Solid fit — 6 yrs at Meghna Group covering Trade Marketing, Market Research, A&P Budgeting; misses 1 required skill(s).',
+     k:[['Broad skill cover','p'],['Career break','n']]},
+  15:{s:'Solid fit — 3 yrs at Marico Bangladesh covering Market Research, A&P Budgeting, Consumer Insights; misses 2 required skill(s).',
+     k:[['Missing information','n'],['Underqualification','n'],['Low parse confidence','n']]},
+  16:{s:'Solid fit — 9 yrs at Reckitt Bangladesh covering A&P Budgeting, Consumer Insights, Campaign Management; misses 2 required skill(s).',
+     k:[['Senior experience','p'],['No red flags','p']]},
+  17:{s:'Solid fit — 11 yrs at Unilever Bangladesh covering Consumer Insights, Campaign Management, Brand Management; misses 2 required skill(s).',
+     k:[['Senior experience','p'],['Frequent job change','n']]},
+  18:{s:'Solid fit — 5 yrs at Square Toiletries covering Campaign Management, Brand Management, Trade Marketing; misses 2 required skill(s).',
+     k:[['No red flags','p']]},
+  19:{s:'Solid fit — 2 yrs at ACI Limited covering Brand Management, Trade Marketing, Market Research; misses 2 required skill(s).',
+     k:[['Missing information','n'],['Low parse confidence','n']]},
+  20:{s:'Solid fit — 7 yrs at Pran-RFL Group covering Trade Marketing, Market Research, A&P Budgeting; misses 2 required skill(s).',
+     k:[['No red flags','p']]},
+  21:{s:'Solid fit — 4 yrs at Akij Group covering no extractable skills; misses 2 required skill(s).',
+     k:[['Skill gap','n']]},
+  22:{s:'Solid fit — 1 yrs at Meghna Group covering A&P Budgeting, Consumer Insights, Campaign Management; misses 2 required skill(s).',
+     k:[['Underqualification','n'],['Career break','n'],['Low parse confidence','n']]},
+  23:{s:'Solid fit — 6 yrs at Marico Bangladesh covering Consumer Insights, Campaign Management, Brand Management; misses 2 required skill(s).',
+     k:[['No red flags','p']]},
+  24:{s:'Partial fit — 8 yrs at Reckitt Bangladesh covering Campaign Management, Brand Management, Trade Marketing; misses 3 required skill(s).',
+     k:[['Senior experience','p'],['No red flags','p']]},
+  25:{s:'Partial fit — 13 yrs at Unilever Bangladesh covering Brand Management, Trade Marketing, Market Research; misses 3 required skill(s).',
+     k:[['Senior experience','p'],['Overqualification','n'],['Low parse confidence','n']]},
+  26:{s:'Partial fit — 3 yrs at Square Toiletries covering Trade Marketing, Market Research, A&P Budgeting; misses 3 required skill(s).',
+     k:[['Frequent job change','n']]},
+  27:{s:'Partial fit — 1 yrs at ACI Limited covering Market Research, A&P Budgeting, Consumer Insights; misses 3 required skill(s).',
+     k:[['Underqualification','n'],['Career break','n'],['Low parse confidence','n']]},
+  28:{s:'Partial fit — 5 yrs at Pran-RFL Group covering A&P Budgeting, Consumer Insights, Campaign Management; misses 3 required skill(s).',
+     k:[['Career break','n']]},
+  29:{s:'Partial fit — 2 yrs at Akij Group covering Consumer Insights, Campaign Management, Brand Management; misses 3 required skill(s).',
+     k:[['Missing information','n'],['Low parse confidence','n']]},
+  30:{s:'Partial fit — 7 yrs at Meghna Group covering Campaign Management, Brand Management, Trade Marketing; misses 3 required skill(s).',
+     k:[['No red flags','p']]},
+  31:{s:'Partial fit — 3 yrs at Marico Bangladesh covering Brand Management, Trade Marketing, Market Research; misses 3 required skill(s).',
+     k:[['Skill gap','n'],['Low parse confidence','n']]},
+  32:{s:'Partial fit — 2 yrs at Reckitt Bangladesh covering Trade Marketing, Market Research, A&P Budgeting; misses 3 required skill(s).',
+     k:[['Underqualification','n']]},
+  33:{s:'Partial fit — 4 yrs at Unilever Bangladesh covering Market Research, A&P Budgeting, Consumer Insights; misses 3 required skill(s).',
+     k:[['Frequent job change','n'],['Overqualification','n'],['Low parse confidence','n']]},
+  34:{s:'Partial fit — 6 yrs at Square Toiletries covering A&P Budgeting, Consumer Insights, Campaign Management; misses 3 required skill(s).',
+     k:[['No red flags','p']]},
+  35:{s:'Weak fit — 1 yrs at ACI Limited covering Consumer Insights, Campaign Management; misses 4 required skill(s).',
+     k:[['Skill gap','n'],['Frequent job change','n'],['Low parse confidence','n']]},
+  36:{s:'Weak fit — 2 yrs at Pran-RFL Group covering Campaign Management, Brand Management; misses 4 required skill(s).',
+     k:[['Missing information','n']]},
+  37:{s:'Weak fit — 1 yrs at Akij Group covering Brand Management, Trade Marketing; misses 4 required skill(s).',
+     k:[['Underqualification','n'],['Low parse confidence','n']]},
+  38:{s:'Weak fit — 9 yrs at Meghna Group covering Trade Marketing, Market Research; misses 4 required skill(s).',
+     k:[['Senior experience','p'],['Career break','n'],['Missing information','n'],['Low parse confidence','n']]},
+  39:{s:'Weak fit — 15 yrs at Marico Bangladesh covering Market Research, A&P Budgeting; misses 4 required skill(s).',
+     k:[['Senior experience','p'],['Overqualification','n']]},
+  40:{s:'Weak fit — 2 yrs at Reckitt Bangladesh covering A&P Budgeting, Consumer Insights; misses 4 required skill(s).',
+     k:[['Skill gap','n'],['Low parse confidence','n']]},
+  41:{s:'Weak fit — 1 yrs at Unilever Bangladesh covering Consumer Insights, Campaign Management; misses 4 required skill(s).',
+     k:[['Missing information','n'],['Underqualification','n'],['Low parse confidence','n']]},
+  42:{s:'Weak fit — 1 yrs at Square Toiletries covering Campaign Management, Brand Management; misses 4 required skill(s).',
+     k:[['Underqualification','n'],['Low parse confidence','n']]},
+  43:{s:'Weak fit — 3 yrs at ACI Limited covering Brand Management, Trade Marketing; misses 4 required skill(s).',
+     k:[['No red flags','p']]},
+  44:{s:'Weak fit — 1 yrs at Pran-RFL Group covering Trade Marketing, Market Research; misses 4 required skill(s).',
+     k:[['Skill gap','n'],['Frequent job change','n'],['Low parse confidence','n']]},
+  45:{s:'Weak fit — 2 yrs at Akij Group covering Market Research, A&P Budgeting; misses 4 required skill(s).',
+     k:[['Missing information','n'],['Low parse confidence','n']]}
 };
+
 var AI_SIGCLS={p:'cvf-sig-pos',n:'cvf-sig-neu',r:'cvf-sig-risk'};
 function aiEval(id){return AI_EVAL[id]||{s:'No AI evaluation summary available for this candidate yet.',k:[]};}
 
-/* Rank by AI match score across the CURRENTLY VISIBLE set — ties broken by
-   id so the order is stable, and ranks are always contiguous from 1. */
-function cvfRankMap(list){
-  var m={};
-  list.slice().sort(function(a,b){return (b.score-a.score)||(a.id-b.id);})
-      .forEach(function(c,i){m[c.id]=i+1;});
-  return m;
-}
-
 /* ══════════════════════════════════════════════════════════════════
    Online presence fixtures (merged in from online-visibility-analysis).
-   Same data model + governance: identity is ONE human decision about the
-   PERSON; LinkedIn/Facebook/portfolio/publications are SOURCE TYPES, i.e.
-   findings attached to a confirmed person — never identity votes.
+   Identity is ONE human decision about the PERSON; LinkedIn/Facebook/
+   portfolio/publications are SOURCE TYPES — findings attached to a
+   confirmed person, never identity votes.
    `matched`   — CV claim corroborated by a public source
    `unmatched` — {cv, src}: src set = real contradiction, src null = no
                  public evidence found (neutral, never held against anyone)
    The presence score never feeds the AI match score and cannot change a
-   candidate's status. Everything below is fixture data.
+   candidate's status.
    ══════════════════════════════════════════════════════════════════ */
 var RP_ICON={
   linkedin:'<rect x="2" y="2" width="20" height="20" rx="4"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 0 0-4 0"/>',
@@ -1036,74 +1384,75 @@ var RP_ICON={
 var RP_SRCNAME={linkedin:'LinkedIn',facebook:'Facebook',social:'Instagram / X',site:'Portfolio',pub:'Publications',news:'News',talk:'Speaking',dir:'Directory'};
 
 var PRESENCE={
-  1:{score:88,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
-     matched:[
-       ['Brand Manager, Unilever Bangladesh (2018–present)','LinkedIn shows the same employer, title and dates'],
-       ['MBA, Marketing — IBA, University of Dhaka (2013)','LinkedIn education section matches'],
-       ['Asst. Brand Manager, Pran-RFL (2014–2018)','Corroborated by portfolio case studies'],
-       ['Trade marketing / A&P ownership','Panellist, Dhaka FMCG Summit 2025 — same programme described']],
+  1:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Brand Manager, Unilever Bangladesh','LinkedIn shows the same employer and title'],['Master\'s / MBA — IBA, University of Dhaka','Education section matches']],
      unmatched:[]},
-  2:{score:81,conf:'High',identity:'Confirmed',sources:['linkedin','facebook','pub'],
-     matched:[
-       ['Sr. Brand Executive, ACI Consumer (2017–present)','LinkedIn shows the same role and dates'],
-       ['Brand Executive, Square Toiletries (2013–2017)','Listed in the same LinkedIn history'],
-       ['MBA, Marketing — North South University (2015)','NSU alumni page listing matches']],
-     unmatched:[
-       {cv:'Kantar Brand Health Tracking certification',src:null}]},
-  3:{score:74,conf:'High',identity:'Confirmed',sources:['linkedin','dir','news'],
-     matched:[
-       ['Trade Marketing Manager, Akij Group (2019–present)','LinkedIn shows the same role and dates'],
-       ['Territory Officer, Marico Bangladesh (2015–2019)','Same employment history on LinkedIn'],
-       ['Chattogram-based route-to-market work','Named in a Chattogram distributor-conference report (2024)']],
+  2:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Asst. Brand Manager, Square Toiletries','LinkedIn shows the same employer and title'],['Master\'s / MBA — North South University','Education section matches']],
      unmatched:[]},
-  4:{score:92,conf:'High',identity:'Confirmed',sources:['linkedin','site','social','pub','news'],
-     matched:[
-       ['Digital Marketing Lead, Bata Bangladesh (2020–present)','LinkedIn shows the same role and dates'],
-       ['Content Executive, Daraz (2018–2020)','Same employment history on LinkedIn'],
-       ['Meta Blueprint and HubSpot Inbound certifications','Both credentials publicly listed and verifiable'],
-       ['Performance-ads and SEO ownership','Public campaign portfolio shows matching work 2020–2026']],
-     unmatched:[
-       {cv:'14-month career break (2018–2020)',src:null}]},
-  5:{score:63,conf:'Medium',identity:'Pending',sources:['linkedin','facebook'],
-     matched:[
-       ['Sales Officer, Nestlé Bangladesh (2016–2018)','LinkedIn shows the same employer and dates'],
-       ['BBA — Metropolitan University, Sylhet (2016)','LinkedIn education section matches']],
-     unmatched:[
-       {cv:'Area Sales Manager, Pran-RFL, 2018–present',src:'LinkedIn shows Territory Sales Officer at Pran-RFL to 2024, then Sr. Sales Executive at Bombay Sweets'},
-       {cv:'Team leadership of 12 field staff',src:null}]},
-  6:{score:48,conf:'Medium',identity:'Confirmed',sources:['linkedin','facebook'],
-     matched:[
-       ['Marketing Officer, Abul Khair Group (2019–present)','LinkedIn shows the same role and dates'],
-       ['BA, English — Khulna University (2018)','Khulna University alumni group listing matches']],
-     unmatched:[
-       {cv:'Brand activation and PR portfolio',src:null},
-       {cv:'bKash internship (2018)',src:null}]},
-  7:{score:21,conf:'Low',identity:'Not found',sources:[],
+  3:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Brand Executive, ACI Limited','LinkedIn shows the same employer and title'],['PhD — BUET','Education section matches']],
+     unmatched:[]},
+  4:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Trade Marketing Executive, Pran-RFL Group','LinkedIn shows the same employer and title'],['Master\'s / MBA — BRAC University','Education section matches']],
+     unmatched:[]},
+  5:{score:74,conf:'High',identity:'Confirmed',sources:['linkedin','news'],
+     matched:[['Market Research Analyst, Akij Group','LinkedIn shows the same employer and title'],['Master\'s / MBA — Khulna University','Education section matches']],
+     unmatched:[['CV states 7 yrs of experience','Public history starts 2022 — about 4 yrs']]},
+  6:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Category Executive, Meghna Group','LinkedIn shows the same employer and title'],['Master\'s / MBA — University of Rajshahi','Education section matches']],
+     unmatched:[]},
+  7:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Campaign Executive, Marico Bangladesh','LinkedIn shows the same employer and title'],['Bachelor\'s — University of Chittagong','Education section matches']],
+     unmatched:[]},
+  8:{score:69,conf:'High',identity:'Confirmed',sources:['linkedin','news','pub'],
+     matched:[['Territory Officer, Reckitt Bangladesh','LinkedIn shows the same employer and title'],['Master\'s / MBA — SUST','Education section matches']],
+     unmatched:[['No disputes declared','Named in a 2024 supplier-payment dispute reported in trade press']]},
+  9:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Brand Manager, Unilever Bangladesh','LinkedIn shows the same employer and title'],['Master\'s / MBA — IBA, University of Dhaka','Education section matches']],
+     unmatched:[]},
+  10:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Asst. Brand Manager, Square Toiletries','LinkedIn shows the same employer and title'],['PhD — North South University','Education section matches']],
+     unmatched:[]},
+  11:{score:45,conf:'Medium',identity:'Pending',sources:['linkedin','facebook'],
+     matched:[['Brand Executive, ACI Limited','LinkedIn shows the same employer and title'],['Bachelor\'s — BUET','Education section matches']],
+     unmatched:[]},
+  12:{score:22,conf:'Low',identity:'Not found',sources:['dir'],
      matched:[],
-     unmatched:[
-       {cv:'Sr. Sales Executive, Square Consumer (2016–present)',src:null},
-       {cv:'Sales Rep, Igloo Foods (2013–2016)',src:null},
-       {cv:'HSC, Business Studies — Rajshahi College (2012)',src:null}]},
-  8:{score:70,conf:'High',identity:'Confirmed',sources:['linkedin','dir'],
-     matched:[
-       ['HR Executive, Square Pharmaceuticals (2018–present)','LinkedIn shows the same role and dates'],
-       ['MBA, HRM — East West University (2016)','LinkedIn education section matches'],
-       ['HR intern, Grameenphone (2016)','Same employment history on LinkedIn']],
-     unmatched:[
-       {cv:'SHRM-CP certification',src:null}]},
-  9:{score:77,conf:'High',identity:'Confirmed',sources:['linkedin','pub','dir','news'],
-     matched:[
-       ['BSc, Industrial & Production Engineering — BUET (2013)','BUET alumni directory listing matches'],
-       ['Planner, Coca-Cola Bangladesh (2013–2017)','Same employment history on LinkedIn'],
-       ['CSCP certification','Credential publicly listed and verifiable']],
-     unmatched:[
-       {cv:'Supply Chain Manager, Akij Food & Beverage, 2017–present',src:'LinkedIn shows Deputy Manager — Supply Chain at Akij Food & Beverage since 2019'}]},
-  10:{score:33,conf:'Low',identity:'Pending',sources:['linkedin','facebook','social'],
-     matched:[
-       ['Customer Care Agent, Robi Axiata (2021–present)','A LinkedIn profile with the same name shows this role']],
-     unmatched:[
-       {cv:'BA, Sociology — National University (2020)',src:null},
-       {cv:'CRM tooling experience',src:null}]}
+     unmatched:[['Employment history','']]},
+  13:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Market Research Analyst, Akij Group','LinkedIn shows the same employer and title'],['Master\'s / MBA — Khulna University','Education section matches']],
+     unmatched:[]},
+  14:{score:74,conf:'High',identity:'Confirmed',sources:['linkedin','news'],
+     matched:[['Category Executive, Meghna Group','LinkedIn shows the same employer and title'],['Bachelor\'s — University of Rajshahi','Education section matches']],
+     unmatched:[['CV states 6 yrs of experience','Public history starts 2023 — about 3 yrs']]},
+  16:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Territory Officer, Reckitt Bangladesh','LinkedIn shows the same employer and title'],['Master\'s / MBA — SUST','Education section matches']],
+     unmatched:[]},
+  18:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Asst. Brand Manager, Square Toiletries','LinkedIn shows the same employer and title'],['Bachelor\'s — North South University','Education section matches']],
+     unmatched:[]},
+  20:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Trade Marketing Executive, Pran-RFL Group','LinkedIn shows the same employer and title'],['Bachelor\'s — BRAC University','Education section matches']],
+     unmatched:[]},
+  21:{score:22,conf:'Low',identity:'Not found',sources:['dir'],
+     matched:[],
+     unmatched:[['Employment history','']]},
+  23:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Campaign Executive, Marico Bangladesh','LinkedIn shows the same employer and title'],['Bachelor\'s — University of Chittagong','Education section matches']],
+     unmatched:[]},
+  24:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Territory Officer, Reckitt Bangladesh','LinkedIn shows the same employer and title'],['Master\'s / MBA — SUST','Education section matches']],
+     unmatched:[]},
+  29:{score:22,conf:'Low',identity:'Not found',sources:['dir'],
+     matched:[],
+     unmatched:[['Employment history','']]},
+  30:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Category Executive, Meghna Group','LinkedIn shows the same employer and title'],['Bachelor\'s — University of Rajshahi','Education section matches']],
+     unmatched:[]},
+  34:{score:82,conf:'High',identity:'Confirmed',sources:['linkedin','site','talk','dir'],
+     matched:[['Asst. Brand Manager, Square Toiletries','LinkedIn shows the same employer and title'],['Bachelor\'s — North South University','Education section matches']],
+     unmatched:[]}
 };
 
 /* run state (prototype only) */
@@ -1532,8 +1881,16 @@ var CVF_LABELS={
   score:{'90':'Score ≥90','80':'Score 80–89','60':'Score 60–79',lt60:'Score <60'},
   flags:{has:'Has red flags',none:'No red flags'},
   pres:{done:'Presence analysed',todo:'Presence not analysed',unmatched:'Has unmatched claims'},
-  exp:{'0-4':'0–4 yrs','5-7':'5–7 yrs','8-10':'8–10 yrs','11':'11+ yrs'}
+  exp:{'0-2':'0–2 yrs','3-5':'3–5 yrs','6-10':'6–10 yrs','10+':'10+ yrs'}
 };
+/* Rank is relative to whatever set is on screen: 1 = highest AI match score,
+   ties broken by id so the order is stable and ranks are contiguous from 1. */
+function cvfRankMap(list){
+  var m={};
+  (list||[]).slice().sort(function(a,b){return (b.score-a.score)||(a.id-b.id);})
+            .forEach(function(c,i){m[c.id]=i+1;});
+  return m;
+}
 function cvfVal(id){var el=document.getElementById(id);return el&&el.value?String(el.value):'';}
 function cvfState(){
   var f={};
@@ -1551,6 +1908,8 @@ function cvfHaystack(c){
     (c.flags||[]).map(function(x){return x.t+' '+x.d;}).join(' ')].join(' ').toLowerCase();
 }
 function cvfMatch(c,f){
+  /* chart segments are part of the same filter state (AND with the dropdowns) */
+  if(typeof cvaMatch==='function' && !cvaMatch(c)) return false;
   if(f.q && cvfHaystack(c).indexOf(f.q)<0) return false;
   if(f.status && (CAND_STATUS[c.id]||'warn')!==f.status) return false;
   if(f.conf){
@@ -1579,13 +1938,9 @@ function cvfMatch(c,f){
   }
   if(f.skill && (c.skills||[]).concat(c.skillsFull||[]).indexOf(f.skill)<0) return false;
   if(f.district && c.district!==f.district) return false;
-  if(f.exp){
-    var y=cvfYears(c);
-    if(f.exp==='0-4'  && y>4) return false;
-    if(f.exp==='5-7'  && (y<5||y>7)) return false;
-    if(f.exp==='8-10' && (y<8||y>10)) return false;
-    if(f.exp==='11'   && y<11) return false;
-  }
+  /* Same bands as the Experience chart (STLF.EXB) so a chart click and the
+     dropdown can never disagree about which bucket a candidate is in. */
+  if(f.exp && STLF.exK(cvfYears(c))!==f.exp) return false;
   return true;
 }
 function cvfChipLabel(k,v){
@@ -1611,6 +1966,7 @@ function clearCvFilter(k){
   applyCvFilters();
 }
 function clearCvFilters(){
+  if(typeof cvaClearOnly==='function') cvaClearOnly();  /* also de-select chart segments; scope survives */
   Object.keys(CVF_IDS).forEach(function(k){
     var el=document.getElementById(CVF_IDS[k]);
     if(el) el.value='';
@@ -1629,10 +1985,13 @@ function cvfPopulate(){
   if(d) d.innerHTML='<option value="">All districts</option>'+Object.keys(di).sort().map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+'</option>';}).join('');
 }
 function applyCvFilters(){
+  CVA_POOL = (typeof cvfScoped==='function') ? cvfScoped() : CANDS;   /* keep charts in step */
   var f=cvfState(), shown=0;
+  var scope=CVA_POOL, inScope={};
+  scope.forEach(function(c){inScope[c.id]=1;});
   /* Rank is recomputed over the VISIBLE set on every filter change, so it is
      always contiguous from 1 and always ordered by AI match score. */
-  var visible=CANDS.filter(function(c){return cvfMatch(c,f);});
+  var visible=scope.filter(function(c){return cvfMatch(c,f);});
   var rank=cvfRankMap(visible);
   CANDS.forEach(function(c){
     var ok=rank[c.id]!==undefined;
@@ -1651,7 +2010,7 @@ function applyCvFilters(){
   var em=document.getElementById('cvfEmpty');
   if(em) em.style.display = shown ? 'none' : 'table-row';
   var cnt=document.querySelector('[data-testid="cvf-count"]');
-  if(cnt) cnt.textContent = shown+' of '+CANDS.length+' candidate'+(CANDS.length===1?'':'s');
+  if(cnt) cnt.textContent = shown+' of '+scope.length+' candidate'+(scope.length===1?'':'s');
   renderCvfChips(f);
   updateCount();
 }
@@ -1930,7 +2289,18 @@ function cvaCfK(v){return STLF.cfK(v)}
 function cvaExK(v){return STLF.exK(v)}
 function cvaBandL(b,k){return STLF.bandL(b,k)}
 function cvaBandOf(b,k){return STLF.bandOf(b,k)}
-function cvaBuildPool(cfg){return STLF.pool(cfg)}
+/* Charts and table now share ONE candidate set. Scope = position + batch;
+   every chart segment count is therefore the number of rows the table shows. */
+function cvaBuildPool(){ return cvfScoped(); }
+function cvfScoped(){
+  var posEl=document.getElementById('cva-position'), batEl=document.getElementById('cva-batch');
+  var pos=(posEl&&posEl.value)||'sbm', batch=(batEl&&batEl.value)||'';
+  return CANDS.filter(function(c){
+    if(c.position!==pos) return false;
+    if(batch && c.ba!==batch) return false;
+    return true;
+  });
+}
 
 var CVA_POOL=[];
 
@@ -1964,10 +2334,12 @@ function cvaAny(){return Object.keys(CVA_SEL).some(function(k){return CVA_SEL[k]
 function cvaPick(k,v){
   if(!CVA_SEL[k])return;
   var a=CVA_SEL[k],i=a.indexOf(v);
-  if(i>-1)a.splice(i,1);else a.push(v);
+  if(i>-1)a.splice(i,1);else a.push(v);   /* second click clears that dimension */
   cvaRenderAll();
+  if(typeof applyCvFilters==='function') applyCvFilters();
 }
-function cvaClear(){CVA_SEL=cvaBlank();cvaRenderAll()}
+function cvaClearOnly(){CVA_SEL=cvaBlank();cvaRenderAll();}
+function cvaClear(){CVA_SEL=cvaBlank();cvaRenderAll();if(typeof applyCvFilters==='function') applyCvFilters();}
 
 /* Event delegation — keeps SVG segments free of inline handlers and avoids
    quoting hazards with values like "A&P Budgeting". */
@@ -1985,11 +2357,10 @@ function cvaEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').r
 function cvaScope(){
   var posEl=document.getElementById('cva-position');
   var batEl=document.getElementById('cva-batch');
-  var cfg=CVA_POS[(posEl&&posEl.value)||'sbm']||CVA_POS.sbm;
-  var batch=(batEl&&batEl.value)||'';
-  CVA_POOL=cvaBuildPool(cfg).filter(function(c){return !batch||c.ba===batch});
-  CVA_SEL=cvaBlank();
+  CVA_POOL=cvaBuildPool();
+  CVA_SEL=cvaBlank();          /* new scope -> chart selections reset */
   cvaRenderAll();
+  if(typeof applyCvFilters==='function') applyCvFilters();   /* table follows the scope */
 }
 
 /* ── SVG helpers ─────────────────────────────────────────────────── */

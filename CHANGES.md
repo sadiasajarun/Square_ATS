@@ -349,3 +349,12 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
 - **Bug:** every fixture record defined `pos:` **twice** — once as the job title string and again as the positives array. JS keeps the last key, so `c.pos` was always the array; the hero subtitle rendered the whole array as comma-joined text (including full URLs), which forced the page into infinite horizontal scroll. Renamed the array key to `positives:` across all 6 records and updated its 4 consumers. Verified: `pos` is now a string and `positives`/`risks` are arrays for all 6 candidates.
 - **Overflow guards** added so no long URL or string can widen the page again: `min-width:0` on grid/flex children, `overflow-wrap:anywhere` on text blocks, `overflow-x:hidden` on the content column.
 - **"At a glance" verdict strip** added under the hero for fast scanning — Identity · Sources · Matches · Mismatches · Not found · Risks, colour-coded, with cross-check figures deliberately hidden until a human confirms identity (collapses 6→3→2 columns responsively).
+
+## Round 11b — fix: empty report sections (regression from 11a) · 2026-06-24
+
+- **Bug (self-inflicted in 11a):** the new at-a-glance strip read the candidate as `OPD_DATA[OPD_ID]`, but the page holds the current candidate in `OPD_C`. `OPD_ID` was undefined → `c.sources` threw → `opdRender()` aborted immediately after the hero, leaving **Identity verification, Sources found, Information gathered, CV cross-check and Signals all empty** (including the Confirm / Not-a-match buttons).
+- **Fix:** `opdGlance()` now reads `OPD_C`.
+- **Verification hardened:** added a headless render harness (stubbed DOM) that executes `opdRender()` for **all 6 candidates** and asserts every section produces content, then walks the full not-a-match cycle. A syntax check alone would not have caught this — the failure was a runtime reference error.
+  - All 6 candidates render hero/glance/identity/sources/info/cross/signals.
+  - Not-a-match cycle on the 3-identity candidate: idx 0 → 1 → 2 → exhausted.
+  - Identity controls confirmed present: "Confirmed — this is the candidate" (`opd-confirm`) and "Not a match" (`opd-not-a-match`).

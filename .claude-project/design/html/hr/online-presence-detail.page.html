@@ -936,7 +936,7 @@ function opdDrop(i){OPD_S.drop[i]=!OPD_S.drop[i];opdRender()}
 /* At-a-glance verdict strip — the whole report in one scan line.
    Cross-check figures stay hidden until a human confirms identity. */
 function opdGlance(){
-  var c=OPD_DATA[OPD_ID], box=document.getElementById('opd-glance');
+  var c=OPD_C, box=document.getElementById('opd-glance');
   if(!box) return;
   var locked=!OPD_S.confirmed, dash='<span style="color:var(--muted)">&mdash;</span>';
   function cell(icon,label,val,sub,col){

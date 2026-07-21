@@ -252,12 +252,72 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
 .rp-toast.on{opacity:1;transform:translateY(0)}
 .rp-toast svg{width:15px;height:15px;flex:none;color:#4ADE80}
 .rp-toast a{color:#93C5FD;font-weight:700;text-decoration:underline;pointer-events:auto}
+/* ══════════════════════════════════════════════════════════════════
+   CVF — density pass + CV-review filter bar (`cvf-` namespace).
+   Existing design tokens only. No new colours.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* tighter table rhythm — the row height was the main source of congestion */
+table[data-testid="review-table"] th{padding:9px 12px}
+table[data-testid="review-table"] td{padding:9px 12px}
+
+/* circular gauges (confidence / AI match score / presence score) */
+.cvf-ring{width:46px;height:46px;flex:none;line-height:0}
+.cvf-ring svg{width:46px;height:46px;display:block}
+.cvf-ring.sm,.cvf-ring.sm svg{width:34px;height:34px}
+.cvf-ringtxt{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.cvf-ring.sm .cvf-ringtxt{font-size:13px}
+
+/* CV file cell — icons + truncated filename */
+.cvf-file{display:flex;align-items:center;gap:6px;max-width:200px}
+.cvf-fname{font-size:12.5px;color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.cvf-iconbtn{width:26px;height:26px;padding:0;border:1px solid var(--border);border-radius:7px;display:inline-grid;place-items:center;color:var(--muted);background:var(--surface);flex:none}
+.cvf-iconbtn:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-soft)}
+.cvf-iconbtn svg{width:14px;height:14px}
+
+/* parsed profile — one tight line */
+.cvf-morechip{background:var(--primary-soft);color:var(--primary)}
+
+/* online presence cell — icon only, no repeated wording */
+.cvf-prescell{display:flex;align-items:center;gap:6px;min-width:0}
+.cvf-prescell .rp-chip{padding:2px 7px;font-size:11px}
+.cvf-presrun{display:inline-grid;place-items:center;width:26px;height:26px;color:var(--primary)}
+.cvf-presrun .rp-spin{width:15px;height:15px}
+
+/* actions — vertical, tinted, colour-coded */
+.cvf-acts{display:flex;flex-direction:column;gap:4px;align-items:stretch;min-width:100px}
+.cvf-act{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:6px;font-size:11.5px;font-weight:600;border:1px solid transparent;line-height:1.25;text-align:left;background:var(--muted-s);color:var(--muted)}
+.cvf-act svg{width:12px;height:12px;flex:none}
+.cvf-act:hover{filter:brightness(.95)}
+.cvf-act-suc{background:var(--success-s);color:var(--success)}
+.cvf-act-dan{background:var(--danger-s);color:var(--danger)}
+.cvf-act-warn{background:var(--warn-s);color:var(--warn)}
+
+/* filter bar */
+.cvf-bar{padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.cvf-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cvf-search{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--muted);flex:1 1 240px;min-width:220px;max-width:330px}
+.cvf-search svg{width:15px;height:15px;flex:none}
+.cvf-search input{border:0;background:transparent;outline:0;font:inherit;font-size:13px;color:var(--text);width:100%}
+.cvf-sel{font:inherit;font-size:12.5px;padding:6px 9px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;max-width:168px}
+.cvf-sel:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.cvf-count{margin-left:auto;font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.cvf-active{display:none;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--muted);font-weight:600}
+.cvf-fchip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-size:11.5px;font-weight:600}
+.cvf-fchip button{border:0;background:transparent;color:inherit;padding:0;display:inline-grid;place-items:center;line-height:0}
+.cvf-fchip button svg{width:11px;height:11px}
+.cvf-fchip button:hover{color:var(--primary-hover)}
+.cvf-emptybox{text-align:center;padding:38px 20px;color:var(--muted)}
+.cvf-emptybox svg{width:34px;height:34px;opacity:.5;margin-bottom:10px}
+.cvf-emptybox p{font-size:13px;margin-bottom:12px}
+
 @media(max-width:1024px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
   .drawer-grid{grid-template-columns:1fr}
   .parsed-cell{max-width:200px}
   .rp-lists{grid-template-columns:1fr}
+  .cvf-search{max-width:none}
 }
 </style>
 </head>
@@ -370,6 +430,64 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
           <h2>Parsed candidates</h2>
           <span style="font-size:12.5px;color:var(--muted)"><span data-testid="review-selected-count">0</span> selected</span>
         </div>
+        <!-- CV-review filter bar (cvf- namespace) -->
+        <div class="cvf-bar" data-testid="cvf-filter-bar">
+          <div class="cvf-row">
+            <div class="cvf-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="cvfSearch" data-testid="cvf-search" placeholder="Search name, email, skills, parsed content…" aria-label="Search candidates, emails, skills and parsed content" oninput="applyCvFilters()">
+            </div>
+            <select class="cvf-sel" id="cvfStatus" data-testid="cvf-status" aria-label="Filter by review status" onchange="applyCvFilters()">
+              <option value="">All statuses</option>
+              <option value="warn">Pending review</option>
+              <option value="suc">Shortlisted</option>
+              <option value="dan">Rejected</option>
+            </select>
+            <select class="cvf-sel" id="cvfConf" data-testid="cvf-confidence" aria-label="Filter by parsing confidence" onchange="applyCvFilters()">
+              <option value="">All confidence</option>
+              <option value="high">High (≥90)</option>
+              <option value="med">Medium (70–89)</option>
+              <option value="low">Low (&lt;70)</option>
+            </select>
+            <select class="cvf-sel" id="cvfScore" data-testid="cvf-score" aria-label="Filter by AI match score" onchange="applyCvFilters()">
+              <option value="">All match scores</option>
+              <option value="90">Score ≥90</option>
+              <option value="80">Score 80–89</option>
+              <option value="60">Score 60–79</option>
+              <option value="lt60">Score &lt;60</option>
+            </select>
+            <select class="cvf-sel" id="cvfFlags" data-testid="cvf-redflags" aria-label="Filter by red flags" onchange="applyCvFilters()">
+              <option value="">All red-flag states</option>
+              <option value="has">Has red flags</option>
+              <option value="none">No red flags</option>
+            </select>
+            <select class="cvf-sel" id="cvfPres" data-testid="cvf-presence" aria-label="Filter by online presence state" onchange="applyCvFilters()">
+              <option value="">All presence states</option>
+              <option value="done">Presence analysed</option>
+              <option value="todo">Not analysed</option>
+              <option value="unmatched">Has unmatched claims</option>
+            </select>
+            <select class="cvf-sel" id="cvfSkill" data-testid="cvf-skill" aria-label="Filter by skill" onchange="applyCvFilters()">
+              <option value="">All skills</option>
+            </select>
+            <select class="cvf-sel" id="cvfDistrict" data-testid="cvf-district" aria-label="Filter by district" onchange="applyCvFilters()">
+              <option value="">All districts</option>
+            </select>
+            <select class="cvf-sel" id="cvfExp" data-testid="cvf-experience" aria-label="Filter by years of experience" onchange="applyCvFilters()">
+              <option value="">All experience</option>
+              <option value="0-4">0–4 yrs</option>
+              <option value="5-7">5–7 yrs</option>
+              <option value="8-10">8–10 yrs</option>
+              <option value="11">11+ yrs</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" data-testid="cvf-clear-all" onclick="clearCvFilters()" title="Clear all filters">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Clear all
+            </button>
+            <span class="cvf-count" data-testid="cvf-count">10 of 10 candidates</span>
+          </div>
+          <div class="cvf-active" id="cvfActive" data-testid="cvf-active-filters" aria-live="polite"></div>
+        </div>
+
         <!-- Bulk selection actions (incl. online-presence run) -->
         <div class="rp-bulkbar" data-testid="review-bulk-bar">
           <button class="btn btn-primary btn-sm" id="rpBulkBtn" data-testid="review-bulk-runpresence" onclick="runPresenceBulk()" disabled>
@@ -402,7 +520,7 @@ tr.expanded .parsed-cell .more svg{transform:rotate(180deg)}
               <th>AI match score</th>
               <th>Online presence</th>
               <th>Status</th>
-              <th style="text-align:right">Actions</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="cvBody"></tbody>
@@ -751,62 +869,103 @@ function scoreColor(s){return s>=80?'var(--success)':s>=60?'var(--warn)':'var(--
 function confColor(c){return c>=90?'var(--success)':c>=70?'var(--warn)':'var(--danger)';}
 function esc(s){return String(s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
 
+/* ---------- Compact icon set (inline SVG only, no emojis) ---------- */
+var CVF_SVG={
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
+};
+function cvfIcon(k,w){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'+
+    (w?' style="width:'+w+'px;height:'+w+'px"':'')+'>'+(CVF_SVG[k]||'')+'</svg>';
+}
+
+/* ---------- Circular gauge (donut ring with the % inside) ----------
+   r=16 on a 40×40 viewBox -> circumference 100.53, so dashoffset is a
+   straight (100 - value) mapping. */
+function ringHTML(v,color,label,tid,small,unit){
+  var pct=Math.max(0,Math.min(100,Math.round(Number(v)||0)));
+  var off=(100.53*(100-pct)/100).toFixed(2);
+  var u=(unit===undefined?'%':unit);
+  return '<div class="cvf-ring'+(small?' sm':'')+'" role="img" aria-label="'+esc(label)+'" title="'+esc(label)+'"'+
+      (tid?' data-testid="'+tid+'"':'')+'>'+
+    '<svg viewBox="0 0 40 40" aria-hidden="true">'+
+      '<circle cx="20" cy="20" r="16" fill="none" stroke="var(--surface-2)" stroke-width="4"/>'+
+      '<circle cx="20" cy="20" r="16" fill="none" stroke="'+color+'" stroke-width="4" stroke-linecap="round"'+
+        ' stroke-dasharray="100.53" stroke-dashoffset="'+off+'" transform="rotate(-90 20 20)"/>'+
+      '<text class="cvf-ringtxt" x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="'+color+'">'+pct+u+'</text>'+
+    '</svg></div>';
+}
+
 /* ---------- Build table rows ---------- */
 function buildRows(){
   var tb=document.getElementById('cvBody'); var html='';
   CANDS.forEach(function(c){
-    var chips=c.skills.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('');
+    var sk=c.skills||[];
+    var shownSk=sk.slice(0,3);
+    var extraSk=sk.length-shownSk.length;
+    var chips=shownSk.map(function(s){return '<span class="chip" title="'+esc(s)+'">'+esc(s)+'</span>';}).join('')+
+      (extraSk>0?'<span class="chip cvf-morechip" title="'+esc(sk.join(', '))+'">+'+extraSk+'</span>':'');
     html+=''+
     '<tr id="row-'+c.id+'" data-testid="review-row-'+c.id+'">'+
       '<td><input type="checkbox" class="rowcb" data-cid="'+c.id+'" data-testid="review-row-'+c.id+'-check" onchange="updateCount()" aria-label="Select '+esc(c.name)+'"></td>'+
       '<td><div class="cand"><span class="ava">'+initials(c.name)+'</span><div><div style="font-weight:600">'+esc(c.name)+'</div><small>'+esc(c.email)+'</small></div></div></td>'+
-      '<td><div style="display:flex;align-items:center;gap:8px">'+
-        '<a href="#" download data-testid="review-row-'+c.id+'-download" onclick="downloadCv('+c.id+');return false;" title="Download CV" style="font-size:12.5px;color:var(--primary);font-weight:600;display:inline-flex;align-items:center;gap:6px">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+esc(c.file)+'</a>'+
-        '<button class="icon-btn" style="width:30px;height:30px" data-testid="review-row-'+c.id+'-viewcv" onclick="openCvDrawer('+c.id+')" title="View original CV" aria-label="View original CV">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'+
-        '</button></div></td>'+
+      '<td><div class="cvf-file">'+
+        '<a class="cvf-iconbtn" href="#" download data-testid="review-row-'+c.id+'-download" onclick="downloadCv('+c.id+');return false;" title="Download '+esc(c.file)+'" aria-label="Download CV of '+esc(c.name)+'">'+cvfIcon('download')+'</a>'+
+        '<button class="cvf-iconbtn" data-testid="review-row-'+c.id+'-viewcv" onclick="openCvDrawer('+c.id+')" title="View original CV" aria-label="View original CV of '+esc(c.name)+'">'+cvfIcon('eye')+'</button>'+
+        '<span class="cvf-fname" title="'+esc(c.file)+'">'+esc(c.file)+'</span>'+
+      '</div></td>'+
       '<td><div class="parsed-cell" data-testid="review-row-'+c.id+'-parsed" onclick="toggleProfile('+c.id+')" title="Expand parsed profile">'+
           chips+
           '<span class="chip" style="background:var(--info-s);color:var(--info)">'+esc(c.exp)+'</span>'+
           '<span class="more">details<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>'+
         '</div></td>'+
-      '<td><div class="score"><div class="bar"><i style="width:'+c.conf+'%;background:'+confColor(c.conf)+'"></i></div><b style="color:'+confColor(c.conf)+'">'+c.conf+'%</b></div></td>'+
-      '<td><div class="score"><div class="bar"><i style="width:'+c.score+'%;background:'+scoreColor(c.score)+'"></i></div><b>'+c.score+'%</b></div></td>'+
-      '<td><div class="rp-cell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
+      '<td>'+ringHTML(c.conf,confColor(c.conf),'Parsing confidence '+c.conf+' percent','review-row-'+c.id+'-confidence')+'</td>'+
+      '<td>'+ringHTML(c.score,scoreColor(c.score),'AI match score '+c.score+' percent','review-row-'+c.id+'-score')+'</td>'+
+      '<td><div class="cvf-prescell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
       '<td><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
-      '<td style="text-align:right;white-space:nowrap">'+
-        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')">Shortlist</button> '+
-        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-reject" onclick="setStatus('+c.id+',\'dan\')">Reject</button> '+
-        '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+c.id+'-pending" onclick="setStatus('+c.id+',\'warn\')">Mark pending</button>'+
-      '</td>'+
+      '<td><div class="cvf-acts">'+
+        '<button class="cvf-act cvf-act-suc" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')" title="Shortlist '+esc(c.name)+'">'+cvfIcon('check')+'Shortlist</button>'+
+        '<button class="cvf-act cvf-act-dan" data-testid="review-row-'+c.id+'-reject" onclick="setStatus('+c.id+',\'dan\')" title="Reject '+esc(c.name)+' (human review required)">'+cvfIcon('x')+'Reject</button>'+
+        '<button class="cvf-act cvf-act-warn" data-testid="review-row-'+c.id+'-pending" onclick="setStatus('+c.id+',\'warn\')" title="Mark '+esc(c.name)+' pending">'+cvfIcon('clock')+'Mark pending</button>'+
+      '</div></td>'+
     '</tr>'+
     '<tr class="drawer-row" id="drawer-'+c.id+'" style="display:none"><td colspan="9"><div class="drawer-inner" id="profile-'+c.id+'" data-testid="review-row-'+c.id+'-profile">'+profileHTML(c)+'</div></td></tr>';
   });
+  html+='<tr id="cvfEmpty" data-testid="cvf-empty" style="display:none"><td colspan="9">'+
+    '<div class="cvf-emptybox">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'+
+      '<p>No candidates match the current filters.</p>'+
+      '<button class="btn btn-ghost btn-sm" data-testid="cvf-empty-clear" onclick="clearCvFilters()">Clear all filters</button>'+
+    '</div></td></tr>';
   tb.innerHTML=html;
 }
 
 /* ---------- Online presence: in-row indicator ---------- */
 function presenceCellHTML(id){
   if(PRES_BUSY[id]){
-    return '<span class="rp-running" data-testid="review-row-'+id+'-presence-running">'+
-      '<svg class="rp-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>Analysing…</span>';
+    return '<span class="cvf-presrun rp-running" data-testid="review-row-'+id+'-presence-running" role="status" title="Analysing…" aria-label="Analysing online presence">'+
+      '<svg class="rp-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg></span>';
   }
   if(!PRES_DONE[id]){
-    return '<button class="btn btn-ghost btn-sm" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+')" title="Run online presence research on public professional sources">'+
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Run online presence</button>';
+    return '<button class="cvf-iconbtn" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+')" title="Run online presence" aria-label="Run online presence">'+
+      cvfIcon('globe')+'</button>';
   }
   var p=presData(id);
   var contra=presContraCount(p);
   var cls = contra ? 'rp-bad' : (p.unmatched.length ? 'rp-warnc' : 'rp-ok');
-  var ic = contra
-    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ic = contra ? cvfIcon('x') : cvfIcon('check');
+  var lbl = p.matched.length+' matched · '+p.unmatched.length+' unmatched';
   return ''+
-    '<div class="rp-scorerow"><div class="rp-bar"><i style="width:'+p.score+'%;background:'+presScoreColor(p.score)+'"></i></div>'+
-      '<b style="color:'+presScoreColor(p.score)+'">'+p.score+'</b></div>'+
-    '<span class="rp-chip '+cls+'" data-testid="review-row-'+id+'-presence-chip">'+ic+p.matched.length+' matched · '+p.unmatched.length+' unmatched</span>'+
-    '<button class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:11.5px" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+',true)" title="Re-run online presence research">Re-run</button>';
+    ringHTML(p.score,presScoreColor(p.score),'Online presence score '+p.score+' out of 100','review-row-'+id+'-presence-score',true,'')+
+    '<span class="rp-chip '+cls+'" data-testid="review-row-'+id+'-presence-chip" title="'+esc(lbl)+'" aria-label="'+esc(lbl)+'">'+ic+p.matched.length+'/'+p.unmatched.length+'</span>'+
+    '<a class="cvf-iconbtn" href="online-presence-detail.page.html?c='+id+'" data-testid="review-row-'+id+'-presence-detail" title="View full online presence report" aria-label="View full online presence report">'+cvfIcon('eye')+'</a>'+
+    '<button class="cvf-iconbtn" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+',true)" title="Re-run online presence" aria-label="Re-run online presence">'+cvfIcon('refresh')+'</button>';
 }
 
 /* ---------- Online presence: drawer block ---------- */
@@ -916,6 +1075,7 @@ function runPresence(id,isRerun,done){
     PRES_DONE[id]=true;
     renderPresenceCell(id);
     refreshProfile(id);
+    applyCvFilters();
     if(done){ done(); return; }
     publishPresence();
     var c=CANDS.filter(function(x){return x.id===id;})[0];
@@ -1000,10 +1160,13 @@ function toast(msg,withLink){
 }
 
 /* ---------- Row expand (parsed profile) ---------- */
+var CVF_EXPANDED={};
 function toggleProfile(id){
   var dr=document.getElementById('drawer-'+id);
   var row=document.getElementById('row-'+id);
+  if(!dr||!row) return;
   var open = dr.style.display==='none';
+  CVF_EXPANDED[id]=open;
   dr.style.display = open ? 'table-row' : 'none';
   row.classList.toggle('expanded', open);
 }
@@ -1038,15 +1201,154 @@ function closeCvDrawer(){
 
 /* ---------- Status / actions ---------- */
 var STMAP={suc:['b-suc','Shortlisted'], dan:['b-dan','Rejected — pending HR review'], warn:['b-warn','Pending review'], inf:['b-inf','Screened']};
+var CAND_STATUS={};   /* id -> status key, drives the Status filter */
 function setStatus(id,kind){
-  var el=document.getElementById('status-'+id); if(!el)return;
-  var m=STMAP[kind];
-  el.className='badge '+m[0]; el.textContent=m[1];
+  CAND_STATUS[id]=kind;
+  var el=document.getElementById('status-'+id);
+  if(el){
+    var m=STMAP[kind]||STMAP.warn;
+    el.className='badge '+m[0]; el.textContent=m[1];
+  }
+  applyCvFilters();
 }
 
-/* ---------- Bulk select ---------- */
+/* ══════════════════════════════════════════════════════════════════
+   CVF — CV-review filter bar. Filters the rendered rows; bulk select
+   only ever applies to rows that are currently visible.
+   ══════════════════════════════════════════════════════════════════ */
+var CVF_IDS={q:'cvfSearch',status:'cvfStatus',conf:'cvfConf',score:'cvfScore',flags:'cvfFlags',pres:'cvfPres',skill:'cvfSkill',district:'cvfDistrict',exp:'cvfExp'};
+var CVF_LABELS={
+  status:{warn:'Pending review',suc:'Shortlisted',dan:'Rejected'},
+  conf:{high:'Confidence ≥90',med:'Confidence 70–89',low:'Confidence <70'},
+  score:{'90':'Score ≥90','80':'Score 80–89','60':'Score 60–79',lt60:'Score <60'},
+  flags:{has:'Has red flags',none:'No red flags'},
+  pres:{done:'Presence analysed',todo:'Presence not analysed',unmatched:'Has unmatched claims'},
+  exp:{'0-4':'0–4 yrs','5-7':'5–7 yrs','8-10':'8–10 yrs','11':'11+ yrs'}
+};
+function cvfVal(id){var el=document.getElementById(id);return el&&el.value?String(el.value):'';}
+function cvfState(){
+  var f={};
+  Object.keys(CVF_IDS).forEach(function(k){ f[k]=cvfVal(CVF_IDS[k]).trim(); });
+  f.q=f.q.toLowerCase();
+  return f;
+}
+function cvfYears(c){var m=/(\d+)/.exec(String(c.exp||''));return m?parseInt(m[1],10):0;}
+function cvfHaystack(c){
+  return [c.name,c.email,c.district,c.edu,c.exp,c.file,
+    (c.skills||[]).join(' '),(c.skillsFull||[]).join(' '),(c.edus||[]).join(' '),
+    (c.work||[]).join(' '),(c.certs||[]).join(' '),
+    (c.flags||[]).map(function(x){return x.t+' '+x.d;}).join(' ')].join(' ').toLowerCase();
+}
+function cvfMatch(c,f){
+  if(f.q && cvfHaystack(c).indexOf(f.q)<0) return false;
+  if(f.status && (CAND_STATUS[c.id]||'warn')!==f.status) return false;
+  if(f.conf){
+    var cf=c.conf;
+    if(f.conf==='high' && cf<90) return false;
+    if(f.conf==='med'  && (cf<70||cf>=90)) return false;
+    if(f.conf==='low'  && cf>=70) return false;
+  }
+  if(f.score){
+    var s=c.score;
+    if(f.score==='90'   && s<90) return false;
+    if(f.score==='80'   && (s<80||s>=90)) return false;
+    if(f.score==='60'   && (s<60||s>=80)) return false;
+    if(f.score==='lt60' && s>=60) return false;
+  }
+  if(f.flags){
+    var hasFlag=(c.flags||[]).length>0;
+    if(f.flags==='has'  && !hasFlag) return false;
+    if(f.flags==='none' && hasFlag) return false;
+  }
+  if(f.pres){
+    var done=!!PRES_DONE[c.id];
+    if(f.pres==='done' && !done) return false;
+    if(f.pres==='todo' && done) return false;
+    if(f.pres==='unmatched' && (!done || presData(c.id).unmatched.length===0)) return false;
+  }
+  if(f.skill && (c.skills||[]).concat(c.skillsFull||[]).indexOf(f.skill)<0) return false;
+  if(f.district && c.district!==f.district) return false;
+  if(f.exp){
+    var y=cvfYears(c);
+    if(f.exp==='0-4'  && y>4) return false;
+    if(f.exp==='5-7'  && (y<5||y>7)) return false;
+    if(f.exp==='8-10' && (y<8||y>10)) return false;
+    if(f.exp==='11'   && y<11) return false;
+  }
+  return true;
+}
+function cvfChipLabel(k,v){
+  if(k==='q') return 'Search: "'+v+'"';
+  if(k==='skill') return 'Skill: '+v;
+  if(k==='district') return 'District: '+v;
+  return (CVF_LABELS[k]&&CVF_LABELS[k][v])||v;
+}
+function renderCvfChips(f){
+  var host=document.getElementById('cvfActive');
+  if(!host) return;
+  var keys=Object.keys(CVF_IDS).filter(function(k){return !!f[k];});
+  if(!keys.length){ host.innerHTML=''; host.style.display='none'; return; }
+  host.style.display='flex';
+  host.innerHTML='<span>Active filters:</span>'+keys.map(function(k){
+    return '<span class="cvf-fchip" data-testid="cvf-chip-'+k+'">'+esc(cvfChipLabel(k,f[k]))+
+      '<button type="button" data-testid="cvf-chip-'+k+'-remove" title="Remove filter" aria-label="Remove '+esc(cvfChipLabel(k,f[k]))+' filter" onclick="clearCvFilter(\''+k+'\')">'+cvfIcon('x')+'</button></span>';
+  }).join('');
+}
+function clearCvFilter(k){
+  var el=document.getElementById(CVF_IDS[k]);
+  if(el) el.value='';
+  applyCvFilters();
+}
+function clearCvFilters(){
+  Object.keys(CVF_IDS).forEach(function(k){
+    var el=document.getElementById(CVF_IDS[k]);
+    if(el) el.value='';
+  });
+  applyCvFilters();
+}
+function cvfPopulate(){
+  var sk={},di={};
+  CANDS.forEach(function(c){
+    (c.skills||[]).concat(c.skillsFull||[]).forEach(function(s){sk[s]=1;});
+    if(c.district) di[c.district]=1;
+  });
+  var s=document.getElementById('cvfSkill');
+  if(s) s.innerHTML='<option value="">All skills</option>'+Object.keys(sk).sort().map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+'</option>';}).join('');
+  var d=document.getElementById('cvfDistrict');
+  if(d) d.innerHTML='<option value="">All districts</option>'+Object.keys(di).sort().map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+'</option>';}).join('');
+}
+function applyCvFilters(){
+  var f=cvfState(), shown=0;
+  CANDS.forEach(function(c){
+    var ok=cvfMatch(c,f);
+    var row=document.getElementById('row-'+c.id);
+    var dr=document.getElementById('drawer-'+c.id);
+    if(row){
+      row.style.display = ok ? '' : 'none';
+      var cb=row.querySelector ? row.querySelector('.rowcb') : null;
+      if(!ok && cb && cb.checked) cb.checked=false;
+    }
+    if(dr) dr.style.display = (ok && CVF_EXPANDED[c.id]) ? 'table-row' : 'none';
+    if(ok) shown++;
+  });
+  var em=document.getElementById('cvfEmpty');
+  if(em) em.style.display = shown ? 'none' : 'table-row';
+  var cnt=document.querySelector('[data-testid="cvf-count"]');
+  if(cnt) cnt.textContent = shown+' of '+CANDS.length+' candidate'+(CANDS.length===1?'':'s');
+  renderCvfChips(f);
+  updateCount();
+}
+
+/* ---------- Bulk select (visible rows only) ---------- */
+function cvfRowVisible(id){
+  var row=document.getElementById('row-'+id);
+  return !!row && row.style.display!=='none';
+}
 function toggleAll(cb){
-  document.querySelectorAll('.rowcb').forEach(function(x){x.checked=cb.checked;});
+  document.querySelectorAll('.rowcb').forEach(function(x){
+    var id=parseInt(x.getAttribute('data-cid'),10);
+    x.checked = cb.checked && cvfRowVisible(id);
+  });
   updateCount();
 }
 function updateCount(){
@@ -1122,6 +1424,8 @@ function applySuggestion(){
 
 /* init */
 buildRows();
+cvfPopulate();
+applyCvFilters();
 onTopN(30);
 updateCount();
 </script>

@@ -381,3 +381,16 @@ Full findings + resolution log: `.claude-project/design/WORKFLOW_AUDIT.md`.
 - Added a static **"Sample presence report"** link on Review CVs so the full report keeps a non-JS entry point.
 
 **Verification** (executed, not just syntax-checked): cv-review — 10/10 candidates render the presence cell and drawer in both states, `runPresence` runs for all 10, published payload carries all 9 keys. results — 18 interaction paths pass (boot, every filter control, chip removal, tab switching, card/table swap, all AI-prompt paths incl. the unrecognised case, modals). **41/41 pages reachable · 0 broken links · 0 emoji-icons.**
+
+## Round 12a — Review CVs decluttered + CV-review filters · 2026-06-24
+
+Client feedback: the parsed-candidates table was too congested.
+
+- **Confidence & AI match score → circular gauges.** Linear bars replaced with 46px SVG donut rings and the **percentage written inside**, colour-banded (confidence ≥90 green / 70–89 amber / <70 red; score ≥80 / ≥60 / below). Each carries `role="img"` + an aria-label.
+- **Online presence → icon only.** The column header already says it, so the cell no longer repeats the words: a single globe icon button un-analysed, a spinner while running, and once analysed a small score ring + tight `X/Y` chip + eye link to the full report + re-run icon.
+- **Actions → vertical and colour-coded.** Shortlist (green), Reject (red), Mark pending (amber) as soft tinted buttons stacked vertically, so the row reads calmly instead of three wide blocks.
+- **CV file → compact.** Download icon + eye icon, filename truncated at 150px with the full name in a `title` — long filenames were a main cause of the width pressure.
+- **Parsed profile → tighter.** Max 3 skill chips + `+N` overflow, years chip and `details` expander kept; cell padding tightened.
+- **New `cvf-` filter bar** relevant to this stage: full-text search, Status, Confidence band, AI-score band, Red flags, **Online presence (analysed / not / has unmatched)**, Skills, District, Experience — with removable active-filter chips, a live "N of M" count, an empty state, and bulk-select scoped to visible rows only.
+
+**Verified by execution** (not just `node --check`): structural checks (gauges use `stroke-dasharray`, ellipsis truncation, `cvf-` namespace, shell intact, no emoji) plus runtime — `buildRows`/`presenceCellHTML`/`presenceBlockHTML`/`profileHTML` for **all 10 candidates in un-analysed and analysed states**, `runPresence` 10/10, publish contract intact. Filter logic asserted against independently computed expectations: confidence bands 2/5/3 and score bands both **partition the set exactly**, red flags 6/4, presence filter flips 0 → 10 after running, search matches. 41/41 pages reachable, 0 broken links.

@@ -262,7 +262,7 @@ table[data-testid="review-table"] th{padding:9px 12px}
 table[data-testid="review-table"] td{padding:9px 12px}
 
 /* circular gauges (confidence / AI match score / presence score) */
-.cvf-ring{width:46px;height:46px;flex:none;line-height:0}
+.cvf-ring{width:46px;height:46px;flex:none;line-height:0;display:inline-block}
 .cvf-ring svg{width:46px;height:46px;display:block}
 .cvf-ring.sm,.cvf-ring.sm svg{width:34px;height:34px}
 .cvf-ringtxt{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -279,7 +279,7 @@ table[data-testid="review-table"] td{padding:9px 12px}
 .cvf-morechip{background:var(--primary-soft);color:var(--primary)}
 
 /* online presence cell — icon only, no repeated wording */
-.cvf-prescell{display:flex;align-items:center;gap:6px;min-width:0}
+.cvf-prescell{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}
 .cvf-prescell .rp-chip{padding:2px 7px;font-size:11px}
 .cvf-presrun{display:inline-grid;place-items:center;width:26px;height:26px;color:var(--primary)}
 .cvf-presrun .rp-spin{width:15px;height:15px}
@@ -491,7 +491,7 @@ table[data-testid="review-table"] td{padding:9px 12px}
         <!-- Bulk selection actions (incl. online-presence run) -->
         <div class="rp-bulkbar" data-testid="review-bulk-bar">
           <button class="btn btn-primary btn-sm" id="rpBulkBtn" data-testid="review-bulk-runpresence" onclick="runPresenceBulk()" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
             Run online presence
           </button>
           <span class="rp-prog" id="rpBulkProg" data-testid="review-bulk-progress">
@@ -516,10 +516,10 @@ table[data-testid="review-table"] td{padding:9px 12px}
               <th>Candidate</th>
               <th>CV file</th>
               <th>Parsed profile</th>
-              <th>Confidence</th>
-              <th>AI match score</th>
-              <th>Online presence</th>
-              <th>Status</th>
+              <th style="text-align:center">Confidence</th>
+              <th style="text-align:center">AI match score</th>
+              <th style="text-align:center">Online presence</th>
+              <th style="text-align:center">Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -874,6 +874,7 @@ var CVF_SVG={
   download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
   eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
   globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  play:'<polygon points="6 3 20 12 6 21 6 3"/>',
   refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
   check:'<polyline points="20 6 9 17 4 12"/>',
   x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
@@ -881,7 +882,8 @@ var CVF_SVG={
   search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
 };
 function cvfIcon(k,w){
-  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'+
+  var fill = (k==='play') ? 'currentColor' : 'none';   /* play reads better solid */
+  return '<svg viewBox="0 0 24 24" fill="'+fill+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'+
     (w?' style="width:'+w+'px;height:'+w+'px"':'')+'>'+(CVF_SVG[k]||'')+'</svg>';
 }
 
@@ -925,10 +927,10 @@ function buildRows(){
           '<span class="chip" style="background:var(--info-s);color:var(--info)">'+esc(c.exp)+'</span>'+
           '<span class="more">details<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>'+
         '</div></td>'+
-      '<td>'+ringHTML(c.conf,confColor(c.conf),'Parsing confidence '+c.conf+' percent','review-row-'+c.id+'-confidence')+'</td>'+
-      '<td>'+ringHTML(c.score,scoreColor(c.score),'AI match score '+c.score+' percent','review-row-'+c.id+'-score')+'</td>'+
-      '<td><div class="cvf-prescell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
-      '<td><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
+      '<td style="text-align:center">'+ringHTML(c.conf,confColor(c.conf),'Parsing confidence '+c.conf+' percent','review-row-'+c.id+'-confidence')+'</td>'+
+      '<td style="text-align:center">'+ringHTML(c.score,scoreColor(c.score),'AI match score '+c.score+' percent','review-row-'+c.id+'-score')+'</td>'+
+      '<td style="text-align:center"><div class="cvf-prescell" id="pres-'+c.id+'" data-testid="review-row-'+c.id+'-presence">'+presenceCellHTML(c.id)+'</div></td>'+
+      '<td style="text-align:center"><span class="badge b-warn" id="status-'+c.id+'" data-testid="review-row-'+c.id+'-status">Pending review</span></td>'+
       '<td><div class="cvf-acts">'+
         '<button class="cvf-act cvf-act-suc" data-testid="review-row-'+c.id+'-shortlist" onclick="setStatus('+c.id+',\'suc\')" title="Shortlist '+esc(c.name)+'">'+cvfIcon('check')+'Shortlist</button>'+
         '<button class="cvf-act cvf-act-dan" data-testid="review-row-'+c.id+'-reject" onclick="setStatus('+c.id+',\'dan\')" title="Reject '+esc(c.name)+' (human review required)">'+cvfIcon('x')+'Reject</button>'+
@@ -954,7 +956,7 @@ function presenceCellHTML(id){
   }
   if(!PRES_DONE[id]){
     return '<button class="cvf-iconbtn" data-testid="review-row-'+id+'-runpresence" onclick="runPresence('+id+')" title="Run online presence" aria-label="Run online presence">'+
-      cvfIcon('globe')+'</button>';
+      cvfIcon('play')+'</button>';
   }
   var p=presData(id);
   var contra=presContraCount(p);

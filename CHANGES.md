@@ -394,3 +394,10 @@ Client feedback: the parsed-candidates table was too congested.
 - **New `cvf-` filter bar** relevant to this stage: full-text search, Status, Confidence band, AI-score band, Red flags, **Online presence (analysed / not / has unmatched)**, Skills, District, Experience — with removable active-filter chips, a live "N of M" count, an empty state, and bulk-select scoped to visible rows only.
 
 **Verified by execution** (not just `node --check`): structural checks (gauges use `stroke-dasharray`, ellipsis truncation, `cvf-` namespace, shell intact, no emoji) plus runtime — `buildRows`/`presenceCellHTML`/`presenceBlockHTML`/`profileHTML` for **all 10 candidates in un-analysed and analysed states**, `runPresence` 10/10, publish contract intact. Filter logic asserted against independently computed expectations: confidence bands 2/5/3 and score bands both **partition the set exactly**, red flags 6/4, presence filter flips 0 → 10 after running, search matches. 41/41 pages reachable, 0 broken links.
+
+## Round 12b — Review CVs: play icon + centred columns · 2026-06-24
+
+- **Run online presence now uses a play icon** instead of the globe, on both the bulk button and the per-row icon button. `cvfIcon()` renders `play` filled (`fill="currentColor"`) so the triangle reads solid rather than as a hollow outline. The globe is kept only where it is a *subject* icon (the drawer's "not analysed" placeholder and the personal-website source type), not as a run control.
+- **Confidence, AI match score, Online presence and Status columns are centre-aligned** — headers and cells. `.cvf-ring` is now `inline-block` and `.cvf-prescell` uses `justify-content:center` so the gauges, presence icon/chip and status badge actually sit centred rather than just their text.
+
+Re-verified after the change: structural checks pass, all 10 candidates render in un-analysed and analysed states, and the filter logic still partitions the set exactly. 41/41 reachable, 0 broken links.

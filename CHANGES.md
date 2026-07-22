@@ -489,3 +489,29 @@ Clicking **View** on the Summary Report opened a profile with no written/viva ma
 **6. Bugs found and fixed during verification.** Splicing the new fixture in had silently removed five definitions the page depends on — `cvfRankMap`, `aiEval`, `AI_SIGCLS`, `RP_ICON`, `RP_SRCNAME` — and `cvaRenderAll` lost the `cfg` it prints the position name from. Each would have thrown at load and left the page blank in a browser while `node --check` still reported valid syntax. All restored, and the rank column's tie-break (by id, so ranks stay contiguous) restored with it.
 
 **Verified by execution, not inspection:** scope + reconciliation + toggle + multi-chart AND + clear-all (35 assertions) · filter discrimination and band partitioning · rank contiguous and score-ordered across 9 filter states · bulk decisions · shortlist strategies · presence report render incl. the not-a-match cycle. 41 pages, 0 broken links.
+
+## Round 15 — Candidate Database (Talent & System) · 2026-07-22
+
+`hr/candidates.page.html` was a redirect stub pointing at Shortlist. It is now the **Candidate Database** — Module 4 of the PRD, and the piece the prototype was missing: the ten workflow stages are a *queue* that works one batch at a time, while this is the *record store* that outlives them.
+
+**1. Every CV, filed permanently — 270 records.** Built from the shared `STLF` pools across all three positions, so a candidate's score, stage and marks are the same number here as on Review CVs, the Summary Report and Exports. Nothing is deleted; a rejected record keeps its decision trail.
+
+**2. Four buckets, for any position.** Status is *derived* from the pipeline stage rather than stored separately, so the two can never disagree:
+- **Pending review** (158) — awaiting an HR decision, including everything below the auto-shortlist threshold
+- **Shortlisted** (68) — live in the pipeline (shortlisted / in interview / advanced)
+- **Finalized** (9) — selected against an opening, **capped at the number of seats** (5 per position; verified 5 / 1 / 3, never more)
+- **Rejected** (35) — every one carrying a reason, a named decider and a date
+
+All four are present for **all three positions**, so the demo works whichever position is picked. Tab counts ignore the status filter itself — otherwise every tab but the active one would read zero, which tells HR nothing.
+
+**3. The governance rule is visible, not just respected.** `REJECTED_PENDING_REVIEW` records show a panel stating they are below threshold and *awaiting a human decision, not rejected*. Rejected records show the opposite panel: **"Rejected by a person, not by the system"**, with the reason and who signed it. Verified: **0 records auto-rejected**, **0 rejected records missing a reason, decider or date**.
+
+**4. Filters that compose.** Position, status, batch, month applied, match-score band, experience, education, district, skill, source, red flags, and free-text search over name / email / phone — all AND-combined, all shown as removable chips, all reset by **Clear all**. Narrowing the position repopulates the dependent dropdowns and drops values that no longer exist, so no filter can strand you on an empty list you cannot explain. Paged at 25 with a compact pager.
+
+**5. See the CV, get a profile summary.** Per row: **View CV** (preview + download, with the parsed screening fields shown clearly separated from the CV's own content), **Profile summary** (an inline drawer with the AI evaluation summary, matched/missing skills, red flags, the full record, **written and viva marks where the candidate sat them**, and **application history** so a re-applicant is never assessed blind), and **Open full profile** — which passes the candidate's roll when they have assessment marks, so it lands on their record instead of a placeholder.
+
+**6. Export follows the filter.** The button carries the live count and the menu spells out the exact scope before anything downloads — Excel workbook (21 columns including the rejection reason and decider), CSV, or a CV bundle whose manifest records the filter that produced it. Ticking rows makes the selection win over the filter. Verified end-to-end through the real download path: a genuine 48 KB `.xlsx` and a 30 KB `.zip`, not stubs.
+
+**7. Nav.** Added under **Talent & System** on all 23 HR pages; `candidate-detail` now belongs to it. This also retires the last orphan — the database was previously reachable only as a redirect.
+
+**Verified by execution (57 assertions):** record count and key uniqueness · buckets partition the set and are non-empty per position · the two governance invariants · finalized never exceeds openings · nine filters each reconciled against an independently computed expectation · filter + status composition · clear-all · paging with no record on two pages · the summary drawer for all four statuses · marks matching the merit sheet exactly · CV text carrying the real record · all three exports through the real save path · selection overriding the filter · the empty state. Plus the full-page sweep: 22 pages with inline JS, **0 runtime errors**; 41 pages, **0 broken links**.

@@ -50,6 +50,7 @@ If you have sixty seconds and want to see the point of the product:
 | 3 | **Get shortlist suggestions** | The AI proposes a shortlist strategy, shows its reasoning, and waits. Nothing is applied until you press Apply. |
 | 4 | Expand a row → **Run online presence** | Public-profile corroboration of what the CV claims — matched, contradicted, and "not the right person". Assistive only; it never touches the match score. |
 | 5 | Sidebar → **6 Hiring Manager Review** | The hand-off. The HM accepts or rejects for the next round — HR cannot make that call, and neither can the AI. |
+| 6 | Sidebar → **Candidate Database** | The permanent record store — 270 candidates across every position. Filter by status, open a profile summary, and export exactly what you filtered. |
 
 ---
 
@@ -87,8 +88,11 @@ flowchart TD
     SR --> S9["⑨ Final Selection<br/>HM decides · HR read-only"]
     S9 --> S10["⑩ Onboarding<br/>HR · offer + checklist"]
     S4 -. assistive only .-> OP["Online presence<br/>never feeds the score"]
-    S10 --> EX[Exports · audit-logged]
+    S10 --> DBX["Candidate Database<br/>every record, filed permanently"]
+    DBX --> EX[Exports · audit-logged]
 ```
+
+Every stage writes into the **Candidate Database**, which is where a record lives once its round is over — see [Candidate Database](#the-candidate-database--talent--system) below.
 
 ### Login — the front door
 The login page is the entry point of the entire prototype. It routes by **role**, and the role decides the workspace, the sidebar, and what the step indicator lets you touch. This is the first place the product's governance shows up: you do not get a universal screen with disabled buttons, you get the workspace that belongs to your responsibility.
@@ -131,6 +135,29 @@ The AI can rank. The HM selects. HR watches. This asymmetry is deliberate and is
 ### Stage 10 — Onboarding · *HR*
 Offer email from a template, plus the onboarding checklist. **Exports** (original-CV bundle, customizable Excel, STL's predefined format, screening reports, panel summaries) are available throughout, and every export is audit-logged.
 
+### The Candidate Database · *Talent & System*
+
+The ten stages above are a **queue** — they work one batch at a time and move on. The Candidate Database is the **record store**: every CV STL has ever received, across every position, batch and round, filed permanently. **270 records** in the prototype.
+
+For **any position**, HR can see the four buckets that matter, each with a live count:
+
+| Bucket | What it means |
+|--------|---------------|
+| **Pending review** | Awaiting an HR decision — including everything that scored below the auto-shortlist threshold. Being below threshold is a **queue**, not an outcome. |
+| **Shortlisted** | Live in the pipeline — shortlisted, in interview, or advanced |
+| **Finalized** | Selected against an opening. A position can never finalize more people than it has seats, and the cap is visible. |
+| **Rejected** | A **person** rejected it. The record keeps the reason, who decided, and when. |
+
+On top of the position and status scope, HR can filter by **batch, month applied, match-score band, experience, education, district, skill, source and red flags**, in any combination. Active filters show as removable chips, and **Clear all** resets everything.
+
+Each row gives HR three things:
+
+- **View CV** — the CV itself in a preview, with a download. What the screening engine actually parsed is shown alongside it, clearly separated from the CV's own content.
+- **Profile summary** — an inline drawer: the AI evaluation summary, matched and missing skills, red flags, the full record, **written and viva marks where the candidate sat them** (identical to the Summary Report), and **application history** — because the same person may have applied more than once, and a re-applicant should never be assessed blind.
+- **Open full profile** — the complete candidate page.
+
+**Exporting respects the filter.** The export button carries the live count, and the menu spells out the exact scope before anything downloads — Excel workbook, CSV, or a CV bundle whose manifest records the filter that produced it. Tick specific rows and the selection wins over the filter. Every export is audit-logged.
+
 ---
 
 ## 5. How decisions are made
@@ -164,6 +191,7 @@ The prototype has no backend, so its "data" is deliberately structured to behave
 | `assets/js/stl-fixtures.js` | The shared fixture library (`STLF`). A seeded pseudo-random generator means **every page shows the same people with the same numbers on every load** — no flicker, no contradictions between screens. Provides the candidate pool, assessment marks, and the score/confidence/experience band definitions. |
 | `assets/js/stl-xlsx.js` | Real Excel generation for the export screens — the downloads are genuine `.xlsx` files, not placeholders. |
 | Per-page fixtures | Review CVs carries a **45-candidate pool** built to exercise every filter: all six score bands, three confidence tiers, **all six red-flag types**, 10 districts, 6 institutions, 4 sources, every required skill — plus deliberate edge cases (a very long name and filename, a CV with zero parsed skills, one missing phone and institution, and a **namesake pair**). |
+| Candidate Database | Built from the same `STLF` pools — **270 records** across three positions, so a candidate's score, stage and marks are the same number there as on Review CVs and the Summary Report. Status buckets are *derived* from the pipeline stage rather than stored separately, so they cannot contradict it. |
 | `localStorage` | The only cross-page state: `stl_presence_results` and `stl_presence_run_at`. Running online presence on Review CVs makes it appear on the candidate profile, the Viewer profile and the Hiring Manager's application detail — one run, four screens. |
 
 The band definitions (score, confidence, experience) live in **one** place and are shared by the charts and the filter dropdowns, so a chart click and the matching dropdown option can never return different people.
@@ -206,9 +234,9 @@ Governance is aligned to **NIST AI RMF**, **ISO/IEC 42001** and the **OWASP LLM 
 
 **Detail views:** `candidate-detail` · `application-detail` · `online-presence-detail`
 
-**Utility:** `exports` · `settings`
+**Talent & System:** `candidates` (Candidate Database) · `exports` · `settings`
 
-**Legacy URL catchers** (redirect to their merged home): `candidates` → Shortlist · `cv-analysis-dashboard` → Review CVs · `online-visibility-analysis` → Review CVs
+**Legacy URL catchers** (redirect to their merged home): `cv-analysis-dashboard` → Review CVs · `online-visibility-analysis` → Review CVs
 </details>
 
 <details>

@@ -3,20 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candidate Database · moved · STL ATS</title>
-<meta http-equiv="refresh" content="0; url=results.page.html">
-<link rel="canonical" href="results.page.html">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Candidate Database · STL ATS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  html,body{height:100%;margin:0;font-family:'Inter',system-ui,sans-serif;background:#F8FAFC;color:#0F172A}
-  .wrap{height:100%;display:grid;place-items:center;text-align:center;padding:24px}
-  .card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:28px 32px;max-width:520px;box-shadow:0 1px 2px rgba(15,23,42,.06)}
-  h1{font-size:18px;margin:0 0 8px}
-  p{color:#64748B;font-size:13.5px;line-height:1.6;margin:0 0 16px}
-  a.btn{display:inline-flex;align-items:center;gap:8px;background:#0B61C2;color:#fff;text-decoration:none;
-        font-weight:600;font-size:13px;padding:10px 16px;border-radius:8px}
-  .logo{width:34px;height:34px;border-radius:9px;background:#0B61C2;color:#fff;display:grid;place-items:center;
-        font-weight:700;margin:0 auto 14px}
+:root{
+  --bg:#F8FAFC;--surface:#FFFFFF;--surface-2:#F1F5F9;--border:#E2E8F0;
+  --text:#0F172A;--muted:#64748B;
+  --primary:#0B61C2;--primary-hover:#094E9E;--primary-soft:#E6F0FB;--accent:#1E88E5;
+  --success:#16A34A;--success-s:#DCFCE7;--info:#0369A1;--info-s:#E0F2FE;
+  --warn:#D97706;--warn-s:#FEF3C7;--danger:#DC2626;--danger-s:#FEE2E2;
+  --caution:#7C3AED;--caution-s:#EDE9FE;--muted-s:#F1F5F9;
+  --radius:12px;--shadow:0 1px 2px rgba(15,23,42,.06);--shadow-lg:0 4px 12px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;font-weight:700;font-size:16px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary);position:relative}
+.nav-item.active::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--primary)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--border)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-weight:600;flex:none}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 28px}
+.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text);font-weight:600}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--muted);width:280px}
+.search input{border:0;background:transparent;outline:0;font:inherit;color:var(--text);width:100%}
+.lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;font-weight:600}
+.lang span{padding:6px 10px;color:var(--muted)}.lang span.on{background:var(--primary-soft);color:var(--primary)}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;color:var(--muted);background:var(--surface)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.content{padding:24px 28px;overflow:auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:22px;font-weight:700}
+.page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(.93)}
+.btn-sm{padding:6px 10px;font-size:12.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-head h2{font-size:15px;font-weight:600}
+.card-head a{font-size:13px;color:var(--primary);font-weight:600}
+.card-body{padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:500}
+.kpi .k-ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+.kpi .v{font-size:28px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px}
+.up{color:var(--success)}.down{color:var(--danger)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);padding:10px 20px;position:sticky;top:0}
+td{padding:12px 20px;border-top:1px solid var(--border);font-size:13.5px}
+tbody tr:hover td{background:var(--primary-soft)}
+.cand{display:flex;align-items:center;gap:10px}
+.cand .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+.cand small{color:var(--muted);display:block;font-size:12px}
+.score{display:flex;align-items:center;gap:8px;min-width:120px}
+.bar{flex:1;height:7px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.score b{font-variant-numeric:tabular-nums;width:34px;text-align:right}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-suc{background:var(--success-s);color:var(--success)}
+.b-inf{background:var(--info-s);color:var(--info)}
+.b-warn{background:var(--warn-s);color:var(--warn)}
+.b-dan{background:var(--danger-s);color:var(--danger)}
+.b-cau{background:var(--caution-s);color:var(--caution)}
+.b-mut{background:var(--muted-s);color:var(--muted)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);overflow:hidden}.pbar i{display:block;height:100%;background:var(--primary);border-radius:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--surface-2);font-size:12.5px;font-weight:500}
+.chip .x{cursor:pointer;color:var(--muted)}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+.grid-detail{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.tabs-row{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary)}
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border-radius:14px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:17px;font-weight:700}
+
+/* ---- candidate database (Talent & System) ---- */
+.db-head-acts{display:flex;align-items:center;gap:10px}
+.db-exp-wrap{position:relative}
+.db-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);min-width:280px;padding:6px;display:none;z-index:40}
+.db-menu.on{display:block}
+.db-menu button{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:10px;border:0;background:transparent;border-radius:8px}
+.db-menu button:hover{background:var(--surface-2)}
+.db-menu svg{width:16px;height:16px;color:var(--primary);flex:none;margin-top:2px}
+.db-menu b{display:block;font-size:13px;font-weight:600}
+.db-menu small{color:var(--muted);font-size:12px;line-height:1.4}
+.db-menu .db-mnote{padding:8px 10px;border-top:1px solid var(--border);margin-top:4px;color:var(--muted);font-size:11.5px;line-height:1.45}
+
+.db-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.db-tab{display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;font-weight:600;color:var(--muted);box-shadow:var(--shadow)}
+.db-tab:hover{border-color:var(--accent);color:var(--text)}
+.db-tab.on{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.db-tab .db-n{font-variant-numeric:tabular-nums;font-size:16px;font-weight:700;color:var(--text)}
+.db-tab.on .db-n{color:var(--primary)}
+.db-tab .db-sw{width:8px;height:8px;border-radius:50%;flex:none}
+
+.db-filters{padding:14px 16px;margin-bottom:14px}
+.db-frow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.db-frow + .db-frow{margin-top:8px}
+.db-sel,.db-search input{padding:8px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:12.5px;background:var(--surface);color:var(--text);outline:none}
+.db-sel:focus,.db-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--primary-soft)}
+.db-search{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:8px;padding:0 10px;background:var(--surface);flex:1;min-width:230px}
+.db-search svg{width:15px;height:15px;color:var(--muted);flex:none}
+.db-search input{border:0;flex:1;padding:8px 0}
+.db-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.db-chips:empty{margin-top:0}
+.db-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:600}
+.db-chip button{border:0;background:transparent;color:inherit;line-height:1;padding:0;font-size:14px}
+
+.db-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.db-selall{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:500}
+.db-scope{font-size:12.5px;color:var(--muted)}
+.db-scope b{color:var(--text)}
+.db-scroll{overflow-x:auto}
+.db-scroll table{min-width:1060px}
+.db-scroll th,.db-scroll td{padding:11px 14px}
+.db-scroll th:first-child,.db-scroll td:first-child{padding-left:18px}
+.db-c{text-align:center}
+.db-mono{font-variant-numeric:tabular-nums}
+.db-sub{color:var(--muted);font-size:12px;display:block;margin-top:2px}
+.db-acts{display:flex;gap:5px}
+.db-ico{width:29px;height:29px;border:1px solid var(--border);border-radius:7px;display:grid;place-items:center;background:var(--surface);color:var(--muted)}
+.db-ico svg{width:15px;height:15px}
+.db-ico:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.db-ico.on{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.db-apps{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:var(--surface-2);font-size:12px;font-weight:700;color:var(--muted)}
+.db-apps.multi{background:var(--caution-s);color:var(--caution)}
+
+.db-drawer td{background:var(--surface-2);padding:0 !important;border-top:0}
+.db-dwrap{padding:16px 18px}
+.db-dgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:start}
+.db-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.db-box h4{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.db-sum{font-size:13.5px;line-height:1.6}
+.db-sig{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.db-kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.db-kv dt{color:var(--muted)}
+.db-kv dd{font-weight:600;text-align:right}
+.db-hist{width:100%;font-size:12.5px;border-collapse:collapse;margin-top:2px}
+.db-hist td{padding:6px 0;border-top:1px solid var(--border)}
+.db-hist tr:first-child td{border-top:0}
+.db-marks{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.db-mark{flex:1;min-width:76px;background:var(--surface-2);border-radius:8px;padding:8px 10px;text-align:center}
+.db-mark span{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.db-mark b{font-size:17px;font-variant-numeric:tabular-nums}
+.db-rej{background:var(--danger-s);border:1px solid var(--danger-s);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--text);margin-bottom:12px}
+.db-rej b{color:var(--danger)}
+.db-dacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+.db-pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-top:1px solid var(--border);flex-wrap:wrap}
+.db-pager .db-pinfo{font-size:12.5px;color:var(--muted)}
+.db-pbtns{display:flex;gap:4px;align-items:center}
+.db-pg{min-width:30px;height:30px;padding:0 8px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12.5px;font-weight:600;color:var(--muted)}
+.db-pg:hover:not(:disabled){border-color:var(--primary);color:var(--primary)}
+.db-pg.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.db-pg:disabled{opacity:.45}
+.db-gap{color:var(--muted);padding:0 2px}
+
+.db-cvbody{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.65;white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:52vh;overflow:auto}
+.db-toast{position:fixed;right:22px;bottom:22px;background:var(--text);color:#fff;padding:11px 16px;border-radius:10px;font-size:13px;box-shadow:var(--shadow-lg);z-index:80;max-width:380px}
+@media(max-width:1100px){.db-dgrid{grid-template-columns:1fr}}
+/* ---- end candidate database ---- */
 
 /* ---- workflow spine v2 (stepper + numbered nav) ---- */
 .wf-stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow)}
@@ -37,14 +208,728 @@ a.wf-step:hover{color:var(--primary)}a.wf-step:hover .wf-dot{border-color:var(--
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="logo">S</div>
-      <h1>Candidate Database has moved</h1>
-      <p>The talent-pool filters and card view are now part of the Shortlist screen.<br>It now lives inside <b>Shortlist (Stage 5)</b>. Redirecting&hellip;</p>
-      <a class="btn" href="results.page.html" data-testid="moved-continue">Continue to Shortlist (Stage 5)</a>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.page.html" data-testid="sidebar-brand">
+      <span class="logo">S</span><span>STL ATS</span>
+    </a>
+                                                    <div class="nav-label">Workspace</div>
+    <a class="nav-item" href="dashboard.page.html" data-testid="nav-dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+    <a class="nav-item" href="positions.page.html" data-testid="nav-positions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Job Positions</a>
+    <div class="nav-label">Hiring Workflow</div>
+    <a class="nav-item" href="template-builder.page.html" data-testid="nav-s1"><span class="nav-num">1</span>Screening Template</a>
+    <a class="nav-item" href="import-cvs.page.html" data-testid="nav-s2"><span class="nav-num">2</span>Import CVs</a>
+    <a class="nav-item" href="processing.page.html" data-testid="nav-s3"><span class="nav-num">3</span>Processing</a>
+    <a class="nav-item" href="cv-review.page.html" data-testid="nav-s4"><span class="nav-num">4</span>Review CVs</a>
+    <a class="nav-item" href="results.page.html" data-testid="nav-s5"><span class="nav-num">5</span>Shortlist</a>
+    <a class="nav-item" href="../hiring-manager/shortlist.page.html" data-testid="nav-s6"><span class="nav-num">6</span>Hiring Manager Review</a>
+    <a class="nav-item" href="written-exam.page.html" data-testid="nav-s7"><span class="nav-num">7</span>Written Exam</a>
+    <a class="nav-item" href="interviews.page.html" data-testid="nav-s8"><span class="nav-num">8</span>Viva &amp; Interviews</a>
+    <a class="nav-item nav-sub" href="interview-schedule.page.html" data-testid="nav-schedule">Schedule Viva</a>
+    <a class="nav-item nav-sub" href="assessment-summary-report.page.html" data-testid="nav-summary">Summary Report</a>
+    <a class="nav-item" href="final-selection.page.html" data-testid="nav-s9"><span class="nav-num">9</span>Final Selection</a>
+    <a class="nav-item" href="onboarding.page.html" data-testid="nav-s10"><span class="nav-num">10</span>Onboarding</a>
+    <div class="nav-label">Talent &amp; System</div>
+    <a class="nav-item active" href="candidates.page.html" data-testid="nav-database"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Candidate Database</a>
+    <a class="nav-item" href="exports.page.html" data-testid="nav-exports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports</a>
+    <a class="nav-item" href="settings.page.html" data-testid="nav-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="side-foot">
+      <span class="avatar">FA</span>
+      <div><div style="font-weight:600;font-size:13px">Farzana Akter</div><div style="color:var(--muted);font-size:12px">HR Manager</div></div>
+    
+      <a class="icon-btn" href="../auth/login.page.html" data-testid="hr-logout" title="Sign out" aria-label="Sign out" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></a>
     </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Talent &amp; System · <b>Candidate Database</b></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search candidates, positions…" data-testid="topbar-search">
+      </div>
+      <div class="lang" data-testid="lang-toggle">
+        <span class="on" data-testid="lang-en">EN</span><span data-testid="lang-bn">বাংলা</span>
+      </div>
+      <button class="icon-btn" data-testid="topbar-notifications" onclick="void 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Candidate database</h1>
+          <p>Every CV STL has received, filed permanently across positions, batches and hiring rounds. Nothing is deleted &mdash; a rejected record keeps its reason and the person who decided it.</p>
+        </div>
+        <div class="db-head-acts">
+          <a class="btn btn-ghost btn-sm" href="exports.page.html" data-testid="db-export-centre">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Export centre
+          </a>
+          <div class="db-exp-wrap">
+            <button class="btn btn-primary" id="dbExportBtn" data-testid="db-export" onclick="dbToggleExport(event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export <span id="dbExpN">0</span>
+            </button>
+            <div class="db-menu" id="dbExpMenu" data-testid="db-export-menu">
+              <button data-testid="db-export-xlsx" onclick="dbExport('xlsx')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                <span><b>Excel workbook</b><small>Full record per candidate &mdash; contact, scoring, status, decision trail.</small></span>
+              </button>
+              <button data-testid="db-export-csv" onclick="dbExport('csv')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+                <span><b>CSV</b><small>Same columns, plain text &mdash; for import into another system.</small></span>
+              </button>
+              <button data-testid="db-export-bundle" onclick="dbExport('bundle')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg>
+                <span><b>CV bundle (.zip)</b><small>Original CV per candidate plus a manifest of the filter that produced it.</small></span>
+              </button>
+              <div class="db-mnote" id="dbExpScope"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="db-tabs" id="dbTabs" role="tablist" aria-label="Filter by status"></div>
+
+      <section class="card db-filters">
+        <div class="db-frow">
+          <label class="db-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="dbQ" data-testid="db-search" placeholder="Search name, email or phone&hellip;" aria-label="Search the candidate database" oninput="dbApply()">
+          </label>
+          <select class="db-sel" id="dbPos" data-testid="db-position" aria-label="Filter by position" onchange="dbPosChanged()"></select>
+          <select class="db-sel" id="dbBatch" data-testid="db-batch" aria-label="Filter by batch" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbApplied" data-testid="db-applied" aria-label="Filter by month applied" onchange="dbApply()"></select>
+        </div>
+        <div class="db-frow">
+          <select class="db-sel" id="dbScore" data-testid="db-score" aria-label="Filter by match score" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbExp" data-testid="db-experience" aria-label="Filter by experience" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbEdu" data-testid="db-education" aria-label="Filter by education" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbDist" data-testid="db-district" aria-label="Filter by district" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbSkill" data-testid="db-skill" aria-label="Filter by skill" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbSrc" data-testid="db-source" aria-label="Filter by source" onchange="dbApply()"></select>
+          <select class="db-sel" id="dbFlag" data-testid="db-flags" aria-label="Filter by red flags" onchange="dbApply()"></select>
+          <button class="btn btn-ghost btn-sm" data-testid="db-clear" onclick="dbClear()" title="Clear every filter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Clear all
+          </button>
+        </div>
+        <div class="db-chips" id="dbChips"></div>
+      </section>
+
+      <div class="db-bar">
+        <label class="db-selall"><input type="checkbox" id="dbAll" data-testid="db-select-all" onchange="dbToggleAll(this)"> Select all on this page</label>
+        <span class="db-scope" id="dbScope"></span>
+      </div>
+
+      <div class="card" style="overflow:visible">
+        <div class="db-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:34px"></th>
+                <th>Candidate</th>
+                <th>Position applied</th>
+                <th>Batch</th>
+                <th>Applied</th>
+                <th class="db-c">Match</th>
+                <th>Status</th>
+                <th class="db-c">Applications</th>
+                <th style="width:118px">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dbBody"></tbody>
+          </table>
+        </div>
+        <div class="db-pager" id="dbPager"></div>
+      </div>
+
+      <div id="dbModal"></div>
+      <div id="dbToast"></div>
+
+    </main>
   </div>
-  <script>location.replace('results.page.html');</script>
+</div>
+
+<script src="../assets/js/stl-fixtures.js"></script>
+<script src="../assets/js/stl-xlsx.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   CANDIDATE DATABASE — Module 4 (Candidate Database & History).
+
+   This is the permanent record store, not a working queue. Review CVs and
+   Shortlist look at one batch at a time; this page looks across every
+   position, every batch and every round STL has ever run.
+
+   Records come from STLF (the shared fixture), so a candidate's score here is
+   the same number Review CVs, the Summary Report and Exports show.
+
+   Status buckets are DERIVED from the pipeline stage so they can never
+   contradict it, and the governance rule holds: REJECTED_PENDING_REVIEW is a
+   queue for a human, not an outcome. A record only becomes "Rejected" once a
+   named person recorded a reason — which is why the drawer shows both.
+   ══════════════════════════════════════════════════════════════════════════ */
+var TODAY='2026-07-22', ACTOR='Farzana Akter (HR Manager)';
+var POSK=['sbm','tmo','qac'];
+var DB=[], HIST={}, ASSESS={};
+var PAGE=1, PER=25, SEL={}, OPEN={};
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function initials(n){var p=String(n).trim().split(/\s+/);return ((p[0]||'')[0]||'')+((p[p.length-1]||'')[0]||'');}
+
+/* ── Status model ─────────────────────────────────────────────────────────
+   Four buckets HR actually asks for, mapped from the pipeline stage:
+     pending     — awaiting an HR decision (incl. below-threshold: NEVER auto-rejected)
+     shortlisted — live in the pipeline (shortlisted / in interview / advanced)
+     finalized   — selected against an opening
+     rejected    — a human rejected it, with a logged reason                      */
+var DBST={
+  pending:    {l:'Pending review', b:'b-warn', c:'var(--warn)'},
+  shortlisted:{l:'Shortlisted',    b:'b-inf',  c:'var(--info)'},
+  finalized:  {l:'Finalized',      b:'b-suc',  c:'var(--success)'},
+  rejected:   {l:'Rejected',       b:'b-dan',  c:'var(--danger)'}
+};
+var DBST_ORDER=['pending','shortlisted','finalized','rejected'];
+var REJ_GENERIC=[
+  'Below the required years of experience for this grade',
+  'Does not hold a must-have skill listed on the screening template',
+  'Education criterion not met for this position',
+  'Withdrew after the screening call',
+  'Duplicate of an earlier application for the same position'
+];
+var REVIEWERS=['Farzana Akter (HR Manager)','Shakib Al Hasan (HR Executive)','Nusrat Jahan (HR Executive)'];
+
+function dbStatusOf(c,fin){
+  if(c.st==='ADVANCED')     return fin[c.id]?'finalized':'shortlisted';
+  if(c.st==='SHORTLISTED'||c.st==='IN_INTERVIEW') return 'shortlisted';
+  /* Below threshold: a human either actioned it or it is still queued. Roughly
+     two thirds have been reviewed; the rest are genuinely still pending. */
+  if(c.st==='REJECTED_PENDING_REVIEW') return (c.id%3===0)?'pending':'rejected';
+  return 'pending';                        /* SCREENED, RETURNED_TO_HR */
+}
+function dbReason(c){
+  if(c.rf.length) return 'Red flag confirmed on review: '+c.rf[0].toLowerCase();
+  return REJ_GENERIC[c.id%REJ_GENERIC.length];
+}
+function dbPlusDays(iso,n){
+  var p=iso.split('-'), d=new Date(Date.UTC(+p[0],+p[1]-1,+p[2]));
+  d.setUTCDate(d.getUTCDate()+n);
+  return d.toISOString().slice(0,10);
+}
+
+function dbBuild(){
+  var out=[];
+  POSK.forEach(function(k){
+    var cfg=STLF.POS[k];
+    var pool=STLF.pool(cfg);
+    /* Finalized = the top scorers among those who reached ADVANCED, capped at
+       the number of openings. A position cannot finalize more people than it
+       has seats, and that cap is visible rather than arbitrary. */
+    var fin={};
+    pool.filter(function(c){return c.st==='ADVANCED';})
+        .slice().sort(function(a,b){return b.sc-a.sc;})
+        .slice(0,STLF.OPENINGS).forEach(function(c){fin[c.id]=1;});
+    pool.forEach(function(c){
+      var st=dbStatusOf(c,fin);
+      c.key=k+'-'+c.id;
+      c.posk=k;
+      c.dbst=st;
+      if(st==='rejected'){
+        c.rejReason=dbReason(c);
+        c.rejBy=REVIEWERS[c.id%REVIEWERS.length];
+        c.rejOn=dbPlusDays(c.applied,9+(c.id%12));
+      }
+      out.push(c);
+    });
+  });
+  DB=out;
+  /* Application history — the same person can apply to more than one position.
+     Keyed on name because that is what the fixture guarantees is stable. */
+  HIST={};
+  DB.forEach(function(c){ (HIST[c.n]=HIST[c.n]||[]).push(c); });
+  /* Assessment marks, where the candidate actually sat the exam + viva. */
+  ASSESS={};
+  STLF.assess().forEach(function(a){ ASSESS[a.n]=a; });
+}
+
+/* ── Filters ──────────────────────────────────────────────────────────── */
+var DBF_IDS={q:'dbQ',pos:'dbPos',batch:'dbBatch',applied:'dbApplied',score:'dbScore',
+             exp:'dbExp',edu:'dbEdu',dist:'dbDist',skill:'dbSkill',src:'dbSrc',flag:'dbFlag'};
+var DB_STATUS='';        /* the tab — kept out of DBF so tab counts can ignore it */
+
+function dbVal(id){var el=document.getElementById(id);return el&&el.value?String(el.value):'';}
+function dbState(){
+  var f={};
+  Object.keys(DBF_IDS).forEach(function(k){ f[k]=dbVal(DBF_IDS[k]).trim(); });
+  f.q=f.q.toLowerCase();
+  return f;
+}
+function dbMatch(c,f,skipStatus){
+  if(!skipStatus && DB_STATUS && c.dbst!==DB_STATUS) return false;
+  if(f.pos    && c.posk!==f.pos) return false;
+  if(f.batch  && c.ba!==f.batch) return false;
+  if(f.applied&& c.applied.slice(0,7)!==f.applied) return false;
+  if(f.score  && STLF.scK(c.sc)!==f.score) return false;
+  if(f.exp    && STLF.exK(c.yr)!==f.exp) return false;
+  if(f.edu    && c.ed!==f.edu) return false;
+  if(f.dist   && c.d!==f.dist) return false;
+  if(f.skill  && c.sk.indexOf(f.skill)<0) return false;
+  if(f.src    && c.so!==f.src) return false;
+  if(f.flag==='has'  && !c.rf.length) return false;
+  if(f.flag==='none' && c.rf.length) return false;
+  if(f.q){
+    var hay=(c.n+' '+c.e+' '+c.phone).toLowerCase();
+    if(hay.indexOf(f.q)<0) return false;
+  }
+  return true;
+}
+function dbFiltered(){ var f=dbState(); return DB.filter(function(c){return dbMatch(c,f,false);}); }
+
+/* ── Populate the selects from the data, so no option can be a dead end ── */
+function dbPopulate(){
+  function fill(id,label,vals,cur){
+    var el=document.getElementById(id); if(!el)return;
+    var keep=cur!==undefined?cur:el.value;
+    el.innerHTML='<option value="">'+esc(label)+'</option>'+vals.map(function(v){
+      return '<option value="'+esc(v[0])+'">'+esc(v[1])+'</option>';
+    }).join('');
+    if(keep) el.value=keep;
+  }
+  fill('dbPos','All positions',POSK.map(function(k){return [k,STLF.POS[k].name];}));
+  var f=dbState();
+  var scope=DB.filter(function(c){return !f.pos||c.posk===f.pos;});
+  function uniq(get){
+    var seen={},out=[];
+    scope.forEach(function(c){var v=get(c);(v instanceof Array?v:[v]).forEach(function(x){if(x&&!seen[x]){seen[x]=1;out.push(x);}});});
+    return out.sort();
+  }
+  fill('dbBatch','All batches',uniq(function(c){return c.ba;}).map(function(v){return [v,v];}));
+  fill('dbApplied','Any month',uniq(function(c){return c.applied.slice(0,7);}).map(function(v){
+    var p=v.split('-'),M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return [v,M[+p[1]-1]+' '+p[0]];
+  }));
+  fill('dbScore','Any match score',STLF.SCB.slice().reverse().map(function(b){return [b.k,b.l+'%'];}));
+  fill('dbExp','Any experience',STLF.EXB.map(function(b){return [b.k,b.l];}));
+  fill('dbEdu','Any education',uniq(function(c){return c.ed;}).map(function(v){return [v,v];}));
+  fill('dbDist','All districts',uniq(function(c){return c.d;}).map(function(v){return [v,v];}));
+  fill('dbSkill','Any skill',uniq(function(c){return c.sk;}).map(function(v){return [v,v];}));
+  fill('dbSrc','Any source',uniq(function(c){return c.so;}).map(function(v){return [v,v];}));
+  fill('dbFlag','Red flags: any',[['has','Has red flags'],['none','No red flags']]);
+}
+function dbPosChanged(){
+  /* Narrowing the position can strand a batch/district that no longer exists —
+     repopulate the dependent selects, dropping any value that is now invalid. */
+  ['dbBatch','dbApplied','dbEdu','dbDist','dbSkill','dbSrc'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  dbPopulate();
+  dbApply();
+}
+
+var DB_CHIPL={pos:'Position',batch:'Batch',applied:'Applied',score:'Match score',exp:'Experience',
+              edu:'Education',dist:'District',skill:'Skill',src:'Source',flag:'Red flags',q:'Search'};
+function dbChipText(k,v){
+  if(k==='pos')   return STLF.POS[v]?STLF.POS[v].name:v;
+  if(k==='score') return STLF.bandL(STLF.SCB,v)+'%';
+  if(k==='exp')   return STLF.bandL(STLF.EXB,v);
+  if(k==='flag')  return v==='has'?'has red flags':'no red flags';
+  if(k==='q')     return '"'+v+'"';
+  return v;
+}
+function dbRenderChips(f){
+  var el=document.getElementById('dbChips'); if(!el)return;
+  var out=[];
+  if(DB_STATUS) out.push('<span class="db-chip">Status: '+esc(DBST[DB_STATUS].l)+
+    ' <button data-testid="db-chip-x-status" aria-label="Clear status filter" onclick="dbTab(\'\')">&times;</button></span>');
+  Object.keys(DBF_IDS).forEach(function(k){
+    if(!f[k])return;
+    out.push('<span class="db-chip">'+esc(DB_CHIPL[k])+': '+esc(dbChipText(k,f[k]))+
+      ' <button data-testid="db-chip-x-'+k+'" aria-label="Clear '+esc(DB_CHIPL[k])+' filter" onclick="dbDrop(\''+k+'\')">&times;</button></span>');
+  });
+  el.innerHTML=out.join('');
+}
+function dbDrop(k){
+  var el=document.getElementById(DBF_IDS[k]); if(el) el.value='';
+  if(k==='pos') return dbPosChanged();
+  dbApply();
+}
+function dbClear(){
+  DB_STATUS='';
+  Object.keys(DBF_IDS).forEach(function(k){var el=document.getElementById(DBF_IDS[k]);if(el)el.value='';});
+  dbPopulate();
+  dbApply();
+}
+function dbTab(k){ DB_STATUS=(DB_STATUS===k)?'':k; PAGE=1; dbApply(); }
+
+/* ── Render ───────────────────────────────────────────────────────────── */
+function dbRenderTabs(f){
+  /* Counts ignore the status filter itself — otherwise every tab but the
+     active one would read zero, which tells HR nothing. */
+  var base=DB.filter(function(c){return dbMatch(c,f,true);});
+  var n={};
+  DBST_ORDER.forEach(function(k){n[k]=0;});
+  base.forEach(function(c){n[c.dbst]++;});
+  var html='<button class="db-tab'+(DB_STATUS===''?' on':'')+'" role="tab" aria-selected="'+(DB_STATUS===''?'true':'false')+
+    '" data-testid="db-tab-all" onclick="dbTab(\'\')"><span class="db-n">'+base.length+'</span> All records</button>';
+  DBST_ORDER.forEach(function(k){
+    html+='<button class="db-tab'+(DB_STATUS===k?' on':'')+'" role="tab" aria-selected="'+(DB_STATUS===k?'true':'false')+
+      '" data-testid="db-tab-'+k+'" onclick="dbTab(\''+k+'\')">'+
+      '<span class="db-sw" style="background:'+DBST[k].c+'"></span><span class="db-n">'+n[k]+'</span> '+DBST[k].l+'</button>';
+  });
+  document.getElementById('dbTabs').innerHTML=html;
+}
+
+function dbScoreCell(c){
+  var col=c.sc>=80?'var(--success)':(c.sc>=60?'var(--warn)':'var(--danger)');
+  return '<div class="score" style="min-width:96px"><div class="bar"><i style="width:'+c.sc+'%;background:'+col+'"></i></div>'+
+         '<b class="db-mono" style="color:'+col+'">'+c.sc+'%</b></div>';
+}
+function dbRow(c){
+  var h=HIST[c.n]||[c], apps=h.length;
+  var s=DBST[c.dbst];
+  return '<tr id="dbrow-'+c.key+'" data-testid="db-row-'+c.key+'">'+
+    '<td><input type="checkbox" class="dbcb" data-testid="db-cb-'+c.key+'" data-key="'+c.key+'"'+(SEL[c.key]?' checked':'')+' onchange="dbSelect(\''+c.key+'\',this.checked)" aria-label="Select '+esc(c.n)+'"></td>'+
+    '<td><div class="cand"><span class="ava">'+esc(initials(c.n))+'</span><div><div style="font-weight:600">'+esc(c.n)+'</div>'+
+      '<small>'+esc(c.e)+'</small></div></div></td>'+
+    '<td>'+esc(c.pos)+'<span class="db-sub">'+esc(c.dept)+'</span></td>'+
+    '<td>'+esc(c.ba)+'</td>'+
+    '<td class="db-mono">'+esc(c.applied)+'</td>'+
+    '<td>'+dbScoreCell(c)+'</td>'+
+    '<td><span class="badge '+s.b+'">'+esc(s.l)+'</span></td>'+
+    '<td class="db-c"><span class="db-apps'+(apps>1?' multi':'')+'" title="'+apps+' application'+(apps===1?'':'s')+' on record">'+apps+'</span></td>'+
+    '<td><div class="db-acts">'+
+      '<button class="db-ico'+(OPEN[c.key]?' on':'')+'" id="dbtog-'+c.key+'" data-testid="db-summary-'+c.key+'" title="Profile summary" aria-label="Profile summary for '+esc(c.n)+'" onclick="dbToggle(\''+c.key+'\')">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>'+
+      '<button class="db-ico" data-testid="db-cv-'+c.key+'" title="View CV" aria-label="View CV of '+esc(c.n)+'" onclick="dbCv(\''+c.key+'\')">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>'+
+      '<a class="db-ico" href="'+dbProfileUrl(c)+'" data-testid="db-profile-'+c.key+'" title="Open full profile" aria-label="Open full profile of '+esc(c.n)+'">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>'+
+    '</div></td></tr>'+
+    '<tr class="db-drawer" id="dbdraw-'+c.key+'" style="display:'+(OPEN[c.key]?'table-row':'none')+'"><td colspan="9">'+
+      (OPEN[c.key]?dbSummary(c):'')+'</td></tr>';
+}
+
+/* Profile summary — the "why", assembled from the same fixture the score is. */
+function dbSummary(c){
+  var cfg=STLF.POS[c.posk];
+  var miss=STLF.SKILLS.filter(function(k){return c.sk.indexOf(k)<0;});
+  var sig=c.sk.map(function(k){return '<span class="badge b-suc">'+esc(k)+'</span>';})
+    .concat(miss.map(function(k){return '<span class="badge b-mut">missing: '+esc(k)+'</span>';}))
+    .concat(c.rf.map(function(k){return '<span class="badge b-cau">'+esc(k)+'</span>';})).join('');
+  var h=(HIST[c.n]||[c]).slice().sort(function(a,b){return a.applied<b.applied?1:-1;});
+  var hist=h.map(function(x){
+    return '<tr><td>'+esc(x.applied)+'</td><td>'+esc(x.pos)+'</td><td style="text-align:right">'+
+      '<span class="badge '+DBST[x.dbst].b+'">'+esc(DBST[x.dbst].l)+'</span></td></tr>';
+  }).join('');
+  var a=ASSESS[c.n], marks='';
+  if(a){
+    var comb=Math.round(a.w*0.6+a.v*0.4);
+    var qual=(a.w>=50&&a.v>=60);
+    marks='<div class="db-box" style="margin-top:12px"><h4>Assessment on record</h4>'+
+      '<div class="db-marks">'+
+        '<div class="db-mark"><span>Written</span><b>'+a.w+'</b></div>'+
+        '<div class="db-mark"><span>Viva</span><b>'+a.v+'</b></div>'+
+        '<div class="db-mark"><span>Combined</span><b>'+comb+'%</b></div>'+
+      '</div>'+
+      '<span class="badge '+(qual?'b-suc':'b-dan')+'">'+(qual?'Qualified':'Not qualified')+'</span> '+
+      '<span style="color:var(--muted);font-size:12px">written &times;60% + viva &times;40% &middot; pass: written &ge;50, viva &ge;60</span>'+
+      (a.rem?'<p style="margin-top:9px;font-size:12.5px;color:var(--muted)">Panel remark: '+esc(a.rem)+'</p>':'')+
+      '</div>';
+  }
+  var rej=(c.dbst==='rejected')
+    ? '<div class="db-rej"><b>Rejected by a person, not by the system.</b><br>Reason: '+esc(c.rejReason)+
+      '<br>Decided by '+esc(c.rejBy)+' on '+esc(c.rejOn)+'.</div>' : '';
+  var pend=(c.dbst==='pending'&&c.st==='REJECTED_PENDING_REVIEW')
+    ? '<div class="db-rej" style="background:var(--warn-s)"><b>Below threshold &mdash; awaiting a human decision.</b><br>'+
+      'Scored under the auto-shortlist threshold, which queues the record for review. It is not a rejection and no automated path can make it one.</div>' : '';
+  return '<div class="db-dwrap">'+rej+pend+
+    '<div class="db-dgrid">'+
+      '<div>'+
+        '<div class="db-box"><h4>AI evaluation summary</h4>'+
+          '<p class="db-sum">'+esc(STLF.summary(c,cfg))+'</p>'+
+          '<div class="db-sig">'+sig+'</div>'+
+          '<p style="margin-top:10px;font-size:12px;color:var(--muted)">Assistive only &mdash; the decision on this record stays with HR and the Hiring Manager.</p>'+
+        '</div>'+
+        marks+
+      '</div>'+
+      '<div>'+
+        '<div class="db-box"><h4>Record</h4><dl class="db-kv">'+
+          '<dt>Phone</dt><dd>'+esc(c.phone)+'</dd>'+
+          '<dt>District</dt><dd>'+esc(c.d)+'</dd>'+
+          '<dt>Education</dt><dd>'+esc(c.ed)+'</dd>'+
+          '<dt>Experience</dt><dd>'+c.yr+' yrs</dd>'+
+          '<dt>Current / last</dt><dd>'+esc(c.role)+'</dd>'+
+          '<dt>Employer</dt><dd>'+esc(c.co)+'</dd>'+
+          '<dt>Source</dt><dd>'+esc(c.so)+'</dd>'+
+          '<dt>Parsing confidence</dt><dd>'+c.cf+'%</dd>'+
+        '</dl></div>'+
+        '<div class="db-box" style="margin-top:12px"><h4>Application history</h4>'+
+          '<table class="db-hist">'+hist+'</table>'+
+          (h.length>1?'<p style="margin-top:8px;font-size:12px;color:var(--muted)">This person is on file against '+h.length+' positions. Earlier outcomes stay visible so a re-applicant is never assessed blind.</p>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="db-dacts">'+
+      '<button class="btn btn-ghost btn-sm" data-testid="db-d-cv-'+c.key+'" onclick="dbCv(\''+c.key+'\')">View CV</button>'+
+      '<button class="btn btn-ghost btn-sm" data-testid="db-d-dl-'+c.key+'" onclick="dbDownload(\''+c.key+'\')">Download CV</button>'+
+      '<a class="btn btn-ghost btn-sm" href="'+dbProfileUrl(c)+'" data-testid="db-d-profile-'+c.key+'">Open full profile</a>'+
+    '</div></div>';
+}
+
+function dbToggle(k){
+  OPEN[k]=!OPEN[k];
+  var dr=document.getElementById('dbdraw-'+k), c=dbFind(k);
+  if(dr&&c){
+    dr.innerHTML='<td colspan="9">'+(OPEN[k]?dbSummary(c):'')+'</td>';
+    dr.style.display=OPEN[k]?'table-row':'none';
+  }
+  var tg=document.getElementById('dbtog-'+k);
+  if(tg) tg.className='db-ico'+(OPEN[k]?' on':'');
+}
+function dbFind(k){for(var i=0;i<DB.length;i++)if(DB[i].key===k)return DB[i];return null;}
+/* The profile page keys off ?roll=. Pass it when this person actually sat the
+   assessment, so the link lands on their marks instead of a placeholder. */
+function dbProfileUrl(c){
+  var a=ASSESS[c.n];
+  return 'candidate-detail.page.html'+(a?('?roll='+encodeURIComponent(a.roll)):'');
+}
+
+function dbSelect(k,on){ if(on)SEL[k]=1; else delete SEL[k]; dbBar(); }
+function dbToggleAll(cb){
+  var rows=dbPageRows();
+  rows.forEach(function(c){ if(cb.checked)SEL[c.key]=1; else delete SEL[c.key]; });
+  document.querySelectorAll('.dbcb').forEach(function(x){ x.checked=cb.checked; });
+  dbBar();
+}
+function dbSelected(){ return DB.filter(function(c){return SEL[c.key];}); }
+
+/* The export set: an explicit selection wins, otherwise the whole filtered set.
+   Whichever it is, it is spelled out on screen before anything downloads. */
+function dbExportSet(){ var s=dbSelected(); return s.length?s:dbFiltered(); }
+function dbScopeText(){
+  var f=dbState(), bits=[];
+  bits.push(f.pos?STLF.POS[f.pos].name:'All positions');
+  if(DB_STATUS) bits.push(DBST[DB_STATUS].l);
+  Object.keys(DBF_IDS).forEach(function(k){ if(k!=='pos'&&f[k]) bits.push(DB_CHIPL[k]+': '+dbChipText(k,f[k])); });
+  return bits.join(' · ');
+}
+function dbBar(){
+  var sel=dbSelected().length, tot=dbFiltered().length;
+  var n=sel||tot;
+  var el=document.getElementById('dbExpN'); if(el) el.textContent=n;
+  var sc=document.getElementById('dbScope');
+  if(sc) sc.innerHTML=sel
+    ? '<b>'+sel+'</b> selected of '+tot+' filtered &mdash; export will use the selection.'
+    : '<b>'+tot+'</b> of '+DB.length+' records match the current filter &mdash; export will use all of them.';
+  var m=document.getElementById('dbExpScope');
+  if(m) m.innerHTML=(sel?'Exports the <b>'+sel+' selected</b> record'+(sel===1?'':'s')+'.'
+                        :'Exports all <b>'+tot+'</b> filtered record'+(tot===1?'':'s')+'.')+
+                    '<br>Scope: '+esc(dbScopeText())+'<br>Every export is audit-logged.';
+}
+
+function dbPageRows(){
+  var list=dbFiltered();
+  var start=(PAGE-1)*PER;
+  return list.slice(start,start+PER);
+}
+function dbRenderPager(total){
+  var pages=Math.max(1,Math.ceil(total/PER));
+  if(PAGE>pages)PAGE=pages;
+  var from=total?((PAGE-1)*PER+1):0, to=Math.min(total,PAGE*PER);
+  var btns='<button class="db-pg" data-testid="db-prev" onclick="dbGo('+(PAGE-1)+')"'+(PAGE<=1?' disabled':'')+' aria-label="Previous page">&lsaquo;</button>';
+  var shown=[];
+  for(var i=1;i<=pages;i++){ if(i===1||i===pages||Math.abs(i-PAGE)<=1) shown.push(i); }
+  var last=0;
+  shown.forEach(function(i){
+    if(last&&i-last>1) btns+='<span class="db-gap">&hellip;</span>';
+    btns+='<button class="db-pg'+(i===PAGE?' on':'')+'" data-testid="db-page-'+i+'" onclick="dbGo('+i+')">'+i+'</button>';
+    last=i;
+  });
+  btns+='<button class="db-pg" data-testid="db-next" onclick="dbGo('+(PAGE+1)+')"'+(PAGE>=pages?' disabled':'')+' aria-label="Next page">&rsaquo;</button>';
+  document.getElementById('dbPager').innerHTML=
+    '<span class="db-pinfo" data-testid="db-page-info">Showing <b>'+from+'&ndash;'+to+'</b> of '+total+' record'+(total===1?'':'s')+'</span>'+
+    '<div class="db-pbtns">'+btns+'</div>';
+}
+function dbGo(p){ PAGE=Math.max(1,p); dbApply(); document.querySelector('.db-scroll').scrollIntoView({block:'start'}); }
+
+function dbApply(){
+  var f=dbState();
+  dbRenderTabs(f);
+  dbRenderChips(f);
+  var list=DB.filter(function(c){return dbMatch(c,f,false);});
+  var pages=Math.max(1,Math.ceil(list.length/PER));
+  if(PAGE>pages)PAGE=pages;
+  var rows=list.slice((PAGE-1)*PER,PAGE*PER);
+  var tb=document.getElementById('dbBody');
+  tb.innerHTML=rows.length
+    ? rows.map(dbRow).join('')
+    : '<tr><td colspan="9"><div class="empty" data-testid="db-empty">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'+
+      '<div style="font-weight:600;color:var(--text)">No records match these filters</div>'+
+      '<div style="margin-top:4px">Widen the position or clear a filter &mdash; the database holds '+DB.length+' records in total.</div>'+
+      '<button class="btn btn-ghost btn-sm" style="margin-top:14px" onclick="dbClear()">Clear all filters</button></div></td></tr>';
+  var all=document.getElementById('dbAll');
+  if(all) all.checked = rows.length>0 && rows.every(function(c){return SEL[c.key];});
+  dbRenderPager(list.length);
+  dbBar();
+}
+
+/* ── CV preview + downloads ───────────────────────────────────────────── */
+function dbCvText(c){
+  return 'CURRICULUM VITAE\n'+
+    '================================================\n'+
+    c.n+'\n'+c.e+'  ·  '+c.phone+'\n'+c.d+', Bangladesh\n\n'+
+    'APPLIED FOR\n  '+c.pos+' ('+c.dept+')\n  Batch: '+c.ba+'\n  Received: '+c.applied+'  ·  Source: '+c.so+'\n\n'+
+    'EXPERIENCE\n  '+c.role+'\n  '+c.co+'\n  '+c.yr+' years total\n\n'+
+    'EDUCATION\n  '+c.ed+'\n\n'+
+    'SKILLS\n  '+c.sk.join('\n  ')+'\n\n'+
+    'SCREENING (system-generated, not part of the CV)\n'+
+    '  Match score ......... '+c.sc+'%\n'+
+    '  Parsing confidence .. '+c.cf+'%\n'+
+    '  Status .............. '+DBST[c.dbst].l+'\n'+
+    '  Red flags ........... '+(c.rf.join(', ')||'None')+'\n'+
+    (c.dbst==='rejected'?'  Rejection reason .... '+c.rejReason+'\n  Decided by .......... '+c.rejBy+' on '+c.rejOn+'\n':'')+
+    '\n------------------------------------------------\n'+
+    'Prototype stand-in. The live system streams the original PDF / Word /\n'+
+    'scanned image from object storage; the parsed fields above are what the\n'+
+    'screening engine actually read.\n';
+}
+function dbCv(k){
+  var c=dbFind(k); if(!c)return;
+  document.getElementById('dbModal').innerHTML=
+    '<div class="modal-mask" data-testid="db-cv-modal" onclick="if(event.target===this)dbCloseCv()">'+
+      '<div class="modal" style="max-width:680px" role="dialog" aria-modal="true" aria-label="CV of '+esc(c.n)+'">'+
+        '<div class="card-head"><div><h3>'+esc(c.n)+'</h3>'+
+          '<div style="color:var(--muted);font-size:12.5px;margin-top:2px">'+esc(c.pos)+' &middot; received '+esc(c.applied)+'</div></div>'+
+          '<button class="db-ico" data-testid="db-cv-close" aria-label="Close" onclick="dbCloseCv()">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'+
+        '<div class="card-body"><div class="db-cvbody">'+esc(dbCvText(c))+'</div>'+
+          '<div class="db-dacts">'+
+            '<button class="btn btn-primary btn-sm" data-testid="db-cv-download" onclick="dbDownload(\''+c.key+'\')">Download CV</button>'+
+            '<button class="btn btn-ghost btn-sm" onclick="dbCloseCv()">Close</button>'+
+          '</div></div>'+
+      '</div></div>';
+}
+function dbCloseCv(){ document.getElementById('dbModal').innerHTML=''; }
+function dbDownload(k){
+  var c=dbFind(k); if(!c)return;
+  STLX.save(new Blob([dbCvText(c)],{type:'text/plain'}), c.n.replace(/[^A-Za-z0-9]+/g,'_')+'_CV.txt');
+  dbToast('CV downloaded for '+c.n+' — logged to the audit trail.');
+}
+
+/* ── Export — always reflects exactly what the filter produced ─────────── */
+var DB_COLS=[
+  ['Candidate',       function(c){return c.n}],
+  ['Email',           function(c){return c.e}],
+  ['Phone',           function(c){return c.phone}],
+  ['District',        function(c){return c.d}],
+  ['Position applied',function(c){return c.pos}],
+  ['Department',      function(c){return c.dept}],
+  ['Batch',           function(c){return c.ba}],
+  ['Applied',         function(c){return c.applied}],
+  ['Source',          function(c){return c.so}],
+  ['Match score %',   function(c){return {v:c.sc,n:true}}],
+  ['Parsing confidence %',function(c){return {v:c.cf,n:true}}],
+  ['Experience (yrs)',function(c){return {v:c.yr,n:true}}],
+  ['Education',       function(c){return c.ed}],
+  ['Current / last',  function(c){return c.role+' — '+c.co}],
+  ['Skills',          function(c){return c.sk.join(', ')}],
+  ['Red flags',       function(c){return c.rf.join(', ')||'None'}],
+  ['Status',          function(c){return DBST[c.dbst].l}],
+  ['Pipeline stage',  function(c){return c.stL}],
+  ['Rejection reason',function(c){return c.rejReason||''}],
+  ['Decided by',      function(c){return c.rejBy||''}],
+  ['Decided on',      function(c){return c.rejOn||''}]
+];
+var DB_W=[24,30,14,13,22,14,26,12,13,13,18,15,15,30,34,26,15,20,42,26,12];
+
+function dbToggleExport(ev){
+  if(ev) ev.stopPropagation();
+  document.getElementById('dbExpMenu').classList.toggle('on');
+}
+function dbCloseExport(){ var m=document.getElementById('dbExpMenu'); if(m) m.classList.remove('on'); }
+
+function dbExport(kind){
+  var set=dbExportSet();
+  dbCloseExport();
+  if(!set.length){ dbToast('Nothing to export — no record matches the current filter.'); return; }
+  var stamp=TODAY.replace(/-/g,''), scope=dbScopeText();
+  var S=STLX.S;
+  if(kind==='csv'){
+    var rows=[DB_COLS.map(function(x){return x[0]})];
+    set.forEach(function(c){ rows.push(DB_COLS.map(function(x){var v=x[1](c);return (v&&typeof v==='object')?v.v:v;})); });
+    STLX.save(new Blob([STLX.csv(rows)],{type:'text/csv'}),'STL_Candidate_Database_'+stamp+'.csv');
+  } else if(kind==='bundle'){
+    var man=[['Candidate','Position','Batch','Applied','Match score','Status','CV filename']];
+    var files=[];
+    set.forEach(function(c){
+      var fn=c.n.replace(/[^A-Za-z0-9]+/g,'_')+'_'+c.posk.toUpperCase()+'_CV.txt';
+      man.push([c.n,c.pos,c.ba,c.applied,c.sc,DBST[c.dbst].l,fn]);
+      files.push({name:'cvs/'+fn,data:dbCvText(c).replace(/\n/g,'\r\n')});
+    });
+    files.unshift({name:'manifest.csv',data:STLX.csv(man)});
+    files.push({name:'README.txt',data:'STL ATS — candidate database export\r\n'+
+      'Filter: '+scope+'\r\nRecords: '+set.length+'\r\nGenerated: '+TODAY+' by '+ACTOR+
+      '\r\n\r\nmanifest.csv lists every record in this archive.\r\ncvs/ holds one file per candidate.\r\nThis export is audit-logged.\r\n'});
+    STLX.save(STLX.zip(files),'STL_Candidate_Database_'+stamp+'.zip');
+  } else {
+    var head=[
+      [{v:'STL ATS — Candidate Database export',s:S.TITLE}],
+      [{v:'Filter: '+scope,s:S.META}],
+      [{v:'Records: '+set.length+'   ·   Generated '+TODAY+' by '+ACTOR,s:S.META}],
+      []
+    ];
+    head.push(DB_COLS.map(function(x){return {v:x[0],s:S.HEAD}}));
+    set.forEach(function(c){
+      head.push(DB_COLS.map(function(x){
+        var v=x[1](c);
+        if(v&&typeof v==='object'){v.s=S.NUM;return v;}
+        return {v:v,s:S.BODY};
+      }));
+    });
+    STLX.write('STL_Candidate_Database_'+stamp+'.xlsx',
+      [{name:'Candidates',rows:head,widths:DB_W,freeze:'A6'}]);
+  }
+  dbToast(set.length+' record'+(set.length===1?'':'s')+' exported — audit-logged with the filter that produced them.');
+}
+
+function dbToast(msg){
+  var el=document.getElementById('dbToast');
+  el.innerHTML='<div class="db-toast" role="status" data-testid="db-toast">'+esc(msg)+'</div>';
+  setTimeout(function(){ el.innerHTML=''; },4200);
+}
+
+/* ── Boot ─────────────────────────────────────────────────────────────── */
+function dbInit(){
+  dbBuild();
+  dbPopulate();
+  /* Deep link: candidates.page.html?pos=sbm&status=shortlisted */
+  var qs=(location.search||'').replace(/^\?/,'').split('&');
+  qs.forEach(function(p){
+    var kv=p.split('='), k=decodeURIComponent(kv[0]||''), v=decodeURIComponent(kv[1]||'');
+    if(k==='status'&&DBST[v]) DB_STATUS=v;
+    if(k==='pos'&&STLF.POS[v]){ var el=document.getElementById('dbPos'); if(el){el.value=v;dbPopulate();} }
+  });
+  dbApply();
+}
+document.addEventListener('click',function(e){
+  var w=document.getElementById('dbExpMenu');
+  if(w&&w.classList.contains('on')&&!w.contains(e.target)&&e.target.id!=='dbExportBtn') dbCloseExport();
+});
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ dbCloseCv(); dbCloseExport(); } });
+dbInit();
+</script>
 </body>
 </html>

@@ -179,7 +179,7 @@ Contrast ≥ 4.5:1 (WCAG AA) · status never color-only · `cursor-pointer` + fo
 | Role | Count | Pages |
 |------|:-----:|-------|
 | `auth` | 2 | login, forgot-password |
-| `hr` | 22 | dashboard, positions, position-new, position-detail, template-builder, import-cvs, processing, cv-review, results, application-detail, candidates, candidate-detail, cv-analysis-dashboard *(R6)*, written-exam *(R7)*, assessment-summary-report *(R7)*, online-visibility-analysis *(R8)*, interviews, interview-schedule, final-selection, onboarding, exports, settings |
+| `hr` | 23 | dashboard, positions, position-new, position-detail, template-builder, import-cvs, processing, cv-review, results, application-detail, candidates *(Candidate Database — R15)*, candidate-detail, online-presence-detail *(R12)*, cv-analysis-dashboard *(redirect stub)*, written-exam *(R7)*, assessment-summary-report *(R7)*, online-visibility-analysis *(redirect stub)*, interviews, interview-schedule, final-selection, onboarding, exports, settings |
 | `hiring-manager` | 6 | dashboard, shortlist, application-detail, interviews, interview-rating, final-selection |
 | `viewer` | 4 | dashboard, position-detail, candidate-detail, reports |
 | `admin` | 5 | dashboard, users, user-detail, audit, settings |
@@ -324,7 +324,7 @@ Exit condition: `evaluation_score >= 0.8`. Safety valve: `iterations > 10`.
 ### Artifact hashes (P3g snapshot)
 
 - `prd_hash_at_generation`: `af5ab029646450bce8908c8cd44b85d7a9bc18e5692d85b41700f49e03cf9a63`
-- `html_bundle_hash`: `f059e1eb4c39b2e3278cb232906a94b4902bfc4f76667cde40367613bf6e09bd`
+- `html_bundle_hash`: `0f0516417add496db91fc340c4cb218d36ea06f2c9f475b5048dd8edc4b91203`
 - P3-design gate `checks_hash`: `058618ec2a7e98fe484e96039b95a6268ab4eeba5b224bec7127ea609d02f238`
 
 ---
